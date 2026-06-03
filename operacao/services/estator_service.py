@@ -39,7 +39,7 @@ class EstatorService:
     @staticmethod
     def processar_post(request, dados_estator):
         if "restaurar" in request.POST:
-            SessionService.limpar_estator_temp(request)
+            SessionService.limpar_estator_(request,'estator_temp')
             return DadosEstatorForm(instance=dados_estator)
 
         if "aplicar_estator" in request.POST:

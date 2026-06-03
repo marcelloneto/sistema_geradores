@@ -15,6 +15,11 @@ class SessionService:
         request.session.modified = True
 
     @staticmethod
+    def limpar_estator_(request, pagina):
+        request.session.pop(pagina, None)
+        request.session.modified = True
+
+    @staticmethod
     def salvar_estator_temp(request, dados):
         request.session["estator_temp"] = {
             campo: None if valor is None else str(valor)
