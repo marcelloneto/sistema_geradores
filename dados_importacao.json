@@ -1,0 +1,160 @@
+[
+    {
+        "codigo_material": "COND-SM-001",
+        "nome": "Cobre 99%",
+        "categoria": "Condutor",
+        "descricao": "Condutor de cobre 99% com isolação Coralglas.",
+        "fornecedor": "São Marco",
+        "prioridade": 2,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "COND-SM-002",
+        "nome": "Cobre 99%",
+        "categoria": "Condutor",
+        "descricao": "Condutor de cobre 99% com isolação Coralglas H.",
+        "fornecedor": "São Marco",
+        "prioridade": 3,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "COND-SM-003",
+        "nome": "Cobre 99%",
+        "categoria": "Condutor",
+        "descricao": "Condutor de cobre 99% com isolação Coraltherm HG.",
+        "fornecedor": "São Marco",
+        "prioridade": 1,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "COND-PPE-001",
+        "nome": "Cobre 99%",
+        "categoria": "Condutor",
+        "descricao": "Condutor de cobre 99% com isolação Poliglas ER1.",
+        "fornecedor": "PPE",
+        "prioridade": 3,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "COND-PPE-002",
+        "nome": "Cobre 99%",
+        "categoria": "Condutor",
+        "descricao": "Condutor de cobre 99% com isolação Poliglas ER2.",
+        "fornecedor": "PPE",
+        "prioridade": 2,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "COND-PPE-003",
+        "nome": "Cobre 99%",
+        "categoria": "Condutor",
+        "descricao": "Condutor de cobre 99% esmaltado.",
+        "fornecedor": "PPE",
+        "prioridade": 1,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+
+    {
+        "codigo_material": "ISO-VR-001",
+        "nome": "Thermopreg 406.25",
+        "categoria": "Isolação",
+        "descricao": "Nomex impregnado com resina epóxi em estágio B.",
+        "fornecedor": "Von Roll",
+        "prioridade": 2,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "ISO-KR-001",
+        "nome": "Thermopreg",
+        "categoria": "Isolação",
+        "descricao": "Nomex impregnado com resina epóxi em estágio B.",
+        "fornecedor": "Krempel",
+        "prioridade": 3,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "ISO-KR-002",
+        "nome": "DMI 156",
+        "categoria": "Isolação",
+        "descricao": "Material para isolamento de panquecas.",
+        "fornecedor": "Krempel",
+        "prioridade": 1,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+
+    {
+        "codigo_material": "ISO-DP-001",
+        "nome": "Nomex 410",
+        "categoria": "Isolação",
+        "descricao": "Papel Nomex 410 disponível em espessuras de 0,08 mm, 0,13 mm, 0,19 mm e 0,25 mm.",
+        "fornecedor": "Dupont",
+        "prioridade": 3,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+
+    {
+        "codigo_material": "ISO-VR-002",
+        "nome": "Sisatherm 253.04-12",
+        "categoria": "Isolação",
+        "descricao": "Prepreg com filme de vidro para aplicação acima de 6 kV.",
+        "fornecedor": "Von Roll",
+        "prioridade": 3,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "ISO-VR-003",
+        "nome": "Sisatherm 253.03-16",
+        "categoria": "Isolação",
+        "descricao": "Prepreg com filme de poliéster para aplicação abaixo de 6 kV.",
+        "fornecedor": "Von Roll",
+        "prioridade": 1,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+
+    {
+        "codigo_material": "ISO-KR-003",
+        "nome": "DMI 1265 G",
+        "categoria": "Isolação",
+        "descricao": "Prepreg com filme de vidro para aplicação acima de 6 kV.",
+        "fornecedor": "Krempel",
+        "prioridade": 2,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    },
+    {
+        "codigo_material": "ISO-KR-004",
+        "nome": "DMI 1265 M",
+        "categoria": "Isolação",
+        "descricao": "Prepreg com filme de poliéster para aplicação abaixo de 6 kV.",
+        "fornecedor": "Krempel",
+        "prioridade": 1,
+        "preco": null,
+        "unidade_preco": null,
+        "ativo": true
+    }
+]

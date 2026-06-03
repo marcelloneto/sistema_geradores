@@ -1,0 +1,52 @@
+{% extends 'operacao/base.html' %}
+
+{% block content %}
+
+{% if ordem_selecionada %}
+
+    <h2>{{ ordem_selecionada.maquina }}</h2>
+
+    <div class="card mt-3">
+
+        <div class="card-body">
+
+            <p>
+                <strong>OS:</strong>
+                {{ ordem_selecionada.numero }}
+            </p>
+
+            <p>
+                <strong>Cliente:</strong>
+                {{ ordem_selecionada.cliente }}
+            </p>
+
+            <p>
+                <strong>Máquina:</strong>
+                {{ ordem_selecionada.maquina }}
+            </p>
+
+            <p>
+                <strong>Localização:</strong>
+                {{ ordem_selecionada.localizacao }}
+            </p>
+
+            <p>
+                <strong>Tipo de serviço:</strong>
+                {{ ordem_selecionada.tipo_servico }}
+            </p>
+
+        </div>
+
+    </div>
+
+{% else %}
+
+    <h2>Nenhum projeto carregado</h2>
+
+    <p>
+        Clique em <strong>Alterar Projeto</strong> para selecionar uma Ordem de Serviço.
+    </p>
+
+{% endif %}
+
+{% endblock %}

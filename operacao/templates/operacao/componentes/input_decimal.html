@@ -1,0 +1,14 @@
+<div class="col-md-4 mb-3">
+
+    <label class="form-label">
+        {{ label }}
+    </label>
+
+    <input
+        type="number"
+        step="{{ step|default:'0.01' }}"
+        class="form-control"
+        name="{{ name }}"
+        value="{{ valor|default_if_none:'' }}">
+
+</div>

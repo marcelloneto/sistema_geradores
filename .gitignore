@@ -1,0 +1,27 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Arquivos de ambiente
+.env
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Arquivos estáticos gerados
+staticfiles/
+
+# Uploads
+media/
+
+# Migrações compiladas (opcional)
+**/__pycache__/

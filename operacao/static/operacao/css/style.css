@@ -1,0 +1,16 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.menu-lateral {
+    min-height: 85vh;
+}
+
+.list-group-item {
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+.card {
+    border-radius: 12px;
+}

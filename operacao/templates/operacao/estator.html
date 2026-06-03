@@ -1,0 +1,94 @@
+{% extends 'operacao/base.html' %}
+
+{% block content %}
+
+<h2>Dados do Estator</h2>
+
+<hr>
+
+{% if not ordem_selecionada %}
+
+    <div class="alert alert-warning">
+        Nenhuma Ordem de Serviço selecionada.
+    </div>
+
+{% elif not ordem_selecionada.maquina %}
+
+    <div class="alert alert-warning">
+        Esta OS não possui máquina vinculada.
+    </div>
+
+{% elif not dados_estator %}
+
+    <div class="alert alert-info">
+        Esta máquina ainda não possui dados de estator cadastrados.
+    </div>
+
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+
+    <h3>Bobinado</h3>
+
+    <div class="row">
+        {% for field in campos_bobinado %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+        <button
+            type="submit"
+            name="restaurar"
+            class="btn btn-danger">
+            Restaurar
+        </button>
+        <button
+            type="submit"
+            name="aplicar_estator"
+            class="btn btn-success">
+            Aplicar
+        </button>
+    </div>
+
+    <hr>
+
+    <h3>Núcleo</h3>
+
+    <div class="row">
+        {% for field in campos_nucleo %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+        <button
+            type="submit"
+            name="restaurar"
+            class="btn btn-danger">
+            Restaurar
+        </button>
+        <button
+            type="submit"
+            name="aplicar_estator"
+            class="btn btn-success">
+            Aplicar
+        </button>
+    </div>
+</form>
+<pre>{{ estator_temp }}</pre>
+
+{% endblock %}

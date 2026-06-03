@@ -1,0 +1,193 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Cálculos</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'operacao/css/style.css' %}">
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+    <div class="row border-bottom p-3 bg-white">
+
+        <div class="col">
+
+            <h4>
+                Projeto:
+                {% if ordem_selecionada %}
+                    {{ ordem_selecionada.numero }} -
+                    {{ ordem_selecionada.cliente }}
+                {% else %}
+                    Nenhum projeto carregado
+                {% endif %}
+            </h4>
+
+            <button
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalProjeto">
+                Alterar Projeto
+            </button>
+
+            <button class="btn btn-success">
+                Novo Projeto
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="row border-bottom p-2 bg-light">
+
+        <div class="col">
+
+            <button class="btn btn-outline-primary">
+                Bobinas
+            </button>
+
+            <button class="btn btn-outline-primary">
+                Pintura
+            </button>
+
+            <button class="btn btn-outline-primary">
+                Isolação
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-2 border-end menu-lateral bg-white">
+
+            <div class="list-group mt-3">
+
+                <a href="{% url 'operacao:home' %}" class="list-group-item">
+                    Dados Gerais
+                </a>
+
+                <a href="{% url 'operacao:estator' %}" class="list-group-item">
+                    Estator
+                </a>
+
+                <a href="#" class="list-group-item">
+                    Condutor
+                </a>
+
+                <a href="#" class="list-group-item">
+                    Isolação
+                </a>
+
+                <a href="#" class="list-group-item">
+                    Pintura
+                </a>
+
+                <a href="#" class="list-group-item">
+                    Ensaios
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="col p-4">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="modalProjeto" tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <form method="get">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Escolher Projeto
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label class="form-label">
+                        Ordem de Serviço
+                    </label>
+
+                    <select name="os" class="form-select">
+
+                        {% for ordem in ordens %}
+
+                            <option value="{{ ordem.numero }}">
+                                {{ ordem.numero }} -
+                                {{ ordem.cliente }}
+
+                                {% if ordem.maquina %}
+                                    - {{ ordem.maquina }}
+                                {% endif %}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+                        Carregar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+
+</html>
