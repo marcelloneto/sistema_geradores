@@ -1,55 +1,62 @@
 from django.shortcuts import render
 
 from operacao.services.ordem_service import OrdemService
-from operacao.services.estator_service import EstatorService
+from operacao.services.base_service import BaseService
 from operacao.services.session_service import SessionService
 
 
 def home(request):
-    ordem_selecionada = OrdemService.obter_ordem_selecionada(
+    ordemservice = OrdemService('estator')
+    
+    ordem_selecionada = ordemservice.obter_ordem_selecionada(
         request
     )
 
-    ordens = OrdemService.listar_ordens()
+    ordens = ordemservice.listar_ordens()
 
     return render(request, "operacao/home.html", {
         "ordens": ordens,
         "ordem_selecionada": ordem_selecionada,
     })
 
-
-def estator(request):
-    ordem_selecionada = OrdemService.obter_ordem_selecionada(
-        request
-    )
-
-    SessionService.atualizar_os_anterior(request)
-
-    ordens = OrdemService.listar_ordens()
-
-    dados_estator = EstatorService.obter_dados_estator(
-        ordem_selecionada
-    )
-
-    if request.method == "POST":
-        form = EstatorService.processar_post(
-            request,
-            dados_estator
-        )
-    else:
-        form = EstatorService.criar_form_get(
-            request,
-            dados_estator
+class EstatorView:
+    @staticmethod
+    def estator(request):
+        sessionservice = SessionService('estator')
+        ordemservice =  OrdemService('estator')
+        ordem_selecionada = ordemservice.obter_ordem_selecionada(
+            request
         )
 
-    contexto_form = EstatorService.montar_contexto_form(
-        form
-    )
+        service = BaseService('estator')
 
-    return render(request, "operacao/estator.html", {
-        "ordens": ordens,
-        "ordem_selecionada": ordem_selecionada,
-        "dados_estator": dados_estator,
-        "estatortemp": SessionService.obter_estator_temp(request),
-        **contexto_form,
-    })
+        sessionservice.atualizar_os_anterior(request)
+
+        ordens = ordemservice.listar_ordens()
+
+        dados_estator = service.obter_dados(
+            ordem_selecionada,
+        )
+
+        if request.method == "POST":
+            form = service.processar_post(
+                request,
+                dados_estator
+            )
+        else:
+            form = service.criar_form_get(
+                request,
+                dados_estator
+            )
+
+        contexto_form = service.montar_contexto_form(
+            form
+        )
+
+        return render(request, "operacao/estator.html", {
+            "ordens": ordens,
+            "ordem_selecionada": ordem_selecionada,
+            "dados_estator": dados_estator,
+            "estatortemp": sessionservice.obter_temp_secao(request),
+            **contexto_form,
+        })

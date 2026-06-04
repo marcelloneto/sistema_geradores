@@ -1,9 +1,12 @@
 {% extends 'operacao/base.html' %}
 
 {% block content %}
-
-<h2>Dados do Estator</h2>
-
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Dados do Estator</h2>
+    
+    <button class="btn btn-success" name="salvar_estator">Salvar</button>
+    
+</div>
 <hr>
 
 {% if not ordem_selecionada %}

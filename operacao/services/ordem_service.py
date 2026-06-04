@@ -3,7 +3,9 @@ from operacao.services.session_service import SessionService
 
 
 class OrdemService:
-
+    def __init__(self, secao):
+        self.secao = secao
+        self.sessionservice = SessionService(self.secao)
     @staticmethod
     def listar_ordens():
         return (
@@ -13,21 +15,21 @@ class OrdemService:
             .order_by("-data_registro")
         )
 
-    @staticmethod
-    def obter_ordem_selecionada(request):
+    
+    def obter_ordem_selecionada(self,request):
         os_numero = request.GET.get("os")
 
         if os_numero:
-            SessionService.limpar_temp_se_trocar_os(
+            self.sessionservice.limpar_temp_se_trocar_os(
                 request,
                 os_numero
             )
-            SessionService.definir_os(
+            self.sessionservice.definir_os(
                 request,
                 os_numero
             )
         else:
-            os_numero = SessionService.obter_os(request)
+            os_numero = self.sessionservice.obter_os(request)
 
         if not os_numero:
             return None

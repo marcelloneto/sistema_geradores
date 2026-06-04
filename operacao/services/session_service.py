@@ -1,5 +1,6 @@
 class SessionService:
-
+    def __init__(self,secao):
+        self.secao = secao
     @staticmethod
     def obter_os(request):
         return request.session.get("os")
@@ -9,27 +10,27 @@ class SessionService:
         request.session["os"] = os_numero
         request.session.modified = True
 
-    @staticmethod
-    def limpar_estator_temp(request):
-        request.session.pop("estator_temp", None)
+    
+    def limpar_temp_secao(self,request):
+        request.session.pop(f"{self.secao}_temp", None)
         request.session.modified = True
 
-    @staticmethod
-    def limpar_estator_(request, pagina):
-        request.session.pop(pagina, None)
+    
+    def limpar_estator_(self,request):
+        request.session.pop(f"{self.secao}_temp", None)
         request.session.modified = True
 
-    @staticmethod
-    def salvar_estator_temp(request, dados):
-        request.session["estator_temp"] = {
+    
+    def salvar_temp_secao(self,request, dados):
+        request.session[f"{self.secao}_temp"] = {
             campo: None if valor is None else str(valor)
             for campo, valor in dados.items()
         }
         request.session.modified = True
 
-    @staticmethod
-    def obter_estator_temp(request):
-        return request.session.get("estator_temp")
+    
+    def obter_temp_secao(self,request):
+        return request.session.get(f"{self.secao}_temp")
 
     @staticmethod
     def atualizar_os_anterior(request):
@@ -39,8 +40,8 @@ class SessionService:
             request.session.modified = True
 
     @staticmethod
-    def limpar_temp_se_trocar_os(request, os_numero):
+    def limpar_temp_se_trocar_os(request, os_numero,):
         os_anterior = request.session.get("os_anterior")
 
         if os_anterior and os_anterior != os_numero:
-            SessionService.limpar_estator_temp(request)
+            SessionService.limpar_temp_secao(request)
