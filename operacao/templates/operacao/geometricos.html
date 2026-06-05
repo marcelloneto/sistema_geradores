@@ -1,0 +1,139 @@
+{% extends 'operacao/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Dados Geométricos</h2>
+    
+    <button type="submit" form="geometria" class="btn btn-success" name="salvar">Salvar</button>
+    
+</div>
+<hr>
+
+{% if not ordem_selecionada %}
+
+    <div class="alert alert-warning">
+        Nenhuma Ordem de Serviço selecionada.
+    </div>
+
+{% elif not ordem_selecionada.maquina %}
+
+    <div class="alert alert-warning">
+        Esta OS não possui máquina vinculada.
+    </div>
+
+{% elif not dados_geometricos %}
+
+    <div class="alert alert-info">
+        Esta máquina ainda não possui dados de estator cadastrados.
+    </div>
+
+{% endif %}
+
+<form id="geometria" method="post">
+    {% csrf_token %}
+
+    <div class="row">
+
+    <div class="col-md-5">
+
+        <h2>Ranhuras</h2>
+
+        {{ form.tipo_ranhura }}
+
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-5"><h2>Seção da Bobina</h2></div>
+    <div class="col-md-1"></div>
+    <div class="col-md-5"></div>
+
+    <div class="col-md-1">
+        {% for field in campos_ranhura %}
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="col-md-5"></div>
+
+    <div class="col-md-1">
+
+        {% for field in campos_bobina %}
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="col-md-6"><h2>Seção do Condutor</h2></div>
+
+    <div class="col-md-5">
+        <h2>Seção dos Calços</h2>
+
+        {{ form.tipo_calco }}
+    </div>
+
+    <div class="col-md-1"></div>
+    <div class="col-md-5"></div>
+
+    <div class="col-md-1">
+
+        {% for field in campos_condutor %}
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="col-md-5"></div>
+
+    <div class="col-md-1">
+
+        {% for field in campos_calco %}
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+        <button
+            type="submit"
+            name="restaurar"
+            class="btn btn-danger m-2">
+            Restaurar
+        </button>
+        <button
+            type="submit"
+            name="aplicar_estator"
+            class="btn btn-success m-2">
+            Aplicar
+        </button>
+    </div>
+
+</div>
+
+</form>
+
+
+{% endblock %}

@@ -4,7 +4,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Dados do Estator</h2>
     
-    <button class="btn btn-success" name="salvar_estator">Salvar</button>
+    <button type="submit" form="estator" class="btn btn-success" name="salvar">Salvar</button>
     
 </div>
 <hr>
@@ -29,7 +29,7 @@
 
 {% endif %}
 
-<form method="post">
+<form id="estator" method="post">
     {% csrf_token %}
 
     <h3>Bobinado</h3>
@@ -92,6 +92,6 @@
         </button>
     </div>
 </form>
-<pre>{{ estator_temp }}</pre>
+
 
 {% endblock %}

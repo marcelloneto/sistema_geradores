@@ -1,3 +1,5 @@
+
+
 class SessionService:
     def __init__(self,secao):
         self.secao = secao
@@ -17,6 +19,7 @@ class SessionService:
 
     
     def limpar_estator_(self,request):
+        
         request.session.pop(f"{self.secao}_temp", None)
         request.session.modified = True
 
@@ -42,6 +45,12 @@ class SessionService:
     @staticmethod
     def limpar_temp_se_trocar_os(request, os_numero,):
         os_anterior = request.session.get("os_anterior")
-
+        SECOES  = ["estator","geometricos","isolacao","pintura","ensaios"]
+        
         if os_anterior and os_anterior != os_numero:
-            SessionService.limpar_temp_secao(request)
+            print(list(request.session.keys()))
+            for secao in SECOES:
+                print(secao)
+                if f"{secao}_temp" in request.session:
+                    print(request.session[f"{secao}_temp"])
+                    request.session.pop(f"{secao}_temp", None)

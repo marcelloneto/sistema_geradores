@@ -6,7 +6,7 @@ from operacao.services.session_service import SessionService
 
 
 def home(request):
-    ordemservice = OrdemService('estator')
+    ordemservice = OrdemService('home')
     
     ordem_selecionada = ordemservice.obter_ordem_selecionada(
         request
@@ -22,41 +22,87 @@ def home(request):
 class EstatorView:
     @staticmethod
     def estator(request):
-        sessionservice = SessionService('estator')
-        ordemservice =  OrdemService('estator')
+        secao = 'estator'
+        sessionservice = SessionService(secao)
+        ordemservice =  OrdemService(secao)
         ordem_selecionada = ordemservice.obter_ordem_selecionada(
             request
         )
 
-        service = BaseService('estator')
+        baseservice = BaseService(secao)
 
         sessionservice.atualizar_os_anterior(request)
 
         ordens = ordemservice.listar_ordens()
 
-        dados_estator = service.obter_dados(
+        dados = baseservice.obter_dados(
             ordem_selecionada,
         )
-
+        
         if request.method == "POST":
-            form = service.processar_post(
+            form = baseservice.processar_post(
                 request,
-                dados_estator
+                dados
             )
         else:
-            form = service.criar_form_get(
+            form = baseservice.criar_form_get(
                 request,
-                dados_estator
+                dados
             )
 
-        contexto_form = service.montar_contexto_form(
+        contexto_form = baseservice.montar_contexto_form(
             form
         )
 
         return render(request, "operacao/estator.html", {
             "ordens": ordens,
             "ordem_selecionada": ordem_selecionada,
-            "dados_estator": dados_estator,
+            "dados_estator": dados,
             "estatortemp": sessionservice.obter_temp_secao(request),
+            **contexto_form,
+        })
+    
+class GeometricosView:
+    @staticmethod
+    def geometricos(request):
+        secao = 'geometricos'
+        sessionservice = SessionService(secao)
+        ordemservice =  OrdemService(secao)
+        ordem_selecionada = ordemservice.obter_ordem_selecionada(
+            request
+        )
+
+        baseservice = BaseService(secao)
+
+        sessionservice.atualizar_os_anterior(request)
+
+        ordens = ordemservice.listar_ordens()
+
+        dados = baseservice.obter_dados(
+            ordem_selecionada,
+        )
+
+        print(list(request.session.keys()))
+
+        if request.method == "POST":
+            form = baseservice.processar_post(
+                request,
+                dados
+            )
+        else:
+            form = baseservice.criar_form_get(
+                request,
+                dados
+            )
+
+        contexto_form = baseservice.montar_contexto_form(
+            form
+        )
+
+        return render(request, "operacao/geometricos.html", {
+            "ordens": ordens,
+            "ordem_selecionada": ordem_selecionada,
+            "dados_geometricos": dados,
+            "geometricostemp": sessionservice.obter_temp_secao(request),
             **contexto_form,
         })

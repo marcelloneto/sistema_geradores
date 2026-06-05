@@ -363,32 +363,35 @@ class DadosGeometricosMaquina(models.Model):
     # Ranhura
     tipo_ranhura = models.CharField(max_length=50, blank=True)
 
-    ranhura_a = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_b = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_c = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_d = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_e = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_f = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_a = models.DecimalField('a',max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_b = models.DecimalField('b',max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_c = models.DecimalField('c',max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_d = models.DecimalField('d',max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Seção da Bobina
-    bobina_e = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    bobina_f = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    bobina_g = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    bobina_h = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_g = models.DecimalField('g',max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_h = models.DecimalField('h',max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Seção do Condutor
-    condutor_e = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    condutor_f = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    condutor_E_iso = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    condutor_F_iso = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_E_iso = models.DecimalField('E',max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_F_iso = models.DecimalField('F',max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Calço
     tipo_calco = models.CharField(max_length=50, blank=True)
 
-    calco_a = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    calco_b = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    calco_c = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    calco_d = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_a = models.DecimalField('a',max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_b = models.DecimalField('b',max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_c = models.DecimalField('c',max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_d = models.DecimalField('d',max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return f"Dados do Geometricos da máquina {self.maquina}"
 
 class DadosConstrutivosBobina(models.Model):
     maquina = models.OneToOneField(

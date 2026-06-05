@@ -7,4 +7,5 @@ app_name = "operacao"
 urlpatterns = [
     path("", views.home, name="home"),
     path("estator/", views.EstatorView.estator, name="estator"),
+    path("geometricos/", views.GeometricosView.geometricos, name="geometricos"),
 ]
