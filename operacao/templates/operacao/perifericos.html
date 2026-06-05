@@ -1,0 +1,208 @@
+{% extends 'operacao/base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Dados Periféricos</h2>
+    
+    <button type="submit" form="perifericos" class="btn btn-success" name="salvar">Salvar</button>
+    
+</div>
+<hr>
+
+{% if not ordem_selecionada %}
+
+    <div class="alert alert-warning">
+        Nenhuma Ordem de Serviço selecionada.
+    </div>
+
+{% elif not ordem_selecionada.maquina %}
+
+    <div class="alert alert-warning">
+        Esta OS não possui máquina vinculada.
+    </div>
+
+{% elif not dados_perifericos %}
+
+    <div class="alert alert-info">
+        Esta máquina ainda não possui dados de estator cadastrados.
+    </div>
+
+{% endif %}
+
+<form id="perifericos" method="post">
+    {% csrf_token %}
+
+    <h4>Aro de Amarração</h4>
+
+<div class="row mb-3">
+
+    <div class="col-md-2">
+        
+        <label class="form-label mt-4">
+            Aro de amarração
+        </label>
+    </div>
+
+    <div class="col-md-5">
+        <label class="form-label">
+            {{ campos_aro.0.label }}
+        </label>
+        {{ campos_aro.0 }}
+    </div>
+
+    <div class="col-md-5">
+        <label class="form-label">
+            {{ campos_aro.1.label }}
+        </label>
+        {{ campos_aro.1 }}
+    </div>
+
+</div>
+
+<div class="row mb-5">
+
+    <div class="col-md-2">
+        <label class="form-label">
+            Material do aro
+        </label>
+    </div>
+
+    <div class="col-md-5">
+        {{ campos_aro.2 }}
+    </div>
+
+    <div class="col-md-5">
+        {{ campos_aro.3 }}
+    </div>
+
+</div>
+
+
+<h4>Quantidade de Calço de Amarração por Barra</h4>
+
+<div class="row">
+
+    {% for field in campos_calco %}
+
+        <div class="col-md-3 mb-3">
+
+            <label class="form-label">
+                {{ field.label }}
+            </label>
+            
+            {{ field }}
+              
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<div class="row">
+
+    {% for field in campos_obs_calco %}
+
+        <div class="col-md-3 mb-3">
+
+            {{ field }}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+<hr>
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="mb-3">
+            <label class="form-label">
+                {{ campos_inferior.0.label }}
+            </label>
+            {{ campos_inferior.0 }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                {{ campos_inferior.2.label }}
+            </label>
+            {{ campos_inferior.2 }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                {{ campos_inferior.4.label }}
+            </label>
+            {{ campos_inferior.4 }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                {{ campos_inferior.6.label }}
+            </label>
+            {{ campos_inferior.6 }}
+        </div>
+
+    </div>
+
+        <div class="col-md-6">
+
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ campos_inferior.1.label }}
+                </label>
+                {{ campos_inferior.1 }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ campos_inferior.3.label }}
+                </label>
+                {{ campos_inferior.3 }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ campos_inferior.5.label }}
+                </label>
+                {{ campos_inferior.5 }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ campos_inferior.7.label }}
+                </label>
+                {{ campos_inferior.7 }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+
+        <button
+            type="submit"
+            name="restaurar"
+            class="btn btn-danger me-2">
+            Restaurar
+        </button>
+
+        <button
+            type="submit"
+            name="aplicar"
+            class="btn btn-success">
+            Aplicar
+        </button>
+
+    </div>
+
+</form>
+
+
+
+{% endblock %}

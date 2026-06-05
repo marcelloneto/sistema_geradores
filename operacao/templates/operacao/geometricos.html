@@ -1,5 +1,5 @@
 {% extends 'operacao/base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Dados Geométricos</h2>
@@ -33,90 +33,121 @@
     {% csrf_token %}
 
     <div class="row">
+        
+    
+        <div class="col-md-3 border-end">
 
-    <div class="col-md-5">
+            <h2>Ranhuras</h2>
+            
+            {{ form.tipo_ranhura }}
+            
+            <div class="col-md-12 text-center ">
 
-        <h2>Ranhuras</h2>
+                <img
+                    id="imagem-ranhura"
+                    src="{% static 'operacao/img/ranhura_1.png' %}"
+                    class="img-fluid w-75 border rounded m-2"
+                    alt="Ranhura">
 
-        {{ form.tipo_ranhura }}
+                <div class="col-md-12 text-start">
+                    <div class="row">
+                        {% for field in campos_ranhura %}
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    {{ field.label }}
+                                </label>
 
-    </div>
-    <div class="col-md-1"></div>
-    <div class="col-md-5"><h2>Seção da Bobina</h2></div>
-    <div class="col-md-1"></div>
-    <div class="col-md-5"></div>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
 
-    <div class="col-md-1">
-        {% for field in campos_ranhura %}
-            <div class="mb-3">
-                <label class="form-label">
-                    {{ field.label }}
-                </label>
+                    </div>
+                </div>
 
-                {{ field }}
             </div>
-        {% endfor %}
 
-    </div>
+        </div>
+        
+        <div class="col-md-3 border-end">
+            <h2>Seção da Bobina</h2>
+            
+            <div class="col-md-12 text-center">
+            
+                <img
+                    id="imagem-secao-bobina"
+                    src="{% static 'operacao/img/secao_bobina.png' %}"
+                    class="img-fluid w-100 border rounded mt-5 "
+                    alt="Bobina">
+                    <div class="col-md-12">
+                        <div class="row">
+                            {% for field in campos_bobina %}
+                                <div class="col-md-6 text-start">
+                                    <label class="form-label">
+                                        {{ field.label }}
+                                    </label>
 
-    <div class="col-md-5"></div>
-
-    <div class="col-md-1">
-
-        {% for field in campos_bobina %}
-            <div class="mb-3">
-                <label class="form-label">
-                    {{ field.label }}
-                </label>
-
-                {{ field }}
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
             </div>
-        {% endfor %}
-
-    </div>
-
-    <div class="col-md-6"><h2>Seção do Condutor</h2></div>
-
-    <div class="col-md-5">
-        <h2>Seção dos Calços</h2>
-
-        {{ form.tipo_calco }}
-    </div>
-
-    <div class="col-md-1"></div>
-    <div class="col-md-5"></div>
-
-    <div class="col-md-1">
-
-        {% for field in campos_condutor %}
-            <div class="mb-3">
-                <label class="form-label">
-                    {{ field.label }}
-                </label>
-
-                {{ field }}
+        </div>
+        <div class="col-md-3 border-end">
+            <h2>Seção do Condutor</h2>
+            <div class="col-md-12 text-center mt-5">
+                <img
+                    id="imagem-secao-condutor"
+                    src="{% static 'operacao/img/secao_condutor.png' %}"
+                    class="img-fluid w-100 border rounded"
+                    alt="Condutor">
             </div>
-        {% endfor %}
+            <div class="col-md-12">
+                <div class="row">
+                    {% for field in campos_condutor %}
+                        <div class="col-md-6 text-start">
+                            <label class="form-label">
+                                {{ field.label }}
+                            </label>
 
-    </div>
-
-    <div class="col-md-5"></div>
-
-    <div class="col-md-1">
-
-        {% for field in campos_calco %}
-            <div class="mb-3">
-                <label class="form-label">
-                    {{ field.label }}
-                </label>
-
-                {{ field }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        {% endfor %}
 
-    </div>
+        </div>
+    
+        <div class="col-md-3">
+            <h2>Seção dos Calços</h2>
 
-    <div class="d-flex justify-content-end mt-3">
+            {{ form.tipo_calco }}
+
+            <div class="col-md-12 text-center">
+                <img
+                    id="imagem-secao-calco"
+                    src="{% static 'operacao/img/calco_1.png' %}"
+                    class="img-fluid w-75 border rounded mt-2"
+                    alt="Calco">
+            </div>
+
+            <div class="col-md-12">
+
+                {% for field in campos_calco %}
+                    <div class="mb-6 text-start">
+                        <label class="form-label">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    
+
+        <div class="d-flex justify-content-end mt-3 border-top">
         <button
             type="submit"
             name="restaurar"
@@ -125,15 +156,43 @@
         </button>
         <button
             type="submit"
-            name="aplicar_estator"
+            name="aplicar"
             class="btn btn-success m-2">
             Aplicar
         </button>
+        </div>
+        
     </div>
-
-</div>
 
 </form>
 
+<script>
+const selectRanhura = document.getElementById("id_tipo_ranhura");
+const imagemRanhura = document.getElementById("imagem-ranhura");
+
+const imagensRanhura = {
+    "ranhura1": "/static/operacao/img/ranhura_1.png",
+    "ranhura2": "/static/operacao/img/ranhura_2.png",
+    "ranhura3": "/static/operacao/img/ranhura_3.png"
+};
+
+
+function atualizarImagem() {
+
+    const tipo = selectRanhura.value;
+
+    if (imagensRanhura[tipo]) {
+        imagemRanhura.src = imagensRanhura[tipo];
+    }
+}
+
+selectRanhura.addEventListener(
+    "change",
+    atualizarImagem
+);
+
+atualizarImagem();
+
+</script>
 
 {% endblock %}

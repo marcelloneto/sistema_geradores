@@ -1,10 +1,9 @@
 {% extends 'operacao/base.html' %}
-
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Dados do Estator</h2>
+    <h2 class="mb-0">Dados das Bobinas</h2>
     
-    <button type="submit" form="estator" class="btn btn-success" name="salvar">Salvar</button>
+    <button type="submit" form="Bobina" class="btn btn-success" name="salvar">Salvar</button>
     
 </div>
 <hr>
@@ -21,7 +20,7 @@
         Esta OS não possui máquina vinculada.
     </div>
 
-{% elif not dados_estator %}
+{% elif not dados_bobina %}
 
     <div class="alert alert-info">
         Esta máquina ainda não possui dados de estator cadastrados.
@@ -29,13 +28,13 @@
 
 {% endif %}
 
-<form id="estator" method="post">
+<form id="bobina" method="post">
     {% csrf_token %}
 
-    <h3>Bobinado</h3>
+    <h3>Bobinas</h3>
 
     <div class="row">
-        {% for field in campos_bobinado %}
+        {% for field in form %}
             <div class="col-md-4 mb-3">
                 <label class="form-label">
                     {{ field.label }}
@@ -59,38 +58,7 @@
             class="btn btn-success m-2">
             Aplicar
         </button>
-    </div>
-
-    <hr>
-
-    <h3>Núcleo</h3>
-
-    <div class="row">
-        {% for field in campos_nucleo %}
-            <div class="col-md-4 mb-3">
-                <label class="form-label">
-                    {{ field.label }}
-                </label>
-
-                {{ field }}
-            </div>
-        {% endfor %}
-    </div>
-
-    <div class="d-flex justify-content-end mt-3">
-        <button
-            type="submit"
-            name="restaurar"
-            class="btn btn-danger m-2">
-            Restaurar
-        </button>
-        <button
-            type="submit"
-            name="aplicar"
-            class="btn btn-success m-2">
-            Aplicar
-        </button>
-    </div>
+    
 </form>
 
 

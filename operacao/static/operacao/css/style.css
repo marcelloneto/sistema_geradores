@@ -14,3 +14,42 @@ body {
 .card {
     border-radius: 12px;
 }
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 6px;
+}
+
+.btn {
+    min-width: 110px;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.img-geometria {
+    max-width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: white;
+    padding: 6px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}

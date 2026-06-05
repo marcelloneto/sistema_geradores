@@ -408,7 +408,7 @@ class DadosPerifericosResource(resources.ModelResource):
             "campo_eletrico",
             "densidade_corrente",
             "classe_termica_cabo",
-            "area_cabo",
+            "tensao_cabo",
             "comprimento_cabo_interno",
             "comprimento_cabo_externo",
             "descricao_terminal",
@@ -424,7 +424,7 @@ class DadosPerifericosAdmin(ImportExportModelAdmin):
         "material_aro_ll",
         "material_aro_lol",
         "material_calcos",
-        "area_cabo",
+        "tensao_cabo",
     )
 
     search_fields = (
@@ -460,7 +460,7 @@ class DadosPerifericosAdmin(ImportExportModelAdmin):
                 "campo_eletrico",
                 "densidade_corrente",
                 "classe_termica_cabo",
-                "area_cabo",
+                "tensao_cabo",
                 "comprimento_cabo_interno",
                 "comprimento_cabo_externo",
             )

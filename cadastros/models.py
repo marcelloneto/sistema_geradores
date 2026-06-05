@@ -165,7 +165,7 @@ class Maquina(models.Model):
         on_delete=models.PROTECT,
         null=True,
         blank=True,
-        related_name='maquinas'
+        related_name='dados_maquina'
     )
 
     tipo = models.CharField(
@@ -259,14 +259,25 @@ class MaterialPropriedade(models.Model):
         verbose_name_plural = "Propriedades dos Materiais"
 
 class DadosEstator(models.Model):
+    TIPOS_BOBINA = [
+        ("barra_roebel", "Barras Roebel"),
+        ("multiespiras", "Bobinas Multiespiras")
+    ]
+
+    TIPOS_BOBINADO = [
+            ("ondulado", "Ondulado"),
+            ("imbricado", "Imbricado")
+        ]
+
+
     maquina = models.OneToOneField(
         Maquina,
         on_delete=models.CASCADE,
         related_name="dados_estator"
     )
 
-    tipo_bobina = models.CharField("Tipo bobina", max_length=100, blank=True)
-    tipo_bobinado = models.CharField("Tipo bobinado", max_length=100, blank=True)
+    tipo_bobina = models.CharField("Tipo bobina", max_length=100, choices=TIPOS_BOBINA, blank=True)
+    tipo_bobinado = models.CharField("Tipo bobinado", max_length=100, choices=TIPOS_BOBINADO, blank=True)
     numero_bobinas = models.PositiveIntegerField("Nº de bobinas", null=True, blank=True)
     numero_condutores_por_espira = models.PositiveIntegerField("Nº cond./espira", null=True, blank=True)
     numero_espiras_por_bobina = models.PositiveIntegerField("Nº de espiras/bobina", null=True, blank=True)
@@ -330,17 +341,16 @@ class DadosPerifericos(models.Model):
     obs_calco_amarracao_superior_lol = models.CharField("Observação", max_length=150, blank=True)
 
     material_calcos = models.CharField("Material dos calços", max_length=150, blank=True)
-
     campo_eletrico = models.DecimalField("Campo elétrico", max_digits=12, decimal_places=2, null=True, blank=True)
+
     densidade_corrente = models.DecimalField("Densidade de corrente", max_digits=12, decimal_places=2, null=True, blank=True)
+    tensao_cabo = models.DecimalField("Tensão do cabo", max_digits=12, decimal_places=2, null=True, blank=True)
 
     classe_termica_cabo = models.CharField("Classe térmica do cabo", max_length=100, blank=True)
-    area_cabo = models.DecimalField("Área do cabo", max_digits=12, decimal_places=2, null=True, blank=True)
-
     comprimento_cabo_interno = models.CharField("Comprimento do cabo interno", max_length=100, blank=True)
-    comprimento_cabo_externo = models.CharField("Comprimento do cabo externo", max_length=100, blank=True)
 
     descricao_terminal = models.CharField("Descrição do terminal", max_length=150, blank=True)
+    comprimento_cabo_externo = models.CharField("Comprimento do cabo externo", max_length=100, blank=True)
 
     data_registro = models.DateTimeField("Data de registro", auto_now_add=True)
     data_atualizacao = models.DateTimeField("Última atualização", auto_now=True)
@@ -354,6 +364,19 @@ class DadosPerifericos(models.Model):
     
 class DadosGeometricosMaquina(models.Model):
 
+    tipo_ranhura = [
+        ("ranhura1", "Tipo 1"),
+        ("ranhura2", "Tipo 2"),
+        ("ranhura3", "Tipo 3")
+    ]
+
+    tipo_calco = [
+            ("calco1", "Tipo 1"),
+            ("calco2", "Tipo 2"),
+            ("calco3", "Tipo 3"),
+            ("calco4", "Tipo 4")
+        ]
+
     maquina = models.OneToOneField(
         Maquina,
         on_delete=models.CASCADE,
@@ -361,7 +384,7 @@ class DadosGeometricosMaquina(models.Model):
     )
 
     # Ranhura
-    tipo_ranhura = models.CharField(max_length=50, blank=True)
+    tipo_ranhura = models.CharField(max_length=50, blank=True, choices=tipo_ranhura)
 
     ranhura_a = models.DecimalField('a',max_digits=10, decimal_places=2, null=True, blank=True)
     ranhura_b = models.DecimalField('b',max_digits=10, decimal_places=2, null=True, blank=True)
@@ -383,7 +406,7 @@ class DadosGeometricosMaquina(models.Model):
     condutor_F_iso = models.DecimalField('F',max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Calço
-    tipo_calco = models.CharField(max_length=50, blank=True)
+    tipo_calco = models.CharField(max_length=50, blank=True, choices=tipo_calco)
 
     calco_a = models.DecimalField('a',max_digits=10, decimal_places=2, null=True, blank=True)
     calco_b = models.DecimalField('b',max_digits=10, decimal_places=2, null=True, blank=True)

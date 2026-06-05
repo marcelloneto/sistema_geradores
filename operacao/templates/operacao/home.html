@@ -5,40 +5,60 @@
 {% if ordem_selecionada %}
 
     <h2>{{ ordem_selecionada.maquina }}</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card w-100">
 
-    <div class="card w-25">
+                <div class="card-body">
 
-        <div class="card-body">
+                    <p>
+                        <strong>OS:</strong>
+                        {{ ordem_selecionada.numero }}
+                    </p>
 
-            <p>
-                <strong>OS:</strong>
-                {{ ordem_selecionada.numero }}
-            </p>
+                    <p>
+                        <strong>Cliente:</strong>
+                        {{ ordem_selecionada.cliente }}
+                    </p>
 
-            <p>
-                <strong>Cliente:</strong>
-                {{ ordem_selecionada.cliente }}
-            </p>
+                    <p>
+                        <strong>Máquina:</strong>
+                        {{ ordem_selecionada.maquina }}
+                    </p>
 
-            <p>
-                <strong>Máquina:</strong>
-                {{ ordem_selecionada.maquina }}
-            </p>
+                    <p>
+                        <strong>Localização:</strong>
+                        {{ ordem_selecionada.localizacao }}
+                    </p>
 
-            <p>
-                <strong>Localização:</strong>
-                {{ ordem_selecionada.localizacao }}
-            </p>
+                    <p>
+                        <strong>Tipo de serviço:</strong>
+                        {{ ordem_selecionada.tipo_servico }}
+                    </p>
 
-            <p>
-                <strong>Tipo de serviço:</strong>
-                {{ ordem_selecionada.tipo_servico }}
-            </p>
+                </div>
 
+            </div>
         </div>
+        <div class="col-md-8">
+            <div class="row">
+            {% for field in form %}
+                
+                    <div class="col-md-3 mb-3">
 
+                        <label class="form-label">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                    </div>
+                
+            {% endfor %}
+            </div>
+        </div>
     </div>
-
+    
 {% else %}
 
     <h2>Nenhum projeto carregado</h2>

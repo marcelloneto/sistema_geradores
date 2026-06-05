@@ -18,7 +18,7 @@ class SessionService:
         request.session.modified = True
 
     
-    def limpar_estator_(self,request):
+    def limpar_temp_(self,request):
         
         request.session.pop(f"{self.secao}_temp", None)
         request.session.modified = True
@@ -30,6 +30,7 @@ class SessionService:
             for campo, valor in dados.items()
         }
         request.session.modified = True
+        
 
     
     def obter_temp_secao(self,request):

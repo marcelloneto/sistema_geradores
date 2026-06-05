@@ -1,4 +1,4 @@
-from operacao.forms import DadosEstatorForm, DadosGeometricosForm
+from operacao.forms import DadosEstatorForm, DadosGeometricosForm, DadosPerifericosForm, DadosMaquinaForm, DadosBobinaForm
 from operacao.services.session_service import SessionService
 
 
@@ -8,12 +8,16 @@ class BaseService:
         self.secao=secao
         self.SECOES  = {
         "estator":  DadosEstatorForm,
-        "geometricos": DadosGeometricosForm
+        "geometricos": DadosGeometricosForm,
+        "perifericos": DadosPerifericosForm,
+        "maquina": DadosMaquinaForm,
+        "bobina": DadosBobinaForm,
         }
         self.sessionservice = SessionService(self.secao)
 
     def obter_dados(self,ordem):
         if ordem and ordem.maquina:
+            
             return getattr(
                 ordem.maquina,
                 f"dados_{self.secao}",
@@ -46,10 +50,10 @@ class BaseService:
     
     def processar_post(self,request, dados):
         if "restaurar" in request.POST:
-            self.sessionservice.limpar_estator_(request)
+            self.sessionservice.limpar_temp_(request)
             return self.SECOES[self.secao](instance=dados)
 
-        if "aplicar_estator" in request.POST:
+        if "aplicar" in request.POST:
             form = self.criar_form_post(
                 request,
                 dados
@@ -59,7 +63,7 @@ class BaseService:
                 self.sessionservice.salvar_temp_secao(
                     request,
                     form.cleaned_data
-                )
+                )                
 
             return form
         
@@ -70,7 +74,6 @@ class BaseService:
             )
             
             return self.SECOES[self.secao](instance=dados)
-
 
         return self.SECOES[self.secao](instance=dados)
 
@@ -100,11 +103,23 @@ class BaseService:
                 "campos_bobinado": form.obter_bobinado(),
                 "campos_nucleo": form.obter_nucleo(),
             }
-        else:
+        elif self.secao == "geometricos":
             return {
                 "form": form,
                 "campos_ranhura": form.obter_ranhura(),
                 "campos_bobina": form.obter_bobina(),
                 "campos_condutor": form.obter_condutor,
                 "campos_calco": form.obter_calco,
+            }
+        elif self.secao == "perifericos":
+            return {
+                "form": form,
+                "campos_aro": form.obter_aro(),
+                "campos_calco": form.obter_n_calco(),
+                "campos_obs_calco": form.obter_obs_calco,
+                "campos_inferior": form.obter_inferior,
+            }
+        elif self.secao == 'maquina' or self.secao == 'bobina':
+            return {
+                "form": form,
             }
