@@ -4,7 +4,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Dados das Bobinas</h2>
     
-    <button type="submit" form="Bobina" class="btn btn-success" name="salvar">Salvar</button>
+    <button type="submit" form="bobina" class="btn btn-success" name="salvar">Salvar</button>
     
 </div>
 <hr>
@@ -39,7 +39,6 @@
         <div class="col-md-3 border-end">
             <h3>{{secao.titulo}}</h3>
             <img
-                id="imagem-ranhura"
                 src="{% static secao.caminho_imagem %}"
                 class="img-fluid w-100 border rounded m-2"
                 alt="{{secao.titulo}}">
@@ -67,7 +66,7 @@
         </button>
         <button
             type="submit"
-            name="aplicar_estator"
+            name="aplicar"
             class="btn btn-success m-2">
             Aplicar
         </button>

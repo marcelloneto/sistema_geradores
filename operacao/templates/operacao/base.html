@@ -2,7 +2,14 @@
 
 <!DOCTYPE html>
 <html lang="pt-br">
-
+{% if request.GET.abrir_modal_os %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = new bootstrap.Modal(document.getElementById("modalRegistrarOS"));
+    modal.show();
+  });
+</script>
+{% endif %}
 <head>
     <meta charset="UTF-8">
     <title>Sistema de Cálculos</title>
@@ -41,7 +48,7 @@
                 Alterar Projeto
             </button>
 
-            <button class="btn btn-success">
+            <button type="button" class="btn btn-success" name="novo_projeto" data-bs-toggle="modal" data-bs-target="#modalRegistrarOS">
                 Novo Projeto
             </button>
 
@@ -95,7 +102,7 @@
                     Contrutivos
                 </a>
 
-                <a href="#" class="list-group-item">
+                <a href="{% url 'operacao:ensaios' %}" class="list-group-item">
                     Ensaios
                 </a>
 
@@ -182,6 +189,110 @@
 
     </div>
 
+</div>
+
+<div class="modal fade" id="modalRegistrarOS" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'operacao:registrar_os' %}" class="modal-content">
+      {% csrf_token %}
+
+        <div class="modal-header">
+            <h5 class="modal-title">Registrar nova OS</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body">
+            <div>
+                {{form_registro_os.numero.label}}
+            </div>
+            {{form_registro_os.numero}}
+            <div class="mb-3">
+                <label class="form-label">Cliente</label>
+                <div class="input-group">
+                    {{ form_registro_os.cliente }}
+                    <button type="button" class="btn btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalNovoCliente">
+                    +
+                    </button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Máquina</label>
+                <div class="input-group">
+                    {{ form_registro_os.maquina }}
+                    <button type="button" class="btn btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalNovaMaquina">
+                    +
+                    </button>
+                </div>
+            </div>
+            <div>
+                {{form_registro_os.localizacao.label}}
+            </div>
+            {{form_registro_os.localizacao}}
+            <div>
+                {{form_registro_os.tipo_servico.label}}
+            </div>
+            {{form_registro_os.tipo_servico}}
+            </div>
+            
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" name="novo_projeto" class="btn btn-success">Salvar OS</button>
+        </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="modalNovoCliente" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'operacao:registrar_cliente' %}" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Novo cliente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        {{ form_cliente.as_p }}
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-target="#modalRegistrarOS"
+                data-bs-toggle="modal">
+            Cancelar
+        </button>
+        <button type="submit" name="novo_cliente" class="btn btn-success">Salvar cliente</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="modalNovaMaquina" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'operacao:registrar_maquina' %}" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title">Nova máquina</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        {{ registrar_maquina.as_p }}
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-secondary"
+                data-bs-target="#modalRegistrarOS"
+                data-bs-toggle="modal">
+            Cancelar
+        </button>
+        <button type="submit" name="nova_maquina" class="btn btn-success">Salvar máquina</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script

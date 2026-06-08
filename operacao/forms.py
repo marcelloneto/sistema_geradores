@@ -1,5 +1,5 @@
 from django import forms
-from cadastros.models import DadosEstator,DadosGeometricosMaquina, DadosPerifericos, Maquina, DadosConstrutivosBobina
+from cadastros.models import DadosEstator,DadosGeometricosMaquina, DadosPerifericos, Maquina, DadosConstrutivosBobina, ResIsolamento, OrdemServico, Cliente
 
 
 class DadosEstatorForm(forms.ModelForm):
@@ -329,6 +329,7 @@ class DadosMaquinaForm(forms.ModelForm):
                 })
 
 class DadosBobinaForm(forms.ModelForm):
+
     CROQUI = [
         
         "croqui_g",
@@ -456,3 +457,87 @@ class DadosBobinaForm(forms.ModelForm):
 
     def obter_montada(self):
         return self.obter_grupo(self.MONTADA)
+
+class DadosEnsaiosForm(forms.ModelForm):
+
+    PARTE1 = [
+        "tensao",
+        "temperatura",
+        "umidade",
+        "tempo",
+        "Ø01xm",
+        "Ø02xm",
+        "Ø03xm",
+        "Ø04xm",
+    ]
+
+    PARTE2 = [
+        "Ø01",
+        "Ø02",
+        "Ø03",
+    ]
+
+    INTERVALO = ["res_ohmica"]
+
+    class Meta:
+        model = ResIsolamento
+        exclude = ["maquina"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+
+            field.widget.attrs.update({
+                "class": "form-control"
+            })
+
+            if isinstance(field, forms.DecimalField):
+                field.widget.attrs.update({
+                    "step": "0.01"
+                })
+
+            elif isinstance(field, forms.IntegerField):
+                field.widget.attrs.update({
+                    "step": "1",
+                    "min": "0"
+                })
+
+    def obter_grupo(self, grupo):
+        return [
+            self[campo]
+            for campo in grupo
+        ]
+
+    def obter_parte1(self):
+        
+        return self.obter_grupo(self.PARTE1)
+
+    def obter_parte2(self):
+
+        return self.obter_grupo(self.PARTE2)
+
+class RegistroOSForm(forms.ModelForm):
+    class Meta:
+        model = OrdemServico
+        fields = [
+            "numero",
+            "cliente",
+            "maquina",
+            "localizacao",
+            "tipo_servico",
+        ]    
+
+class RegistroMaquinaForm(forms.ModelForm):
+    class Meta:
+            model = Maquina
+            fields = [
+                "numero_serie",
+            ]  
+
+class RegistroClienteForm(forms.ModelForm):
+    class Meta:
+            model = Cliente
+            fields = [
+                "nome",
+            ]  

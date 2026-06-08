@@ -44,14 +44,11 @@ class SessionService:
             request.session.modified = True
 
     @staticmethod
-    def limpar_temp_se_trocar_os(request, os_numero,):
+    def limpar_temp_se_trocar_os(request, os_numero,secoes):
         os_anterior = request.session.get("os_anterior")
-        SECOES  = ["estator","geometricos","isolacao","pintura","ensaios"]
-        
+            
         if os_anterior and os_anterior != os_numero:
-            print(list(request.session.keys()))
-            for secao in SECOES:
-                print(secao)
+            for secao in secoes:
+                print(f"limpar temp se trocar os: {secao}")
                 if f"{secao}_temp" in request.session:
-                    print(request.session[f"{secao}_temp"])
                     request.session.pop(f"{secao}_temp", None)

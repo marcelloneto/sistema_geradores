@@ -1,5 +1,6 @@
 from cadastros.models import OrdemServico
 from operacao.services.session_service import SessionService
+from operacao.services.base_service import BaseService
 
 
 class OrdemService:
@@ -18,11 +19,12 @@ class OrdemService:
     
     def obter_ordem_selecionada(self,request):
         os_numero = request.GET.get("os")
-
+        secoes = list(BaseService(self.secao).SECOES.keys())
         if os_numero:
             self.sessionservice.limpar_temp_se_trocar_os(
                 request,
-                os_numero
+                os_numero,
+                secoes
             )
             self.sessionservice.definir_os(
                 request,

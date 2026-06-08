@@ -14,7 +14,8 @@ from .models import (
     DadosPerifericos,
     DadosConstrutivosBobina,
     DadosGeometricosMaquina,
-    MateriaisBobinagemRoebel
+    MateriaisBobinagemRoebel,
+    ResIsolamento
 )
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources, fields
@@ -820,6 +821,58 @@ class MateriaisBobinagemRoebelAdmin(ImportExportModelAdmin):
             "fields": (
                 "sobressalente_bobinas",
                 "coeficiente_seguranca_bobinas",
+            )
+        }),
+    )
+
+@admin.register(ResIsolamento)
+class ResIsolamentoAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "id",
+        "maquina",
+        "tensao",
+        "temperatura",
+        "umidade",
+        "tempo",
+        "res_ohmica_t",
+    )
+
+    search_fields = (
+        "maquina__numero_serie",
+    )
+
+    fieldsets = (
+        ("Máquina", {
+            "fields": (
+                "maquina",
+            )
+        }),
+
+        ("Condições do ensaio", {
+            "fields": (
+                "tensao",
+                "temperatura",
+                "umidade",
+                "tempo",
+            )
+        }),
+
+        ("Medições fase x massa", {
+            "fields": (
+                "Ø01xm",
+                "Ø02xm",
+                "Ø03xm",
+                "Ø04xm",
+            )
+        }),
+
+        ("Resistência ôhmica", {
+            "fields": (
+                "res_ohmica_t",
+                "Ø01",
+                "Ø02",
+                "Ø03",
             )
         }),
     )

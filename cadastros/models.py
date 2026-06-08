@@ -508,3 +508,32 @@ class MateriaisBobinagemRoebel(models.Model):
     def __str__(self):
         return f"Materiais Roebel - {self.maquina}"
     
+class ResIsolamento(models.Model):
+
+    maquina = models.OneToOneField(
+            Maquina,
+            on_delete=models.CASCADE,
+            related_name="dados_ensaios"
+        )
+
+    tensao = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    temperatura = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    umidade = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    tempo = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    Ø01xm = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    Ø02xm = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    Ø03xm = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    Ø04xm = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    res_ohmica_t = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    Ø01 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    Ø02 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    Ø03 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+
+    class Meta:
+            verbose_name = "Resistência de isolamento"
+            verbose_name_plural = "Resistências de isolamento"
+    
+    def __str__(self):
+        return f"Resistência de Isolamento - {self.maquina}"
+
+    
