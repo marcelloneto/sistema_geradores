@@ -473,7 +473,7 @@ class MateriaisBobinagemRoebel(models.Model):
     maquina = models.OneToOneField(
         Maquina,
         on_delete=models.CASCADE,
-        related_name="materiais_bobinagem_roebel"
+        related_name="dados_bobinagem_roebel"
     )
 
     condutor = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")

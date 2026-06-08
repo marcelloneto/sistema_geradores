@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cálculos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="d-flex">
+
+    <aside class="bg-light border-end p-3" style="width: 260px; min-height: 100vh;">
+        <h5 class="mb-3">Cálculos</h5>
+
+        <div class="d-grid gap-2">
+            <a href="?secao=bobinas" class="btn btn-outline-primary">Bobinas</a>
+            <a href="?secao=isolamento" class="btn btn-outline-primary">Isolamento</a>
+            <a href="?secao=condutor" class="btn btn-outline-primary">Condutor</a>
+            <a href="?secao=pintura" class="btn btn-outline-primary">Pintura</a>
+            <a href="?secao=geometria" class="btn btn-outline-primary">Geometria</a>
+        </div>
+
+        <hr>
+
+        <a href="{% url 'portal:home' %}" class="btn btn-secondary w-100">
+            Voltar ao início
+        </a>
+    </aside>
+
+    <main class="flex-grow-1">
+
+        <div class="border-bottom p-3 bg-white">
+            <form method="get" >
+                {% csrf_token %}
+
+                <div class="row align-items-end">
+                    <div class="col-md-8">
+                        <label class="form-label">Projeto</label>
+                        <select name="os" class="form-select">
+
+                        {% for ordem in ordens %}
+
+                            <option value="{{ ordem.numero }}"
+                            {% if ordem_selecionada and ordem.id == ordem_selecionada.id %}
+                                selected
+                            {% endif %}>
+                                {{ ordem.numero }} -
+                                {{ ordem.cliente }}
+
+                                {% if ordem.maquina %}
+                                    - {{ ordem.maquina }}
+                                {% endif %}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success w-100">
+                            Selecionar projeto
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <section class="p-4">
+            {% if secao == "bobinas" %}
+                <h2>Cálculos de Bobinas</h2>
+            {% elif secao == "isolamento" %}
+                <h2>Cálculos de Isolamento</h2>
+            {% elif secao == "condutor" %}
+                <h2>Cálculos de Condutor</h2>
+            {% elif secao == "pintura" %}
+                <h2>Cálculos de Pintura</h2>
+            {% elif secao == "geometria" %}
+                <h2>Cálculos de Geometria</h2>
+            {% endif %}
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

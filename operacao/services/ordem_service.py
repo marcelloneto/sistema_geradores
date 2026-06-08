@@ -19,6 +19,7 @@ class OrdemService:
     
     def obter_ordem_selecionada(self,request):
         os_numero = request.GET.get("os")
+        print(f"obter_ordem_selecionada: {os_numero}")
         secoes = list(BaseService(self.secao).SECOES.keys())
         if os_numero:
             self.sessionservice.limpar_temp_se_trocar_os(
@@ -31,7 +32,9 @@ class OrdemService:
                 os_numero
             )
         else:
+            
             os_numero = self.sessionservice.obter_os(request)
+            print(f"obter_ordem_selecionada 2: {os_numero}")
 
         if not os_numero:
             return None

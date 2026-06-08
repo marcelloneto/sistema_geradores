@@ -1,0 +1,129 @@
+{% extends 'operacao/base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Materiais de Bobinagem Roebel</h2>
+
+    <button
+        type="submit"
+        form="materiais-roebel"
+        class="btn btn-success"
+        name="salvar">
+        Salvar
+    </button>
+</div>
+
+<hr>
+
+<form id="materiais-roebel" method="post">
+    {% csrf_token %}
+
+    <h3>Condutor e Isolamento</h3>
+
+    <div class="row">
+        {% for field in campos_condutor_isolamento %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Consolidação e Enchimento</h3>
+
+    <div class="row">
+        {% for field in campos_resinas %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Sistema Condutivo</h3>
+
+    <div class="row">
+        {% for field in campos_condutivo %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Sistema Semicondutivo</h3>
+
+    <div class="row">
+        {% for field in campos_semicondutivo %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Acabamento e Amarração</h3>
+
+    <div class="row">
+        {% for field in campos_acabamento %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Componentes Mecânicos / Elétricos</h3>
+
+    <div class="row">
+        {% for field in campos_componentes %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Parâmetros de Cálculo</h3>
+
+    <div class="row">
+        {% for field in campos_parametros %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+        <button
+            type="submit"
+            name="restaurar"
+            class="btn btn-danger m-2">
+            Restaurar
+        </button>
+
+        <button
+            type="submit"
+            name="aplicar"
+            class="btn btn-success m-2">
+            Aplicar
+        </button>
+    </div>
+
+</form>
+
+{% endblock %}

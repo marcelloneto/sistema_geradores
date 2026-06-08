@@ -1,4 +1,4 @@
-
+from django.db.models import Model
 
 class SessionService:
     def __init__(self,secao):
@@ -24,11 +24,22 @@ class SessionService:
         request.session.modified = True
 
     
-    def salvar_temp_secao(self,request, dados):
-        request.session[f"{self.secao}_temp"] = {
-            campo: None if valor is None else str(valor)
-            for campo, valor in dados.items()
-        }
+    def salvar_temp_secao(self, request, dados):
+
+        temp = {}
+
+        for campo, valor in dados.items():
+
+            if valor is None:
+                temp[campo] = None
+
+            elif isinstance(valor, Model):
+                temp[campo] = valor.pk
+
+            else:
+                temp[campo] = str(valor)
+
+        request.session[f"{self.secao}_temp"] = temp
         request.session.modified = True
         
 

@@ -14,4 +14,5 @@ urlpatterns = [
     path("registrar_os/", views.Registro.registrar_os, name="registrar_os"),
     path("registrar_cliente/", views.Registro.registrar_cliente, name="registrar_cliente"),
     path("registrar_maquina/", views.Registro.registrar_maquina, name="registrar_maquina"),
+    path("bobinagem_roebel/", views.BobinagemView.bobinagem_roebel, name="bobinagem_roebel"),
 ]

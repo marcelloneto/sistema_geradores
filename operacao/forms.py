@@ -1,5 +1,5 @@
 from django import forms
-from cadastros.models import DadosEstator,DadosGeometricosMaquina, DadosPerifericos, Maquina, DadosConstrutivosBobina, ResIsolamento, OrdemServico, Cliente
+from cadastros.models import DadosEstator,DadosGeometricosMaquina, DadosPerifericos, Maquina, DadosConstrutivosBobina, ResIsolamento, OrdemServico, Cliente, MateriaisBobinagemRoebel, Material
 
 
 class DadosEstatorForm(forms.ModelForm):
@@ -541,3 +541,126 @@ class RegistroClienteForm(forms.ModelForm):
             fields = [
                 "nome",
             ]  
+
+
+class MateriaisBobinagemRoebelForm(forms.ModelForm):
+
+    FILTROS = {
+        "condutor": "Condutor",
+        "isolacao_panqueca": "Isolação",
+        "isolacao_condutores": "Isolação",
+        "isolacao_principal": "Isolação",
+        "consolidacao_condutores": "Resina",
+        "massa_enchimento": "Massa",
+        "verniz_condutivo": "Verniz",
+        "fita_condutiva": "Fita",
+        "verniz_semicondutivo": "Verniz",
+        "fita_semicondutiva": "Fita",
+        "fita_sacrificio": "Fita",
+        "cadarco_fibra_vidro": "Cadarço",
+        "fita_acabamento": "Fita",
+        "pavio_central": "Pavio",
+        "aros_amarracao": "Aro",
+        "calcos_radiais": "Calço",
+        "calcos_tangenciais": "Calço",
+        "conexoes": "Conexão",
+        "barramentos_ligacao": "Barramento",
+        "cunhagem": "Cunha",
+        "sensor": "Sensor",
+    }
+
+    CONDUTOR_ISOLAMENTO = [
+        "condutor",
+        "isolacao_panqueca",
+        "isolacao_condutores",
+        "isolacao_principal",
+    ]
+
+    RESINAS = [
+        "consolidacao_condutores",
+        "massa_enchimento",
+    ]
+
+    CONDUTIVO = [
+        "verniz_condutivo",
+        "fita_condutiva",
+    ]
+
+    SEMICONDUTIVO = [
+        "verniz_semicondutivo",
+        "fita_semicondutiva",
+    ]
+
+    ACABAMENTO = [
+        "fita_sacrificio",
+        "cadarco_fibra_vidro",
+        "fita_acabamento",
+        "pavio_central",
+        "aros_amarracao",
+    ]
+
+    COMPONENTES = [
+        "calcos_radiais",
+        "calcos_tangenciais",
+        "conexoes",
+        "barramentos_ligacao",
+        "cunhagem",
+        "sensor",
+    ]
+
+    PARAMETROS = [
+        "sobressalente_bobinas",
+        "coeficiente_seguranca_bobinas",
+    ]
+
+    class Meta:
+        model = MateriaisBobinagemRoebel
+        exclude = ["maquina"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for nome, field in self.fields.items():
+            field.widget.attrs.update({"class": "form-control"})
+
+            if isinstance(field, forms.ModelChoiceField):
+                field.widget.attrs.update({"class": "form-select"})
+
+            if isinstance(field, forms.DecimalField):
+                field.widget.attrs.update({"step": "0.01"})
+
+        for campo, categoria in self.FILTROS.items():
+            if campo in self.fields:
+                self.fields[campo].queryset = (
+                    Material.objects
+                    .filter(categoria__nome=categoria, ativo=True)
+                    .order_by("codigo_material")
+                )
+
+    def obter_grupo(self, grupo):
+        return [
+            self[campo]
+            for campo in grupo
+            if campo in self.fields
+        ]
+
+    def obter_condutor_isolamento(self):
+        return self.obter_grupo(self.CONDUTOR_ISOLAMENTO)
+
+    def obter_resinas(self):
+        return self.obter_grupo(self.RESINAS)
+
+    def obter_condutivo(self):
+        return self.obter_grupo(self.CONDUTIVO)
+
+    def obter_semicondutivo(self):
+        return self.obter_grupo(self.SEMICONDUTIVO)
+
+    def obter_acabamento(self):
+        return self.obter_grupo(self.ACABAMENTO)
+
+    def obter_componentes(self):
+        return self.obter_grupo(self.COMPONENTES)
+
+    def obter_parametros(self):
+        return self.obter_grupo(self.PARAMETROS)

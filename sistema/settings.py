@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'cadastros',
     'import_export',
     'operacao',
+    'portal',
+    'calculos',
 ]
 
 MIDDLEWARE = [

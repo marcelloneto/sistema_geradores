@@ -16,6 +16,7 @@ class home:
         ordem_selecionada = ordemservice.obter_ordem_selecionada(
             request
         )
+        print(ordem_selecionada)
         if ordem_selecionada is None:
             ordens = ordemservice.listar_ordens()
 
@@ -312,6 +313,59 @@ class EnsaioIsolamentoView:
             "ordem_selecionada": ordem_selecionada,
             "dados_ensaios": dados,
             "ensaiostemp": sessionservice.obter_temp_secao(request),
+            **contexto_form,
+        })
+
+class BobinagemView:
+    @staticmethod
+    def bobinagem_roebel(request):
+        secao = 'bobinagem_roebel'
+        sessionservice = SessionService(secao)
+        ordemservice =  OrdemService(secao)
+        ordem_selecionada = ordemservice.obter_ordem_selecionada(
+            request
+        )
+
+        baseservice = BaseService(secao)
+
+        sessionservice.atualizar_os_anterior(request)
+
+        ordens = ordemservice.listar_ordens()
+
+        dados = baseservice.obter_dados(
+            ordem_selecionada,
+        )
+        
+        
+        temp = model_to_dict(dados)
+        print(temp)
+        if f"{secao}_temp" in request.session:
+            pass
+        else:
+            print(False)
+            sessionservice.salvar_temp_secao(request,temp)
+
+        if request.method == "POST":
+            print(True)
+            form = baseservice.processar_post(
+                request,
+                dados=dados
+            )
+        else:
+            form = baseservice.criar_form_get(
+                request,
+                dados
+            )
+        print(list(request.session.keys()))
+        contexto_form = baseservice.montar_contexto_form_roebel(
+            form,
+        )
+
+        return render(request, "operacao/bobinagem_roebel.html", {
+            "ordens": ordens,
+            "ordem_selecionada": ordem_selecionada,
+            "dados_bobinagem": dados,
+            "bobinagemtemp": sessionservice.obter_temp_secao(request),
             **contexto_form,
         })
 

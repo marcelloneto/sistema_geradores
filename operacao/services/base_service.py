@@ -17,6 +17,7 @@ class BaseService:
         "registrar_os": RegistroOSForm,
         "registrar_cliente": RegistroClienteForm,
         "registrar_maquina": RegistroMaquinaForm,
+        "bobinagem_roebel": MateriaisBobinagemRoebelForm,
         }
         self.sessionservice = SessionService(self.secao)
         
@@ -111,7 +112,7 @@ class BaseService:
             temp,
             instance=dados
         )
-
+        
         if form.is_valid():
             objeto = form.save()
             self.sessionservice.limpar_temp_secao(request)
@@ -230,6 +231,18 @@ class BaseService:
                     "campos_parte1": form.obter_parte1(),
                     "campos_parte2": form.obter_parte2(),
                 }
+
+    def montar_contexto_form_roebel(self,form):
+        return {
+        "form": form,
+        "campos_condutor_isolamento": form.obter_condutor_isolamento(),
+        "campos_resinas": form.obter_resinas(),
+        "campos_condutivo": form.obter_condutivo(),
+        "campos_semicondutivo": form.obter_semicondutivo(),
+        "campos_acabamento": form.obter_acabamento(),
+        "campos_componentes": form.obter_componentes(),
+        "campos_parametros": form.obter_parametros(),
+    }
 
     @transaction.atomic
     def criar_novo_projeto(self,form):
