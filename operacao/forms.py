@@ -329,17 +329,95 @@ class DadosMaquinaForm(forms.ModelForm):
                 })
 
 class DadosBobinaForm(forms.ModelForm):
+    CROQUI = [
+        
+        "croqui_g",
+        "croqui_h",
+        "croqui_i",
+        "croqui_j",
+        "croqui_k",
+        "croqui_l",
+    ]
+
+    AMARRACAO = [
+        "amarracao_a1",
+        "amarracao_b1",
+        "amarracao_c1",
+        "amarracao_a2",
+        "amarracao_b2",
+        "amarracao_c2"
+    ]
+
+    CONFIGURACAO = [
+        "configuracao_a1",
+        "configuracao_b1",
+        "configuracao_c1",
+        "configuracao_d1",
+        "configuracao_a2",
+        "configuracao_b2",
+        "configuracao_c2",
+        "configuracao_d2",
+    ]
+
+    MONTADA = [
+        
+        "montada_a",
+        "montada_b",
+        "montada_c",
+        "montada_d",
+        "montada_e1",
+        "montada_e2",
+        "montada_f",
+        "montada_f_sem_isolacao",
+    ]
+
+    LABELS = {
+
+        # croqui
+        "croqui_g": "g",
+        "croqui_h": "h",
+        "croqui_i": "i",
+        "croqui_j": "j",
+        "croqui_k": "k",
+        "croqui_l": "l",
+
+        # amarracao
+        "amarracao_a1": "a1",
+        "amarracao_b1": "b1",
+        "amarracao_c1": "c1",
+        "amarracao_a2": "a2",
+        "amarracao_b2": "b2",
+        "amarracao_c2": "c2",
+
+        # configuracao
+        "configuracao_a1": "a1",
+        "configuracao_b1": "b1",
+        "configuracao_c1": "c1",
+        "configuracao_d1": "d1",
+        "configuracao_a2": "a2",
+        "configuracao_b2": "b2",
+        "configuracao_c2": "c2",
+        "configuracao_d2": "d2",
+
+        # Montada
+        "montada_a": "a",
+        "montada_b": "b",
+        "montada_c": "c",
+        "montada_d": "d",
+        "montada_e1": "e1",
+        "montada_e2": "e2",
+        "montada_f": "f",
+        "montada_f_sem_isolacao": "f (sem isolação)",
+    }
+
     class Meta:
-            model = DadosConstrutivosBobina
-            exclude = [
-            "maquina",
-        ]
+        model = DadosConstrutivosBobina
+        exclude = ["maquina"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
-
             field.widget.attrs.update({
                 "class": "form-control"
             })
@@ -354,3 +432,27 @@ class DadosBobinaForm(forms.ModelForm):
                     "step": "1",
                     "min": "0"
                 })
+        
+        for campo, label in self.LABELS.items():
+
+            if campo in self.fields:
+                self.fields[campo].label = label
+
+    def obter_grupo(self, grupo):
+        return [
+            self[campo]
+            for campo in grupo
+            if campo in self.fields
+        ]
+
+    def obter_croqui(self):
+        return self.obter_grupo(self.CROQUI)
+
+    def obter_amarracao(self):
+        return self.obter_grupo(self.AMARRACAO)
+
+    def obter_configuracao(self):
+        return self.obter_grupo(self.CONFIGURACAO)
+
+    def obter_montada(self):
+        return self.obter_grupo(self.MONTADA)

@@ -1,6 +1,6 @@
 from operacao.forms import DadosEstatorForm, DadosGeometricosForm, DadosPerifericosForm, DadosMaquinaForm, DadosBobinaForm
 from operacao.services.session_service import SessionService
-
+from cadastros.models import DadosEstator
 
 class BaseService:
     
@@ -119,7 +119,71 @@ class BaseService:
                 "campos_obs_calco": form.obter_obs_calco,
                 "campos_inferior": form.obter_inferior,
             }
-        elif self.secao == 'maquina' or self.secao == 'bobina':
+        elif self.secao == 'maquina':
             return {
                 "form": form,
+            }
+        
+        
+    def montar_contexto_form_bobina(self, request, form, maquina):
+        tipo_bobina = DadosEstator.objects.get(maquina=maquina).tipo_bobina
+        tipo_bobinado = DadosEstator.objects.get(maquina=maquina).tipo_bobinado
+
+        if tipo_bobina == "barra_roebel":
+            if tipo_bobinado == "ondulado":
+                croqui = {
+                    "titulo": "Croqui",
+                            "campos": form.obter_croqui(),
+                            "caminho_imagem": "operacao/img/croqui_roebel_ondulado.png"
+                }
+                amarracao = {
+                            "titulo": "Amarração",
+                            "campos": form.obter_amarracao(),
+                            "caminho_imagem": "operacao/img/amarracao_roebel_ondulado.png",
+                        }
+            elif tipo_bobinado == "imbricado":
+                croqui = {
+                    "titulo": "Croqui",
+                            "campos": form.obter_croqui(),
+                            "caminho_imagem": "operacao/img/croqui_roebel_imbricado.png"
+                }
+                amarracao = {
+                            "titulo": "Amarração",
+                            "campos": form.obter_amarracao(),
+                            "caminho_imagem": "operacao/img/amarracao_roebel_imbricado.png",
+                        }
+            configuracao = {
+                        "titulo": "Configuração",
+                        "campos": form.obter_configuracao(),
+                        "caminho_imagem": "operacao/img/configuracao.png",
+            }
+            montada  = {
+                    "titulo": "Bobina Montada",
+                    "campos": form.obter_montada(),
+                    "caminho_imagem": "operacao/img/montada.png",
+            }
+        elif tipo_bobina == "multiespiras":
+            croqui = {
+                "titulo": "Croqui",
+                        "campos": form.obter_croqui(),
+                        "caminho_imagem": "operacao/img/croqui_multiespiras.png"
+            }
+            amarracao = {
+                        "titulo": "Amarração",
+                        "campos": form.obter_amarracao(),
+                        "caminho_imagem": "operacao/img/amarracao_multiespiras.png",
+                    }
+            configuracao = {
+                        "titulo": "Configuração",
+                        "campos": form.obter_configuracao(),
+                        "caminho_imagem": "operacao/img/configuracao.png",
+            }
+            montada  = {
+                    "titulo": "Bobina Montada",
+                    "campos": form.obter_montada(),
+                    "caminho_imagem": "operacao/img/montada.png",
+            }
+        return {
+                "form": form,
+                "secoes": [croqui,amarracao,configuracao,montada,],
             }

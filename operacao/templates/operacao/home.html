@@ -3,8 +3,11 @@
 {% block content %}
 
 {% if ordem_selecionada %}
-
-    <h2>{{ ordem_selecionada.maquina }}</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>{{ ordem_selecionada.maquina }}</h2>
+   
+        <button type="submit" form="geometria" class="btn btn-success" name="salvar">Salvar</button>
+    </div>
     <div class="row">
         <div class="col-md-4">
             <div class="card w-100">

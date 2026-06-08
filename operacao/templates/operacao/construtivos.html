@@ -1,4 +1,5 @@
 {% extends 'operacao/base.html' %}
+{% load static %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Dados das Bobinas</h2>
@@ -31,20 +32,32 @@
 <form id="bobina" method="post">
     {% csrf_token %}
 
-    <h3>Bobinas</h3>
+    
 
     <div class="row">
-        {% for field in form %}
-            <div class="col-md-4 mb-3">
-                <label class="form-label">
-                    {{ field.label }}
-                </label>
+        {% for secao in secoes %}
+        <div class="col-md-3 border-end">
+            <h3>{{secao.titulo}}</h3>
+            <img
+                id="imagem-ranhura"
+                src="{% static secao.caminho_imagem %}"
+                class="img-fluid w-100 border rounded m-2"
+                alt="{{secao.titulo}}">
 
-                {{ field }}
+            <div class="row">
+                {% for field in secao.campos %}
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+                    </div>
+                {% endfor %}
             </div>
+        </div> 
         {% endfor %}
-    </div>
-
+    </div> 
     <div class="d-flex justify-content-end mt-3">
         <button
             type="submit"
@@ -58,6 +71,7 @@
             class="btn btn-success m-2">
             Aplicar
         </button>
+    </div>
     
 </form>
 

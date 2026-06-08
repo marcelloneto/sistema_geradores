@@ -239,14 +239,16 @@ class ConstrutivosView:
                 dados
             )
 
-        contexto_form = baseservice.montar_contexto_form(
-            form
+        contexto_form = baseservice.montar_contexto_form_bobina(
+            request,
+            form,
+            ordem_selecionada.maquina
         )
 
         return render(request, "operacao/construtivos.html", {
             "ordens": ordens,
             "ordem_selecionada": ordem_selecionada,
-            "dados_construtivos": dados,
+            "dados_bobina": dados,
             "construtivostemp": sessionservice.obter_temp_secao(request),
             **contexto_form,
         })
