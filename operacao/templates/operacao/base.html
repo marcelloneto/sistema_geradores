@@ -109,11 +109,16 @@
                 <a href="{% url 'operacao:bobinagem_roebel' %}" class="list-group-item">
                     Bobinagem
                 </a>
-
+                <div class="mt-auto text-center p-3">
+                    <a href="{% url 'portal:home' %}" class="btn btn-secondary btn-voltar-menu">
+                        <i class="bi bi-house"></i>
+                        Voltar
+                    </a>
+                </div>
             </div>
 
         </div>
-
+        
         <div class="col p-4">
 
             {% block content %}
