@@ -346,7 +346,6 @@ class BobinagemView:
             sessionservice.salvar_temp_secao(request,temp)
 
         if request.method == "POST":
-            print(True)
             form = baseservice.processar_post(
                 request,
                 dados=dados
