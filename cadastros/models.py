@@ -1,6 +1,6 @@
 # Create your models here.
 from django.db import models
-
+from django.core.exceptions import ValidationError
 
 class Fornecedor(models.Model):
     
@@ -119,6 +119,60 @@ class CategoriaMaterial(models.Model):
         verbose_name = "Categoria de Material"
         verbose_name_plural = "Categorias de Material"
 
+class MaterialParametroValor(models.Model):
+    material = models.ForeignKey(
+        "Material",
+        on_delete=models.CASCADE,
+        related_name="parametros_tecnicos"
+    )
+
+    parametro = models.ForeignKey(
+        "CategoriaMaterialParametro",
+        on_delete=models.PROTECT,
+        related_name="valores_materiais"
+    )
+
+    valor_texto = models.CharField(
+        "Valor texto",
+        max_length=255,
+        blank=True
+    )
+
+    valor_numero = models.DecimalField(
+        "Valor numérico",
+        max_digits=20,
+        decimal_places=6,
+        null=True,
+        blank=True
+    )
+
+    valor_booleano = models.BooleanField(
+        "Valor booleano",
+        null=True,
+        blank=True
+    )
+
+    unidade = models.ForeignKey(
+        "UnidadeMedida",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="valores_parametros"
+    )
+
+    observacoes = models.CharField(
+        "Observações",
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = "Valor Técnico do Material"
+        verbose_name_plural = "Valores Técnicos dos Materiais"
+        unique_together = ("material", "parametro")
+
+    def __str__(self):
+        return f"{self.material} - {self.parametro}"
+
 class UnidadeMedida(models.Model):
     nome = models.CharField("Nome", max_length=50)
 
@@ -126,11 +180,6 @@ class UnidadeMedida(models.Model):
         "Símbolo",
         max_length=20,
         unique=True
-    )
-
-    grandeza = models.CharField(
-        "Grandeza",
-        max_length=50
     )
 
     fator_base = models.DecimalField(
@@ -240,23 +289,6 @@ class Material(models.Model):
         verbose_name = "Matéria Prima"
         verbose_name_plural = "Matérias Primas"
 
-class MaterialPropriedade(models.Model):
-    material = models.ForeignKey(
-        Material,
-        on_delete=models.CASCADE,
-        related_name="propriedades"
-    )
-
-    nome = models.CharField(max_length=100)
-    valor = models.CharField(max_length=150)
-    unidade = models.CharField(max_length=30, blank=True)
-
-    def __str__(self):
-        return f"{self.material} - {self.nome}"
-    
-    class Meta:
-        verbose_name = "Propriedade do Material"
-        verbose_name_plural = "Propriedades dos Materiais"
 
 class DadosEstator(models.Model):
     TIPOS_BOBINA = [
@@ -535,5 +567,147 @@ class ResIsolamento(models.Model):
     
     def __str__(self):
         return f"Resistência de Isolamento - {self.maquina}"
+
+class CategoriaMaterialParametro(models.Model):
+    class TipoParametro(models.TextChoices):
+        TEXTO = "texto", "Texto"
+        NUMERO = "numero", "Número"
+        LISTA = "lista", "Lista"
+        CHECKBOX = "checkbox", "Checkbox"
+
+    categoria = models.ForeignKey(
+        CategoriaMaterial,
+        on_delete=models.CASCADE,
+        related_name="parametros"
+    )
+
+    nome = models.CharField("Descrição / Nome", max_length=100)
+    tipo = models.CharField(
+        "Tipo",
+        max_length=20,
+        choices=TipoParametro.choices
+    )
+
+    grandeza = models.ForeignKey(
+        "Grandeza",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="parametros_material"
+    )
+
+    unidade = models.ForeignKey(
+        UnidadeMedida,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+
+    inteiro = models.BooleanField("Valor inteiro", default=False)
+
+    usar_limites = models.BooleanField("Usar valor mín. e máx.", default=False)
+    valor_minimo = models.DecimalField(
+        "Valor mínimo",
+        max_digits=12,
+        decimal_places=4,
+        null=True,
+        blank=True
+    )
+    valor_maximo = models.DecimalField(
+        "Valor máximo",
+        max_digits=12,
+        decimal_places=4,
+        null=True,
+        blank=True
+    )
+
+    obrigatorio = models.BooleanField("Obrigatório", default=False)
+    ordem = models.PositiveIntegerField("Ordem", default=0)
+    ativo = models.BooleanField("Ativo", default=True)
+
+    class Meta:
+        verbose_name = "Parâmetro da Categoria"
+        verbose_name_plural = "Parâmetros das Categorias"
+        ordering = ("categoria", "ordem", "nome")
+
+    def __str__(self):
+        return f"{self.categoria} - {self.nome}"
+
+    def clean(self):
+        if self.tipo != self.TipoParametro.NUMERO:
+            if self.grandeza:
+                raise ValidationError({
+                    "grandeza": "Grandeza só deve ser preenchida para parâmetros numéricos."
+                })
+
+            if self.unidade:
+                raise ValidationError({
+                    "unidade": "Unidade só deve ser preenchida para parâmetros numéricos."
+                })
+
+            if self.inteiro:
+                raise ValidationError({
+                    "inteiro": "A opção inteiro só se aplica a parâmetros numéricos."
+                })
+
+            if self.usar_limites:
+                raise ValidationError({
+                    "usar_limites": "Valor mínimo e máximo só se aplicam a parâmetros numéricos."
+                })
+
+        if self.tipo == self.TipoParametro.NUMERO:
+            if self.usar_limites:
+                if self.valor_minimo is None or self.valor_maximo is None:
+                    raise ValidationError(
+                        "Informe valor mínimo e máximo."
+                    )
+
+                if self.valor_minimo > self.valor_maximo:
+                    raise ValidationError({
+                        "valor_minimo": "O valor mínimo não pode ser maior que o valor máximo."
+                    })
+
+
+class CategoriaMaterialParametroOpcao(models.Model):
+    parametro = models.ForeignKey(
+        CategoriaMaterialParametro,
+        on_delete=models.CASCADE,
+        related_name="opcoes"
+    )
+
+    nome = models.CharField("Opção", max_length=100)
+    ordem = models.PositiveIntegerField("Ordem", default=0)
+    ativo = models.BooleanField("Ativo", default=True)
+
+    class Meta:
+        verbose_name = "Opção do Parâmetro"
+        verbose_name_plural = "Opções dos Parâmetros"
+        ordering = ("parametro", "ordem", "nome")
+
+    def __str__(self):
+        return self.nome
+
+class Grandeza(models.Model):
+    nome = models.CharField(
+        "Nome",
+        max_length=100,
+        unique=True
+    )
+
+    unidade_padrao = models.ForeignKey(
+        "UnidadeMedida",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="+"
+    )
+
+    class Meta:
+        verbose_name = "Grandeza"
+        verbose_name_plural = "Grandezas"
+        ordering = ("nome",)
+
+    def __str__(self):
+        return self.nome
 
     

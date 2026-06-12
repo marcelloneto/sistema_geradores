@@ -7,7 +7,6 @@ from .models import (
     OrdemServico,
     CategoriaMaterial,
     Material,
-    MaterialPropriedade,
     UnidadeMedida,
     Maquina,
     DadosEstator,
@@ -15,15 +14,35 @@ from .models import (
     DadosConstrutivosBobina,
     DadosGeometricosMaquina,
     MateriaisBobinagemRoebel,
-    ResIsolamento
+    ResIsolamento,
+    CategoriaMaterialParametro,
+    CategoriaMaterialParametroOpcao,
+    Grandeza,
+    MaterialParametroValor,
 )
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
 
-class MaterialPropriedadeInline(admin.TabularInline):
-    model = MaterialPropriedade
-    extra = 1
+class MaterialParametroValorInline(admin.TabularInline):
+    model = MaterialParametroValor
+    extra = 0
+    can_delete = False
+
+    fields = (
+        "parametro",
+        "valor_texto",
+        "valor_numero",
+        "valor_booleano",
+        "unidade",
+        "observacoes",
+    )
+
+    readonly_fields = ("parametro",)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+        
 
 class MaterialResource(resources.ModelResource):
 
@@ -66,11 +85,46 @@ class MaterialResource(resources.ModelResource):
 @admin.register(Material)
 class MaterialAdmin(ImportExportModelAdmin):
     resource_class = MaterialResource
-    
-    list_display = ("codigo_material", "nome", "categoria", "fornecedor", "preco", "unidade_preco", "ativo", "prioridade")
-    list_filter = ("categoria", "fornecedor", "ativo", "prioridade")
-    search_fields = ("codigo_material","nome","descricao")
-    inlines = [MaterialPropriedadeInline]
+
+    list_display = (
+        "codigo_material",
+        "nome",
+        "categoria",
+        "fornecedor",
+        "preco",
+        "unidade_preco",
+        "ativo",
+        "prioridade",
+    )
+
+    list_filter = (
+        "categoria",
+        "fornecedor",
+        "ativo",
+        "prioridade",
+    )
+
+    search_fields = (
+        "codigo_material",
+        "nome",
+        "descricao",
+    )
+
+    inlines = [MaterialParametroValorInline]
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        material = self.get_object(request, object_id)
+
+        if material and material.categoria:
+            parametros = material.categoria.parametros.filter(ativo=True)
+
+            for parametro in parametros:
+                MaterialParametroValor.objects.get_or_create(
+                    material=material,
+                    parametro=parametro,
+                )
+
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 class FornecedorResource(resources.ModelResource):
@@ -179,11 +233,53 @@ class CategoriaMaterialResource(resources.ModelResource):
             "nome",
         )
 
+class CategoriaMaterialParametroInline(admin.TabularInline):
+    model = CategoriaMaterialParametro
+    extra = 1
+
+
+class CategoriaMaterialParametroOpcaoInline(admin.TabularInline):
+    model = CategoriaMaterialParametroOpcao
+    extra = 1
+
+
+@admin.register(CategoriaMaterialParametro)
+class CategoriaMaterialParametroAdmin(admin.ModelAdmin):
+    list_display = (
+        "nome",
+        "categoria",
+        "tipo",
+        "grandeza",
+        "unidade",
+        "inteiro",
+        "usar_limites",
+        "obrigatorio",
+        "ativo",
+    )
+
+    list_filter = (
+        "categoria",
+        "tipo",
+        "ativo",
+        "obrigatorio",
+    )
+
+    search_fields = (
+        "nome",
+        "categoria__nome",
+    )
+
+    inlines = [CategoriaMaterialParametroOpcaoInline]
+
+    class Media:
+        js = "admin/js/categoria_material_parametro.js"
+
+
 @admin.register(CategoriaMaterial)
 class CategoriaMaterialAdmin(ImportExportModelAdmin):
     list_display = ("id", "nome")
     search_fields = ("nome",)
-
+    inlines = [CategoriaMaterialParametroInline]
 
 @admin.register(Maquina)
 class MaquinaAdmin(admin.ModelAdmin):
@@ -252,24 +348,20 @@ class UnidadeMedidaAdmin(ImportExportModelAdmin):
         "id",
         "nome",
         "simbolo",
-        "grandeza",
         "fator_base",
         "ativa",
     )
 
     list_filter = (
-        "grandeza",
         "ativa",
     )
 
     search_fields = (
         "nome",
         "simbolo",
-        "grandeza",
     )
 
     ordering = (
-        "grandeza",
         "simbolo",
     )
 
@@ -828,6 +920,7 @@ class MateriaisBobinagemRoebelAdmin(ImportExportModelAdmin):
 @admin.register(ResIsolamento)
 class ResIsolamentoAdmin(admin.ModelAdmin):
 
+
     list_display = (
         "id",
         "maquina",
@@ -876,3 +969,9 @@ class ResIsolamentoAdmin(admin.ModelAdmin):
             )
         }),
     )
+
+@admin.register(Grandeza)
+class GrandezaAdmin(admin.ModelAdmin):
+    list_display = ("id", "nome", "unidade_padrao")
+    search_fields = ("nome",)
+    ordering = ("nome",)
