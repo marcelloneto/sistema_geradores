@@ -11,14 +11,14 @@
 
 <div class="d-flex">
 
-    <aside class="bg-light border-end p-3" style="width: 260px; min-height: 100vh;">
+    <aside class="bg-light border-end p-3" style="width: 260px; min-height: 100vh; min-width: 260px;">
         <h5 class="mb-3">Cálculos</h5>
 
         <div class="d-grid gap-2">
             <a href="?secao=bobinas" class="btn btn-outline-primary">Bobinas</a>
-            <a href="?secao=isolamento" class="btn btn-outline-primary">Isolamento</a>
-            <a href="?secao=condutor" class="btn btn-outline-primary">Condutor</a>
-            <a href="?secao=pintura" class="btn btn-outline-primary">Pintura</a>
+            <a href="{% url 'calculos:isolamento' %}" class="btn btn-outline-primary">Isolamento</a>
+            <a href="{% url 'calculos:condutor' %}" class="btn btn-outline-primary">Condutor</a>
+            <a href="{% url 'calculos:pintura' %}" class="btn btn-outline-primary">Pintura</a>
             <a href="?secao=geometria" class="btn btn-outline-primary">Geometria</a>
         </div>
 
@@ -81,6 +81,12 @@
                 <h2>Cálculos de Geometria</h2>
             {% endif %}
         </section>
+        <div class="col p-4">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
 
     </main>
 

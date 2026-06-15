@@ -16,25 +16,25 @@ class DadosMaquinaService:
             "dados_estator",
             "dados_geometricos",
             "dados_construtivos_bobina",
-            "materiais_bobinagem",
+            "dados_bobinagem_roebel",
         ],
         "isolamento": [
             "maquina",
             "dados_estator",
             "dados_geometricos",
-            "materiais_bobinagem",
+            "dados_bobinagem_roebel",
         ],
         "condutor": [
             "maquina",
             "dados_estator",
             "dados_geometricos",
-            "materiais_bobinagem",
+            "dados_bobinagem_roebel",
         ],
         "pintura": [
             "maquina",
             "dados_estator",
             "dados_geometricos",
-            "materiais_bobinagem",
+            "dados_bobinagem_roebel",
         ],
         "geometria": [
             "maquina",
@@ -86,3 +86,4 @@ class DadosMaquinaService:
             return {}
 
         return model_to_dict(objeto)
+

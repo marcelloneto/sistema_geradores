@@ -5,6 +5,7 @@ body {
 .menu-lateral {
     position:  relative;
     min-height: 85vh;
+    min-width: 260px;
 }
 
 .list-group-item {
