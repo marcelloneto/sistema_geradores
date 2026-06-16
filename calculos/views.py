@@ -6,6 +6,7 @@ from operacao.services.ordem_service import OrdemService
 from calculos.services.dados_maquina_service import DadosMaquinaService
 from calculos.services.dados_material_service import DadosMaterialService
 from calculos.services.session_service import ResultadosSessionService as RSS
+from calculos.calculos.condutor import ResultadosCondutor as calculos
 
 def home_calculos(request):
     request.session['resultados']={}
@@ -57,12 +58,17 @@ class ResultadosCondutor:
         rss.verificar_secao(request, dados)
 
         opcoes = rss.obter_opcoes_secao( material)
-
-        rss.processar_post(request)
+        if request.method == "POST":
+            condutor_1 = rss.processar_post(request)
         
         escolhido = material['materiais_disponiveis'][request.session['resultados']['condutor_selecionado']-1]
-        
 
+        print(f"escolhido: {escolhido}")
+        condutor1 = calculos(escolhido)
+        condutor2 = calculos(escolhido)
+
+        condutor1.teste(request)
+        condutor2.teste(request)
         
         return render(request, f"calculos/{secao}.html", {
                 "ordens": ordens,

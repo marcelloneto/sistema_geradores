@@ -51,8 +51,9 @@ class ResultadosSessionService:
     def processar_post(self,request):
         """processa o evento para atualizar os dados do materiais"""
 
-        if request.method == "POST":
+        if "condutor_1" in request.POST:
             acao = request.POST.get("acao")
-            secao = request.POST.get(self.secao)
+            secao = request.POST.get(f"{self.secao}_1")
+            
             request.session['resultados'][f'{self.secao}_selecionado'] = int(secao)
-            print(f"Condutor escolhido: {secao}")
+            return secao
