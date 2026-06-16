@@ -10,27 +10,27 @@ class DadosMaterialService:
         },
         "isolamento_principal": {
             "campo": "isolacao_principal",
-            "categoria": "Isolação Principal",
+            "categoria": "Isolação",
         },
         "isolacao_condutores": {
             "campo": "isolacao_condutores",
-            "categoria": "Isolação Condutores",
+            "categoria": "Isolação",
         },
         "fita_condutiva": {
             "campo": "fita_condutiva",
-            "categoria": "Fita Condutiva",
+            "categoria": "Fita",
         },
         "verniz_condutivo": {
             "campo": "verniz_condutivo",
-            "categoria": "Verniz Condutivo",
+            "categoria": "Verniz",
         },
         "fita_semicondutiva": {
             "campo": "fita_semicondutiva",
-            "categoria": "Fita Semicondutiva",
+            "categoria": "Fita",
         },
         "verniz_semicondutivo": {
             "campo": "verniz_semicondutivo",
-            "categoria": "Verniz Semicondutivo",
+            "categoria": "Verniz",
         },
     }
 
@@ -47,7 +47,7 @@ class DadosMaterialService:
             self.config["campo"],
             None
         )
-
+        
         return {
             "material_utilizado": self.material_para_dict(
                 material_utilizado

@@ -1,4 +1,5 @@
 import math
+from decimal import Decimal
 
 
 class Areas:
@@ -22,14 +23,21 @@ class Areas:
             return math.pow( valor / 4 , 2 ) * math.pi()
 
 class ResultadosCondutor:
-    def __init__(self,dados):
+    def __init__(self,dados, bobina):
         self.dados = dados
+        self.l_bobina = bobina.comprimento()
+        self.altura = self.dados['parametros']['altura']['valor']
+        self.largura = self.dados['parametros']['largura']['valor']
+        self.densidade = self.dados['parametros']['densidade']['valor']
         
-    def teste(self,request):
-        altura = self.dados['parametros']['altura']['valor']
-        largura = self.dados['parametros']['largura']['valor']
-        area = Areas.area_retangulo(altura,largura)
+    def area(self):
         
-        return (self.dados)
+        area = Areas.area_retangulo(self.altura,self.largura)
+        
+        return (area)
 
-    
+    def peso (self,volume):
+
+        peso = volume * self.densidade * Decimal("1e-9")
+
+        return peso

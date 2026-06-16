@@ -462,6 +462,7 @@ class DadosConstrutivosBobina(models.Model):
     croqui_j = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     croqui_k = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     croqui_l = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    croqui_ponta = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Amarração
     amarracao_a1 = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

@@ -7,6 +7,8 @@ from calculos.services.dados_maquina_service import DadosMaquinaService
 from calculos.services.dados_material_service import DadosMaterialService
 from calculos.services.session_service import ResultadosSessionService as RSS
 from calculos.calculos.condutor import ResultadosCondutor as calculos
+from calculos.services.calculos_service import Filtros
+
 
 def home_calculos(request):
     request.session['resultados']={}
@@ -31,7 +33,7 @@ def home_calculos(request):
 class teste:
     def __init__ (self,secao,os):
         dados_maquina = DadosMaquinaService(secao)
-        print(dados_maquina.obter_dados(os))
+        
 
 class ResultadosCondutor:
     @staticmethod
@@ -42,6 +44,7 @@ class ResultadosCondutor:
         
         rss.validar_temp(request)
         d_material_s = DadosMaterialService(secao)
+        dados_material_iso = DadosMaterialService('isolamento_principal')
         
         
         ordemservice = OrdemService("calculos")
@@ -49,26 +52,33 @@ class ResultadosCondutor:
         ordens = ordemservice.listar_ordens()
         
         ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
-
+        material_iso = dados_material_iso.obter_dados(ordem_selecionada.maquina)
         dados = dms.obter_dados(ordem_selecionada)
         material = d_material_s.obter_dados(ordem_selecionada.maquina)
         
         rss.atualizar_pagina(request)
-        rss.verificar_mudanca_pagina(request, material)
+        rss.verificar_mudanca_pagina(request)
         rss.verificar_secao(request, dados)
+        rss.verificar_mudanca_os(request,ordem_selecionada)
 
         opcoes = rss.obter_opcoes_secao( material)
         if request.method == "POST":
-            condutor_1 = rss.processar_post(request)
+            rss.processar_post(request)
+        opcoes_iso = rss.obter_opcoes_secao(material_iso)
+
+        escolhido = rss.escolha(request,dados,material,secao)
+
+        iso_escolhido = rss.escolha(request,dados,material_iso,'isolacao')
+
         
-        escolhido = material['materiais_disponiveis'][request.session['resultados']['condutor_selecionado']-1]
+        
 
-        print(f"escolhido: {escolhido}")
-        condutor1 = calculos(escolhido)
-        condutor2 = calculos(escolhido)
+        coeficiente_seguranca = request.session['resultados'].get(
+            "coeficiente_seguranca_bobinas",
+            1.10
+        )
 
-        condutor1.teste(request)
-        condutor2.teste(request)
+        calculoservice = Filtros(dados,escolhido)
         
         return render(request, f"calculos/{secao}.html", {
                 "ordens": ordens,
@@ -76,9 +86,12 @@ class ResultadosCondutor:
                 "secao": secao,
                 "dados": dados,
                 "material": material,
-                f"{secao}_calculo": request.session['resultados'][f'{secao}_selecionado'],
                 "opcoes": opcoes,
+                "opcoes_iso": opcoes_iso,
                 "escolhido": escolhido,
+                "iso_escolhido": iso_escolhido,
+                'resultados': calculoservice.calcularcondutor(coeficiente_seguranca),
+                "coeficiente_seguranca": coeficiente_seguranca,
             })
         
 
@@ -86,15 +99,21 @@ class ResultadosIsolamento:
     @staticmethod
     def isolamento(request):
         secao = 'isolamento'
+        fita = 'isolamento_principal'
         request.session['resultados']['pagina_atual'] = "resultados_isolamento"
         dados = DadosMaquinaService(secao)
         ordemservice = OrdemService("calculos")
-            
-        ordens = ordemservice.listar_ordens()
-        
         ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
-        print(ordem_selecionada)
-        print(f"Resultados Isolamento: {dados.obter_dados(ordem_selecionada)}")
+        d_material_s = DadosMaterialService(fita)
+        material = d_material_s.obter_dados(ordem_selecionada.maquina) 
+        rss = RSS(secao)    
+        ordens = ordemservice.listar_ordens()
+        rss.atualizar_pagina(request)
+        rss.verificar_mudanca_pagina(request)
+
+        print(f"Material: {material}")
+        
+        
         request.session['resultados']['pagina_anterior'] = "resultados_isolamento"
         return render(request, "calculos/isolamento.html", {
                 "ordens": ordens,

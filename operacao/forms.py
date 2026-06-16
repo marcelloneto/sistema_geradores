@@ -332,12 +332,13 @@ class DadosBobinaForm(forms.ModelForm):
 
     CROQUI = [
         
-        "croqui_g",
-        "croqui_h",
-        "croqui_i",
         "croqui_j",
+        "croqui_g",
         "croqui_k",
+        "croqui_h",
         "croqui_l",
+        "croqui_i",
+        "croqui_ponta"
     ]
 
     AMARRACAO = [
@@ -376,11 +377,12 @@ class DadosBobinaForm(forms.ModelForm):
 
         # croqui
         "croqui_g": "g",
+        "croqui_j": "G",
         "croqui_h": "h",
-        "croqui_i": "i",
-        "croqui_j": "j",
-        "croqui_k": "k",
-        "croqui_l": "l",
+        "croqui_k": "H",
+        "croqui_i": "i",        
+        "croqui_l": "I",
+        "croqui_ponta": "Comprimento da ponta",
 
         # amarracao
         "amarracao_a1": "a1",
