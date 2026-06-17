@@ -39,7 +39,7 @@ class DadosMaterialService:
         self.config = self.CAMPOS[secao]
 
     def obter_dados(self, maquina):
-        
+
         materiais_bobinagem = maquina.dados_bobinagem_roebel
 
         material_utilizado = getattr(
@@ -47,18 +47,25 @@ class DadosMaterialService:
             self.config["campo"],
             None
         )
-        
+
+        materiais = Material.objects.filter(
+            categoria__nome__icontains=self.config["categoria"],
+            ativo=True
+        ).order_by("nome")
+
+        materiais_disponiveis = {}
+
+        for indice, material in enumerate(materiais):
+
+            materiais_disponiveis[str(indice)] = (
+                self.material_para_dict(material)
+            )
+
         return {
             "material_utilizado": self.material_para_dict(
                 material_utilizado
             ),
-            "materiais_disponiveis": [
-                self.material_para_dict(material)
-                for material in Material.objects.filter(
-                    categoria__nome=self.config["categoria"],
-                    ativo=True
-                )
-            ]
+            "materiais_disponiveis": materiais_disponiveis,
         }
 
     def material_para_dict(self, material):

@@ -52,48 +52,80 @@ class ResultadosCondutor:
         ordens = ordemservice.listar_ordens()
         
         ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
-        material_iso = dados_material_iso.obter_dados(ordem_selecionada.maquina)
-        dados = dms.obter_dados(ordem_selecionada)
-        material = d_material_s.obter_dados(ordem_selecionada.maquina)
-        
-        rss.atualizar_pagina(request)
-        rss.verificar_mudanca_pagina(request)
-        rss.verificar_secao(request, dados)
-        rss.verificar_mudanca_os(request,ordem_selecionada)
+        if ordem_selecionada is None:
+            return render(request, f"calculos/{secao}.html", {
+                          "ordens": ordens,
+                          })
+        else:
 
-        opcoes = rss.obter_opcoes_secao( material)
-        if request.method == "POST":
-            rss.processar_post(request)
-        opcoes_iso = rss.obter_opcoes_secao(material_iso)
+            material_iso = dados_material_iso.obter_dados(ordem_selecionada.maquina)
+            dados = dms.obter_dados(ordem_selecionada)
+            material = d_material_s.obter_dados(ordem_selecionada.maquina)
+            
+            rss.atualizar_pagina(request)
+            rss.verificar_mudanca_pagina(request)
+            rss.verificar_secao(request, dados,secao,material["materiais_disponiveis"])
+            rss.verificar_secao(request, dados,'isolacao',material_iso['materiais_disponiveis'])
+            rss.verificar_mudanca_os(request,ordem_selecionada)
 
-        escolhido = rss.escolha(request,dados,material,secao)
+            opcoes = rss.obter_opcoes_secao( material)
+            if request.method == "POST":
+                processar = rss.processar_post(request)
+            opcoes_iso = rss.obter_opcoes_secao(material_iso)
+             
+            escolhido = rss.escolha(request,dados,material,secao)
+            index_cond = ResultadosCondutor.selecao_cond(escolhido,rss,material)
+            iso_escolhido = rss.escolha(request,dados,material_iso,'isolacao')
+            index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material_iso)
+            coeficiente_seguranca = request.session['resultados'].get(
+                "coeficiente_seguranca_bobinas",
+                "1.10"
+            )
+            folga = request.session['resultados'].get(
+                "folga_ran",
+                "0.40"
+            )
 
-        iso_escolhido = rss.escolha(request,dados,material_iso,'isolacao')
+            calculoservice = Filtros(dados,escolhido,iso_escolhido)
+            
+            resultados = calculoservice.calcularcondutor(coeficiente_seguranca,folga)
+            
+            return render(request, f"calculos/{secao}.html", {
+                    "ordens": ordens,
+                    "ordem_selecionada": ordem_selecionada,
+                    "secao": secao,
+                    "dados": dados,
+                    "material": material,
+                    "opcoes": opcoes,
+                    "opcoes_iso": opcoes_iso,
+                    "escolhido": escolhido,
+                    "index_cond": index_cond,
+                    "iso_escolhido": iso_escolhido,
+                    "index_iso": str(index_iso),
+                    'resultados': resultados,
+                    "coeficiente_seguranca": coeficiente_seguranca,
+                    "folga_ran": folga,
+                })
 
-        
-        
+    @staticmethod
+    def selecao_iso(iso_escolhido,rss,material_iso):
+        if iso_escolhido is None:
+            index_iso = "-1"
+        elif iso_escolhido == -1:
+            index_iso = "-1"
+            print(f"iso_escolhido: {type(iso_escolhido)}")
+        else:
+            index_iso = rss.obter_indice_por_id(material_iso['materiais_disponiveis'],iso_escolhido['id'])
 
-        coeficiente_seguranca = request.session['resultados'].get(
-            "coeficiente_seguranca_bobinas",
-            1.10
-        )
+        return index_iso
+    @staticmethod
+    def selecao_cond(escolhido,rss,material):
+        if escolhido is None:
+            index_cond = "0"
+        else:
+            index_cond = rss.obter_indice_por_id(material['materiais_disponiveis'],escolhido['id'])
 
-        calculoservice = Filtros(dados,escolhido)
-        
-        return render(request, f"calculos/{secao}.html", {
-                "ordens": ordens,
-                "ordem_selecionada": ordem_selecionada,
-                "secao": secao,
-                "dados": dados,
-                "material": material,
-                "opcoes": opcoes,
-                "opcoes_iso": opcoes_iso,
-                "escolhido": escolhido,
-                "iso_escolhido": iso_escolhido,
-                'resultados': calculoservice.calcularcondutor(coeficiente_seguranca),
-                "coeficiente_seguranca": coeficiente_seguranca,
-            })
-        
+        return index_cond
 
 class ResultadosIsolamento:
     @staticmethod

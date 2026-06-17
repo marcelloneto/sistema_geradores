@@ -28,6 +28,8 @@ class ResultadosCondutor:
         self.l_bobina = bobina.comprimento()
         self.altura = self.dados['parametros']['altura']['valor']
         self.largura = self.dados['parametros']['largura']['valor']
+        self.altura_iso = self.dados['parametros']['altura isolação']['valor']
+        self.largura_iso = self.dados['parametros']['largura isolação']['valor']
         self.densidade = self.dados['parametros']['densidade']['valor']
         
     def area(self):
@@ -41,3 +43,11 @@ class ResultadosCondutor:
         peso = volume * self.densidade * Decimal("1e-9")
 
         return peso
+
+    def disposicao_condutores(self, ranhura, cond_esp):
+        col = math.floor((ranhura-Decimal(5))/self.largura_iso)
+
+        return {
+            'col': col,
+            'lin': Decimal(cond_esp/col),
+        }

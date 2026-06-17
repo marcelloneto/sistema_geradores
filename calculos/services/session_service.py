@@ -32,20 +32,23 @@ class ResultadosSessionService:
             
         request.session['resultados']['pagina_anterior'] = f"resultados_{self.secao}"
 
-    def verificar_secao(self,request,dados):
+    def verificar_secao(self,request,dados,secao,material):
         """verifica se já existe valor temporário para a seção"""
 
-        if f'{self.secao}_selecionado' in request.session['resultados']:
+        if f'{secao}_selecionado' in request.session['resultados']:
             pass
         else:
-            request.session['resultados'][f'{self.secao}_selecionado'] = dados['dados_bobinagem_roebel'][self.secao]
+            if secao == 'isolacao':
+                request.session['resultados'][f'{secao}_selecionado'] = self.obter_indice_por_id(material,dados['dados_bobinagem_roebel']['isolacao_condutores'])
+            else:
+                request.session['resultados'][f'{secao}_selecionado'] = self.obter_indice_por_id(material,dados['dados_bobinagem_roebel'][secao])
 
     def obter_opcoes_secao(self, material):
         """obtém as opções de materiais disponíveis para utilização e retorna em lista"""
 
         opcoes = []
         for opcao in material['materiais_disponiveis']:
-            opcoes.append(opcao)
+            opcoes.append(material['materiais_disponiveis'][opcao])
         return opcoes
 
     def processar_post(self,request):
@@ -56,15 +59,21 @@ class ResultadosSessionService:
             secao = request.POST.get(f"{self.secao}_1")
             coeficiente = request.POST.get("coeficiente_seguranca")
             iso = request.POST.get("iso_espiras")
+            folga = request.POST.get("folga_ran")
             
             request.session['resultados'][f'{self.secao}_selecionado'] = int(secao)
             request.session['resultados']['coeficiente_seguranca_bobinas'] = coeficiente
             request.session['resultados']['isolacao_selecionado'] = iso
-            
-            return secao
+            request.session['resultados']['folga_ran'] = folga
 
-        if "iso_espiras" in request.POST:
-            print("iso_espiras")
+            return {
+                'condutor': int(secao),
+                'iso_espiras': iso,
+                'folga_ranhura': folga,
+                'coeficiente_seguranca': coeficiente,
+                }
+
+        
 
     def verificar_mudanca_os (self, request, ordem):
         if 'resultados' in request.session:
@@ -82,25 +91,55 @@ class ResultadosSessionService:
             
             request.session['resultados']['os_anterior'] = ordem.numero
 
-    def verificar_dados(self,request,dados,material):
+    def verificar_dados(self,request,dados,material,secao):
         
         if 'dados_bobinagem_roebel' in dados:
-            if dados['dados_bobinagem_roebel'][self.secao] is None:
+            if secao == 'isolacao':
+                material_1 = dados['dados_bobinagem_roebel']['isolacao_condutores']
+                
+            else:
+                material_1 = dados['dados_bobinagem_roebel'][self.secao]
+            selecionado = self.obter_indice_por_id(material['materiais_disponiveis'],material_1)
+            
+            if material_1 is None:
                 return None
             else:
-                escolhido = material['materiais_disponiveis'][dados['dados_bobinagem_roebel'][self.secao]-1]
+                escolhido = material['materiais_disponiveis'][str(int(selecionado))]
                 
                 return escolhido
 
     def escolha(self,request,dados,material,secao):
-        print(request.session['resultados'][f'{secao}_selecionado'])
+        
 
         if f'{secao}_selecionado' in request.session['resultados']:
+            
+            selecionado = request.session['resultados'][f'{secao}_selecionado']
+            
             if request.session['resultados'][f'{secao}_selecionado'] is None:
-                escolhido = material['materiais_disponiveis'][0]
+                escolhido = material['materiais_disponiveis']['0']
             else:
-                escolhido = material['materiais_disponiveis'][int(request.session['resultados'][f'{secao}_selecionado'])-1]
+                if selecionado == "-1":
+                    escolhido = int(selecionado)
+                else:
+                    escolhido = material['materiais_disponiveis'][str(int(selecionado))]
         else:
-            escolhido = self.verificar_dados(request, dados,material)
+            
+            escolhido = self.verificar_dados(request, dados,material,secao)
+            
+            
 
         return escolhido
+
+    @staticmethod
+    def obter_indice_por_id(materiais, id_material):
+        if id_material is None:
+            return "1"
+        for indice, material in materiais.items():
+
+            if material["id"] == id_material:
+                
+                return indice
+        
+        return None
+
+    

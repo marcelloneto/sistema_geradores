@@ -2,8 +2,6 @@
 
 {% block content %}
 
-<h2 class="mb-4">Dados Coletados</h2>
-
 <form method="post">
     {% csrf_token %}
 
@@ -13,11 +11,12 @@
             <label class="form-label">
                 Condutor 1
             </label>
-
+            
             <select name="condutor_1" class="form-select">
+                
                 {% for opcao in opcoes %}
-                    <option value="{{ opcao.id }}"
-                        {% if opcao.id == escolhido.id %}
+                    <option value="{{ forloop.counter0 }}"
+                        {% if forloop.counter0|stringformat:"s" == index_cond|stringformat:"s" %}
                             selected
                         {% endif %}
                     >
@@ -26,18 +25,25 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-md-3">
+
+        <div class="col-md-2">
             <label class="form-label">
                 Isolação Entre Espiras
             </label>
-
+            
             <select name="iso_espiras" class="form-select">
 
-                <option value="">Nenhum</option>
+                <option value="-1"
+                {% if index_iso == "" %}
+                    selected
+                {% endif %}
+                >
+                    Nenhum
+                </option>
 
                 {% for opcao in opcoes_iso %}
                     <option value="{{ forloop.counter0 }}"
-                        {% if forloop.counter0 == iso_espiras_selecionado %}
+                        {% if forloop.counter0|stringformat:"s" == index_iso|stringformat:"s" %}
                             selected
                         {% endif %}
                     >
@@ -48,16 +54,30 @@
             </select>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <label class="form-label">
+                Folga na Ranhura (mm)
+            </label>
+
+            <input
+                type="number"
+                name="folga_ran"
+                class="form-control"
+                step="0.1"
+                min="0"
+                value="{{ folga_ran }}">
+        </div>
+
+        <div class="col-md-2">
             <label class="form-label">
                 Coeficiente de Segurança
             </label>
 
             <input
-                type="float"
+                type="number"
                 name="coeficiente_seguranca"
                 class="form-control"
-                step="0.01"
+                step="0.1"
                 min="1"
                 value="{{ coeficiente_seguranca }}">
         </div>
@@ -75,106 +95,160 @@
     </div>
 </form>
 
-   <div class="card mt-4">
+    <div class="card mt-4">
 
-    <div class="card-header">
-        <strong>Resultados Técnicos do Condutor {{ escolhido.nome }}</strong>
-    </div>
+        <div class="card-header">
+            <strong>Resultados Técnicos do Condutor {{ escolhido.nome }}</strong>
+        </div>
 
-    <div class="card-body">
+        <div class="card-body">
 
-        {% if resultados %}
+            {% if resultados %}
 
-            <div class="row">
+                <div class="row">
 
-                {% for campo, valor in resultados.items %}
+                    {% for campo, valor in resultados.items %}
 
-                    <div class="col-md-3 mb-3">
+                        <div class="col-md-3 mb-3">
 
-                        <div class="border rounded p-2 h-100">
+                            <div class="border rounded p-2 h-100">
 
-                            <small class="text-muted d-block">
-                                {{ campo }}
-                            </small>
-                            
-                            <strong>
+                                <small class="text-muted d-block">
+                                    {{ campo }}
+                                </small>
                                 
-                                {{ valor.0|floatformat:2 }}
-                                {{ valor.1 }}
+                                <strong>
+                                    
+                                    {{ valor.0|floatformat:2 }}
+                                    {{ valor.1 }}
 
-                            </strong>
-                            
+                                </strong>
+                                
+
+                            </div>
 
                         </div>
 
-                    </div>
+                    {% endfor %}
 
-                {% endfor %}
+                </div>
 
-            </div>
+            {% else %}
 
-        {% else %}
+                <div class="alert alert-secondary mb-0">
+                    O condutor selecionado não possui dados cadastrados
+                </div>
 
-            <div class="alert alert-secondary mb-0">
-                Nenhum dado encontrado.
-            </div>
+            {% endif %}
 
-        {% endif %}
+        </div>
 
     </div>
 
     <div class="card mt-4">
 
-    <div class="card-header">
-        <strong>Dados Técnicos do Condutor {{ escolhido.nome }}</strong>
-    </div>
+        <div class="card-header">
+            <strong>Dados Técnicos do Condutor {{ escolhido.nome }}</strong>
+        </div>
 
-    <div class="card-body">
+        <div class="card-body">
 
-        {% if escolhido.parametros %}
+            {% if escolhido.parametros %}
 
-            <div class="row">
+                <div class="row">
 
-                {% for campo, valor in escolhido.parametros.items %}
+                    {% for campo, valor in escolhido.parametros.items %}
 
-                    <div class="col-md-4 mb-3">
+                        <div class="col-md-4 mb-3">
 
-                        <div class="border rounded p-2 h-100">
+                            <div class="border rounded p-2 h-100">
 
-                            <small class="text-muted d-block">
-                                {{ campo }}
-                            </small>
+                                <small class="text-muted d-block">
+                                    {{ campo }}
+                                </small>
 
-                            <strong>
-                                {% if valor.unidade %}
-                                    {{ valor.valor|floatformat:2 }}
-                                {% else %}
-                                    {{ valor.valor }}
-                                {% endif %}
+                                <strong>
+                                    {% if valor.unidade %}
+                                        {{ valor.valor|floatformat:2 }}
+                                    {% else %}
+                                        {{ valor.valor }}
+                                    {% endif %}
 
-                                {% if valor.unidade %}
-                                    {{ valor.unidade }}
-                                {% endif %}
-                            </strong>
+                                    {% if valor.unidade %}
+                                        {{ valor.unidade }}
+                                    {% endif %}
+                                </strong>
+
+                            </div>
 
                         </div>
 
-                    </div>
+                    {% endfor %}
 
-                {% endfor %}
+                </div>
 
-            </div>
+            {% else %}
 
-        {% else %}
+                <div class="alert alert-secondary mb-0">
+                    Nenhum dado encontrado.
+                </div>
 
-            <div class="alert alert-secondary mb-0">
-                Nenhum dado encontrado.
-            </div>
+            {% endif %}
 
-        {% endif %}
+        </div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <strong>Dados Técnicos do Tecido Isolante {{ iso_escolhido.nome }}</strong>
+        </div>
 
+        <div class="card-body">
+
+            {% if iso_escolhido.parametros %}
+
+                <div class="row">
+
+                    {% for campo, valor in iso_escolhido.parametros.items %}
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="border rounded p-2 h-100">
+
+                                <small class="text-muted d-block">
+                                    {{ campo }}
+                                </small>
+
+                                <strong>
+                                    {% if valor.unidade %}
+                                        {{ valor.valor|floatformat:2 }}
+                                    {% else %}
+                                        {{ valor.valor }}
+                                    {% endif %}
+
+                                    {% if valor.unidade %}
+                                        {{ valor.unidade }}
+                                    {% endif %}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="alert alert-secondary mb-0">
+                    Nenhum dado encontrado.
+                </div>
+
+            {% endif %}
+
+        </div>
     </div>
 
-</div>
+
 
 {% endblock %}

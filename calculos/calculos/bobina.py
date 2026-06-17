@@ -33,7 +33,17 @@ class ResultadosBobinas:
     def volume_cobre (self, comprimento_bobina, area_secao):
         return comprimento_bobina * area_secao
 
-    def parede_iso(self,largura_espira,largura_ranhura):
-        return (largura_ranhura - largura_espira - Decimal(0.4))/2
+    def parede_iso(self,largura_espira,largura_ranhura,folga):
+        return (largura_ranhura - largura_espira - Decimal(folga))/2
+
+    def altura_bobina(self, n_esp_b, h_esp,iso_esp=0):
+        return n_esp_b * h_esp + (n_esp_b - 1) * iso_esp
+
+    def altura_bobina_iso(self, h_bobina,iso):
+        return 2 * iso + h_bobina
+    
+    def espaco_para_calco(self, altura_ranhura, h_bobina):
+        
+        return (altura_ranhura - 2* h_bobina)
 
 
