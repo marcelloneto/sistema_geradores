@@ -38,8 +38,10 @@ class ResultadosSessionService:
         if f'{secao}_selecionado' in request.session['resultados']:
             pass
         else:
-            if secao == 'isolacao':
+            if secao == 'isolacao_cond':
                 request.session['resultados'][f'{secao}_selecionado'] = self.obter_indice_por_id(material,dados['dados_bobinagem_roebel']['isolacao_condutores'])
+            elif secao == 'isolacao':
+                request.session['resultados'][f'{secao}_selecionado'] = self.obter_indice_por_id(material,dados['dados_bobinagem_roebel']['isolacao_principal'])
             else:
                 request.session['resultados'][f'{secao}_selecionado'] = self.obter_indice_por_id(material,dados['dados_bobinagem_roebel'][secao])
 
@@ -53,7 +55,7 @@ class ResultadosSessionService:
 
     def processar_post(self,request):
         """processa o evento para atualizar os dados do materiais"""
-
+        
         if "condutor_1" in request.POST:
             acao = request.POST.get("acao")
             secao = request.POST.get(f"{self.secao}_1")
@@ -72,6 +74,19 @@ class ResultadosSessionService:
                 'folga_ranhura': folga,
                 'coeficiente_seguranca': coeficiente,
                 }
+
+        if "isolacao_principal" in request.POST:
+            coeficiente = request.POST.get("coeficiente_seguranca")
+            iso = request.POST.get("isolacao_principal")
+
+            request.session['resultados']['isolacao_selecionado'] = iso
+            request.session['resultados']['coeficiente_seguranca_isolacao'] = coeficiente
+
+
+            return {
+                "isolacao_principal_selecionado": iso,
+                "coeficiente_seguranca_isolacao": coeficiente,
+            }
 
         
 
@@ -94,13 +109,15 @@ class ResultadosSessionService:
     def verificar_dados(self,request,dados,material,secao):
         
         if 'dados_bobinagem_roebel' in dados:
-            if secao == 'isolacao':
+            if secao == 'isolacao_cond':
                 material_1 = dados['dados_bobinagem_roebel']['isolacao_condutores']
+            elif secao == 'isolacao':
+                material_1 = dados['dados_bobinagem_roebel']['isolacao_principal']
                 
             else:
                 material_1 = dados['dados_bobinagem_roebel'][self.secao]
             selecionado = self.obter_indice_por_id(material['materiais_disponiveis'],material_1)
-            
+            print(f'selecionado verifica_dados {selecionado}')
             if material_1 is None:
                 return None
             else:
@@ -114,7 +131,7 @@ class ResultadosSessionService:
         if f'{secao}_selecionado' in request.session['resultados']:
             
             selecionado = request.session['resultados'][f'{secao}_selecionado']
-            
+            print(f'selecionado escolha {selecionado}')
             if request.session['resultados'][f'{secao}_selecionado'] is None:
                 escolhido = material['materiais_disponiveis']['0']
             else:

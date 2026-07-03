@@ -39,18 +39,19 @@ class Verificacao:
 
 
 class Filtros:
-    def __init__(self, dados,condutor,iso_sel):
+    def __init__(self, dados,iso_sel={},condutor={},iso_principal={}):
         self.dados = dados
         self.condutor_sel = condutor
+        self.iso_principal = iso_principal
         self.iso_sel = iso_sel
         self.bobinas = ResultadosBobinas(dados['dados_bobina'])
         self.estator = ResultadosEstator(dados['dados_estator'])
-        if self.validar_dados() is True:
+        if self.validar_dados(self.condutor_sel) is True:
             self.condutor = ResultadosCondutor(condutor,self.bobinas)
         self.eletrica = ResultadosEletrica(dados)
 
-    def validar_dados(self):
-        if self.condutor_sel['parametros'] != {}:
+    def validar_dados(self,secao):
+        if 'parametros' in secao and secao['parametros'] != {}:
             return True
         else:
             return False
@@ -58,7 +59,7 @@ class Filtros:
 
     def calcularcondutor(self, coef,folga):
         
-        if self.validar_dados() is True:
+        if self.validar_dados(self.condutor_sel) is True:
 
             area_condutor = self.condutor.area()
             n_condutores_espira = self.dados['dados_estator']['numero_condutores_por_espira']
@@ -113,8 +114,11 @@ class Filtros:
         else:
             return None
 
+    def calcularisolacao(self, sobreposicao, coef):
+        print(self.iso_principal)
+
     def verificar_iso(self):
-        if self.iso_sel != -1:
+        if self.iso_sel != -1 and self.iso_sel is not None:
             if 'Espessura' in self.iso_sel['parametros']:
                 iso_sel_espessura = self.iso_sel['parametros']['Espessura']['valor']
             else:

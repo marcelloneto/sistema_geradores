@@ -18,7 +18,7 @@ class DadosMaquinaService:
             "dados_construtivos_bobina",
             "dados_bobinagem_roebel",
         ],
-        "isolamento": [
+        "isolacao": [
             "maquina",
             "dados_estator",
             "dados_bobina",

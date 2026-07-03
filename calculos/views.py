@@ -8,6 +8,7 @@ from calculos.services.dados_material_service import DadosMaterialService
 from calculos.services.session_service import ResultadosSessionService as RSS
 from calculos.calculos.condutor import ResultadosCondutor as calculos
 from calculos.services.calculos_service import Filtros
+from decimal import Decimal
 
 
 def home_calculos(request):
@@ -65,7 +66,7 @@ class ResultadosCondutor:
             rss.atualizar_pagina(request)
             rss.verificar_mudanca_pagina(request)
             rss.verificar_secao(request, dados,secao,material["materiais_disponiveis"])
-            rss.verificar_secao(request, dados,'isolacao',material_iso['materiais_disponiveis'])
+            rss.verificar_secao(request, dados,'isolacao_cond',material_iso['materiais_disponiveis'])
             rss.verificar_mudanca_os(request,ordem_selecionada)
 
             opcoes = rss.obter_opcoes_secao( material)
@@ -75,7 +76,7 @@ class ResultadosCondutor:
              
             escolhido = rss.escolha(request,dados,material,secao)
             index_cond = ResultadosCondutor.selecao_cond(escolhido,rss,material)
-            iso_escolhido = rss.escolha(request,dados,material_iso,'isolacao')
+            iso_escolhido = rss.escolha(request,dados,material_iso,'isolacao_cond')
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material_iso)
             coeficiente_seguranca = request.session['resultados'].get(
                 "coeficiente_seguranca_bobinas",
@@ -86,7 +87,7 @@ class ResultadosCondutor:
                 "0.40"
             )
 
-            calculoservice = Filtros(dados,escolhido,iso_escolhido)
+            calculoservice = Filtros(dados,iso_sel=iso_escolhido,condutor=escolhido)
             
             resultados = calculoservice.calcularcondutor(coeficiente_seguranca,folga)
             
@@ -130,28 +131,65 @@ class ResultadosCondutor:
 class ResultadosIsolamento:
     @staticmethod
     def isolamento(request):
-        secao = 'isolamento'
+        secao = 'isolacao'
         fita = 'isolamento_principal'
         request.session['resultados']['pagina_atual'] = "resultados_isolamento"
-        dados = DadosMaquinaService(secao)
-        ordemservice = OrdemService("calculos")
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
-        d_material_s = DadosMaterialService(fita)
-        material = d_material_s.obter_dados(ordem_selecionada.maquina) 
-        rss = RSS(secao)    
-        ordens = ordemservice.listar_ordens()
-        rss.atualizar_pagina(request)
-        rss.verificar_mudanca_pagina(request)
 
-        print(f"Material: {material}")
-        
-        
-        request.session['resultados']['pagina_anterior'] = "resultados_isolamento"
-        return render(request, "calculos/isolamento.html", {
-                "ordens": ordens,
-                "ordem_selecionada": ordem_selecionada,
-                "secao": secao,
-            })
+        ordemservice = OrdemService("calculos")
+        ordens = ordemservice.listar_ordens()
+        ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
+        if ordem_selecionada is None:
+                    return render(request, f"calculos/isolamento.html", {
+                                  "ordens": ordens,
+                                  })
+        else:
+            dados = DadosMaquinaService(secao).obter_dados(ordem_selecionada)
+            d_material_s = DadosMaterialService(fita)
+            material = d_material_s.obter_dados(ordem_selecionada.maquina) 
+            rss = RSS(secao)    
+            
+            rss.atualizar_pagina(request)
+            
+            rss.verificar_mudanca_pagina(request)
+            
+            rss.verificar_secao(request, dados,secao,material["materiais_disponiveis"])
+            
+            rss.verificar_mudanca_os(request,ordem_selecionada)
+            
+            opcoes = rss.obter_opcoes_secao( material)
+            
+            if request.method == "POST":
+                processar = rss.processar_post(request)
+            
+            iso_escolhido = rss.escolha(request,dados,material,secao)
+            index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material)
+            coeficiente_seguranca = request.session['resultados'].get(
+                "coeficiente_seguranca_isolacao",
+                "1.10"
+            )
+            fator_sobreposicao = request.session['resultados'].get(
+                "fator_sobreposicao",
+                Decimal(50)
+            )
+            
+            resultados = Filtros(dados,iso_principal=iso_escolhido)
+            resultados.calcularisolacao(fator_sobreposicao,coeficiente_seguranca)
+
+            print(index_iso)
+
+            print(dados['dados_bobinagem_roebel'])
+
+
+            return render(request, "calculos/isolamento.html", {
+                    "ordens": ordens,
+                    "ordem_selecionada": ordem_selecionada,
+                    "secao": secao,
+                    "opcoes": opcoes,
+                    "iso_escolhido": iso_escolhido,
+                    "index_iso": str(index_iso),
+                    "coeficiente_seguranca": coeficiente_seguranca,
+                    "sobreposicao": fator_sobreposicao,
+                })
 
 class ResultadosPintura(View):
     @staticmethod
