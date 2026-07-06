@@ -1,2 +1,76 @@
 {% extends 'calculos/home.html' %}
-<h1>ISOLAMENTO</h1>
+{% block content %}
+
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="row align-items-end">
+
+        <div class="col-md-3">
+            <label class="form-label">
+                Fita de Isolação
+            </label>
+            
+            <select name="isolacao_principal" class="form-select">
+                
+                {% for opcao in opcoes %}
+                    <option value="{{ forloop.counter0 }}"
+                        {% if forloop.counter0|stringformat:"s" == index_iso|stringformat:"s" %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ opcao.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">
+                Fator de Sobreposição
+            </label>
+
+            <div class="input-group">
+                <input
+                    type="number"
+                    name="sobreposicao"
+                    class="form-control"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    value="{{ sobreposicao }}">
+
+                <span class="input-group-text">%</span>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">
+                Coeficiente de Segurança
+            </label>
+
+            <input
+                type="number"
+                name="coeficiente_seguranca"
+                class="form-control"
+                step="0.1"
+                min="1"
+                value="{{ coeficiente_seguranca }}">
+                
+        </div>
+
+        <div class="col-md-2">
+            <button
+                type="submit"
+                name="acao"
+                value="atualizar_sessao"
+                class="btn btn-warning w-100">
+                Aplicar
+            </button>
+        </div>
+
+    </div>
+</form>
+
+{% endblock %}

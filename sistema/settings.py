@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'operacao',
     'portal',
     'calculos',
-    'ensaios'
+    'ensaios',
+    'listagem',
 ]
 
 MIDDLEWARE = [

@@ -39,18 +39,19 @@ class Verificacao:
 
 
 class Filtros:
-    def __init__(self, dados,condutor,iso_sel):
+    def __init__(self, dados,iso_sel={},condutor={},iso_principal={}):
         self.dados = dados
         self.condutor_sel = condutor
+        self.iso_principal = iso_principal
         self.iso_sel = iso_sel
         self.bobinas = ResultadosBobinas(dados['dados_bobina'])
         self.estator = ResultadosEstator(dados['dados_estator'])
-        if self.validar_dados() is True:
+        if self.validar_dados(self.condutor_sel) is True:
             self.condutor = ResultadosCondutor(condutor,self.bobinas)
         self.eletrica = ResultadosEletrica(dados)
 
-    def validar_dados(self):
-        if self.condutor_sel['parametros'] != {}:
+    def validar_dados(self,secao):
+        if 'parametros' in secao and secao['parametros'] != {}:
             return True
         else:
             return False
@@ -58,7 +59,7 @@ class Filtros:
 
     def calcularcondutor(self, coef,folga):
         
-        if self.validar_dados() is True:
+        if self.validar_dados(self.condutor_sel) is True:
 
             area_condutor = self.condutor.area()
             n_condutores_espira = self.dados['dados_estator']['numero_condutores_por_espira']
@@ -87,7 +88,7 @@ class Filtros:
             campo_eletrico = self.eletrica.campo_eletrico(tensao,espessura_iso) 
             altura_util_ranhura = self.dados['dados_geometricos']['ranhura_c']
 
-            iso_sel_espessura = self.verificar_iso()
+            iso_sel_espessura = self.verificar_iso(self.iso_sel)
             altura_bobina = self.bobinas.altura_bobina(n_espiras_bobina,medidas_espira['h_espira'],iso_sel_espessura)
             altura_bobina_iso = self.bobinas.altura_bobina_iso(altura_bobina,espessura_iso)
             espaco_calco = self.bobinas.espaco_para_calco(altura_util_ranhura,altura_bobina_iso)  
@@ -113,16 +114,36 @@ class Filtros:
         else:
             return None
 
-    def verificar_iso(self):
-        if self.iso_sel != -1:
-            if 'Espessura' in self.iso_sel['parametros']:
-                iso_sel_espessura = self.iso_sel['parametros']['Espessura']['valor']
-            else:
-                iso_sel_espessura = Decimal(0)
-        else:
-            iso_sel_espessura = Decimal(0)
+    def calcularisolacao(self, sobreposicao, coef):
+        print(f"calcularisolacao: {self.dados}")
+        largura_ranhura = self.dados['dados_geometricos']['ranhura_b']
+        n_condutores_espira = self.dados['dados_estator']['numero_condutores_por_espira']
+        disposicao = self.condutor.disposicao_condutores(largura_ranhura,n_condutores_espira)
+        medidas_espira = self.bobinas.medidas_espira_iso(self.condutor_sel['parametros'],disposicao['col'],disposicao['lin'])
+        
+        sobrep = sobreposicao
+        coefseg = coef
+        fita_param = self.iso_principal['parametros']
+        if "Largura" in fita_param:
+            largura_fita = fita_param['Largura']['valor']
+            espessura_fita = fita_param['Espessura']['valor']
+            comp_rolo = fita_param['Comprimento do rolo']['valor']
 
-        return iso_sel_espessura
+        
+                
+
+
+
+    def verificar_iso(self,iso):
+        if iso != -1 and iso is not None:
+            if 'Espessura' in iso['parametros']:
+                iso_espessura = iso['parametros']['Espessura']['valor']
+            else:
+                iso_espessura = Decimal(0)
+        else:
+            iso_espessura = Decimal(0)
+
+        return iso_espessura
     
         
         

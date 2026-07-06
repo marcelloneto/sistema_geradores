@@ -256,5 +256,6 @@ class BaseService:
         DadosGeometricosMaquina.objects.get_or_create(maquina=maquina)
         DadosConstrutivosBobina.objects.get_or_create(maquina=maquina)
         ResIsolamento.objects.get_or_create(maquina=maquina)
+        MateriaisBobinagemRoebel.objects.get_or_create(maquina=maquina)
 
         return os_obj
