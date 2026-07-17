@@ -88,7 +88,7 @@ class Filtros:
             campo_eletrico = self.eletrica.campo_eletrico(tensao,espessura_iso) 
             altura_util_ranhura = self.dados['dados_geometricos']['ranhura_c']
 
-            iso_sel_espessura = self.verificar_iso()
+            iso_sel_espessura = self.verificar_iso(self.iso_sel)
             altura_bobina = self.bobinas.altura_bobina(n_espiras_bobina,medidas_espira['h_espira'],iso_sel_espessura)
             altura_bobina_iso = self.bobinas.altura_bobina_iso(altura_bobina,espessura_iso)
             espaco_calco = self.bobinas.espaco_para_calco(altura_util_ranhura,altura_bobina_iso)  
@@ -115,18 +115,35 @@ class Filtros:
             return None
 
     def calcularisolacao(self, sobreposicao, coef):
-        print(self.iso_principal)
+        print(f"calcularisolacao: {self.dados}")
+        largura_ranhura = self.dados['dados_geometricos']['ranhura_b']
+        n_condutores_espira = self.dados['dados_estator']['numero_condutores_por_espira']
+        disposicao = self.condutor.disposicao_condutores(largura_ranhura,n_condutores_espira)
+        medidas_espira = self.bobinas.medidas_espira_iso(self.condutor_sel['parametros'],disposicao['col'],disposicao['lin'])
+        
+        sobrep = sobreposicao
+        coefseg = coef
+        fita_param = self.iso_principal['parametros']
+        if "Largura" in fita_param:
+            largura_fita = fita_param['Largura']['valor']
+            espessura_fita = fita_param['Espessura']['valor']
+            comp_rolo = fita_param['Comprimento do rolo']['valor']
 
-    def verificar_iso(self):
-        if self.iso_sel != -1 and self.iso_sel is not None:
-            if 'Espessura' in self.iso_sel['parametros']:
-                iso_sel_espessura = self.iso_sel['parametros']['Espessura']['valor']
+        
+                
+
+
+
+    def verificar_iso(self,iso):
+        if iso != -1 and iso is not None:
+            if 'Espessura' in iso['parametros']:
+                iso_espessura = iso['parametros']['Espessura']['valor']
             else:
-                iso_sel_espessura = Decimal(0)
+                iso_espessura = Decimal(0)
         else:
-            iso_sel_espessura = Decimal(0)
+            iso_espessura = Decimal(0)
 
-        return iso_sel_espessura
+        return iso_espessura
     
         
         

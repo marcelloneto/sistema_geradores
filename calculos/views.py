@@ -177,7 +177,7 @@ class ResultadosIsolamento:
 
             print(index_iso)
 
-            print(dados['dados_bobinagem_roebel'])
+            print(iso_escolhido)
 
 
             return render(request, "calculos/isolamento.html", {

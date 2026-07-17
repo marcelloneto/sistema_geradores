@@ -34,7 +34,7 @@ class ResultadosSessionService:
 
     def verificar_secao(self,request,dados,secao,material):
         """verifica se já existe valor temporário para a seção"""
-
+        print(dados)
         if f'{secao}_selecionado' in request.session['resultados']:
             pass
         else:

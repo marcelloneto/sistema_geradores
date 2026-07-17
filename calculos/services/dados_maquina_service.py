@@ -22,6 +22,7 @@ class DadosMaquinaService:
             "maquina",
             "dados_estator",
             "dados_bobina",
+            "dados_geometricos",
             "dados_bobinagem_roebel",
         ],
         "condutor": [
