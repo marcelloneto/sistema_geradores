@@ -424,12 +424,14 @@ class DadosGeometricosMaquina(models.Model):
     ranhura_d = models.DecimalField('d',max_digits=10, decimal_places=2, null=True, blank=True)
     ranhura_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
     ranhura_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
+    folga_ranhura = models.DecimalField('Folga na ranhura',max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Seção da Bobina
     bobina_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
     bobina_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
     bobina_g = models.DecimalField('g',max_digits=10, decimal_places=2, null=True, blank=True)
     bobina_h = models.DecimalField('h',max_digits=10, decimal_places=2, null=True, blank=True)
+    sobreposicao_isolante = models.DecimalField('Sobreposição da fita Isolante',max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Seção do Condutor
     condutor_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)

@@ -586,10 +586,12 @@ class DadosGeometricosMaquinaResource(resources.ModelResource):
             "ranhura_d",
             "ranhura_e",
             "ranhura_f",
+            "folga_ranhura",
             "bobina_e",
             "bobina_f",
             "bobina_g",
             "bobina_h",
+            "sobreposicao_isolante",
             "condutor_e",
             "condutor_f",
             "condutor_E_iso",
@@ -628,6 +630,7 @@ class DadosGeometricosMaquinaAdmin(ImportExportModelAdmin):
                 "tipo_ranhura",
                 ("ranhura_a", "ranhura_b", "ranhura_c"),
                 ("ranhura_d", "ranhura_e", "ranhura_f"),
+                "folga_ranhura",
             )
         }),
 
@@ -635,6 +638,7 @@ class DadosGeometricosMaquinaAdmin(ImportExportModelAdmin):
             "fields": (
                 ("bobina_e", "bobina_f"),
                 ("bobina_g", "bobina_h"),
+                "sobreposicao_isolante",
             )
         }),
 

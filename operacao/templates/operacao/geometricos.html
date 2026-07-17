@@ -52,13 +52,23 @@
                 <div class="col-md-12 text-start">
                     <div class="row">
                         {% for field in campos_ranhura %}
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    {{ field.label }}
-                                </label>
+                            {% if field.name == 'folga_ranhura' %}    
+                                    <div class="col-md-12 text-start">
+                                        <label class="form-label">
+                                            {{ field.label }}
+                                        </label>
 
-                                {{ field }}
-                            </div>
+                                        {{ field }}
+                                    </div>
+                            {% else %}
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        {{ field.label }}
+                                    </label>
+
+                                    {{ field }}
+                                </div>
+                            {% endif %}
                         {% endfor %}
 
                     </div>
@@ -81,13 +91,24 @@
                     <div class="col-md-12">
                         <div class="row">
                             {% for field in campos_bobina %}
-                                <div class="col-md-6 text-start">
-                                    <label class="form-label">
-                                        {{ field.label }}
-                                    </label>
+                                {% if field.name == 'sobreposicao_isolante' %}    
+                                    <div class="col-md-12 text-start">
+                                        <label class="form-label">
+                                            {{ field.label }}
+                                        </label>
 
-                                    {{ field }}
-                                </div>
+                                        {{ field }}
+                                    </div>
+                                {% else %}    
+                                    <div class="col-md-6 text-start">
+                                        <label class="form-label">
+                                            {{ field.label }}
+                                        </label>
+
+                                        {{ field }}
+                                    </div>
+                                {% endif %}
+                                
                             {% endfor %}
                         </div>
                     </div>

@@ -34,7 +34,7 @@ class ResultadosSessionService:
 
     def verificar_secao(self,request,dados,secao,material):
         """verifica se já existe valor temporário para a seção"""
-        print(dados)
+        
         if f'{secao}_selecionado' in request.session['resultados']:
             pass
         else:
@@ -113,11 +113,13 @@ class ResultadosSessionService:
                 material_1 = dados['dados_bobinagem_roebel']['isolacao_condutores']
             elif secao == 'isolacao':
                 material_1 = dados['dados_bobinagem_roebel']['isolacao_principal']
-                
+            elif secao == 'condutor':
+                material_1 = dados['dados_bobinagem_roebel'][secao]
             else:
                 material_1 = dados['dados_bobinagem_roebel'][self.secao]
+
             selecionado = self.obter_indice_por_id(material['materiais_disponiveis'],material_1)
-            print(f'selecionado verifica_dados {selecionado}')
+            
             if material_1 is None:
                 return None
             else:
@@ -131,7 +133,7 @@ class ResultadosSessionService:
         if f'{secao}_selecionado' in request.session['resultados']:
             
             selecionado = request.session['resultados'][f'{secao}_selecionado']
-            print(f'selecionado escolha {selecionado}')
+            
             if request.session['resultados'][f'{secao}_selecionado'] is None:
                 escolhido = material['materiais_disponiveis']['0']
             else:
@@ -139,6 +141,7 @@ class ResultadosSessionService:
                     escolhido = int(selecionado)
                 else:
                     escolhido = material['materiais_disponiveis'][str(int(selecionado))]
+            
         else:
             
             escolhido = self.verificar_dados(request, dados,material,secao)
@@ -152,7 +155,7 @@ class ResultadosSessionService:
         if id_material is None:
             return "1"
         for indice, material in materiais.items():
-
+            
             if material["id"] == id_material:
                 
                 return indice

@@ -85,6 +85,7 @@ class DadosGeometricosForm(forms.ModelForm):
         "ranhura_d",
         "ranhura_e",
         "ranhura_f",
+        "folga_ranhura",
     ]
 
     BOBINA = [
@@ -92,6 +93,7 @@ class DadosGeometricosForm(forms.ModelForm):
         "bobina_f",
         "bobina_g",
         "bobina_h",
+        "sobreposicao_isolante",
     ]
 
     CONDUTOR = [
@@ -118,12 +120,14 @@ class DadosGeometricosForm(forms.ModelForm):
         "ranhura_d": "d",
         "ranhura_e": "e",
         "ranhura_f": "f",
+        "folga_ranhura":"Folga da Ranhura [mm]",
 
         # Bobina
         "bobina_e": "e",
         "bobina_f": "f",
         "bobina_g": "g",
         "bobina_h": "h",
+        "sobreposicao_isolante": "Sobreposição da Fita Isolante [%]",
 
         # Condutor
         "condutor_e": "e",
@@ -146,6 +150,7 @@ class DadosGeometricosForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
+            
             field.widget.attrs.update({
                 "class": "form-control"
             })

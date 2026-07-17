@@ -39,15 +39,16 @@ class Verificacao:
 
 
 class Filtros:
-    def __init__(self, dados,iso_sel={},condutor={},iso_principal={}):
+    def __init__(self, dados,iso_sel={},condutor={},iso_principal={},folga=0.4):
         self.dados = dados
         self.condutor_sel = condutor
         self.iso_principal = iso_principal
         self.iso_sel = iso_sel
-        self.bobinas = ResultadosBobinas(dados['dados_bobina'])
+        
         self.estator = ResultadosEstator(dados['dados_estator'])
         if self.validar_dados(self.condutor_sel) is True:
-            self.condutor = ResultadosCondutor(condutor,self.bobinas)
+            self.bobinas = ResultadosBobinas(self.dados,dados['dados_bobina'], condutor, iso_principal, iso_sel,folga)
+            self.condutor = ResultadosCondutor(self.dados,condutor,self.bobinas.calcular_comprimento())
         self.eletrica = ResultadosEletrica(dados)
 
     def validar_dados(self,secao):
@@ -61,13 +62,13 @@ class Filtros:
         
         if self.validar_dados(self.condutor_sel) is True:
 
-            area_condutor = self.condutor.area()
+            area_condutor = self.condutor.area
             n_condutores_espira = self.dados['dados_estator']['numero_condutores_por_espira']
             n_espiras_bobina = self.dados['dados_estator']['numero_espiras_por_bobina']
-            area_espira = self.bobinas.area_espira(area_condutor,n_condutores_espira)
-            area_total_espiras = self.bobinas.area_secao_cobre(area_espira,n_espiras_bobina)
-            comprimento_bobina = self.bobinas.comprimento()
-            volume_condutor_bobina = self.bobinas.volume_cobre(comprimento_bobina,area_total_espiras)
+            area_espira = self.bobinas.area_espira
+            area_total_espiras = self.bobinas.area_secao_cobre
+            comprimento_bobina = self.bobinas.calcular_comprimento_condutor()
+            volume_condutor_bobina = self.bobinas.volume_cobre
             peso_condutor_bobina = self.condutor.peso(volume_condutor_bobina)
             numero_bobinas = self.dados['dados_estator']['numero_bobinas']
             peso_total_condutor = peso_condutor_bobina * numero_bobinas
@@ -78,20 +79,14 @@ class Filtros:
 
             densidade = self.eletrica.densidade_corrente(corrente,n_paralelos,area_espira)
             largura_ranhura = self.dados['dados_geometricos']['ranhura_b']
-            disposicao = self.condutor.disposicao_condutores(largura_ranhura,n_condutores_espira)
-            medidas_espira = self.bobinas.medidas_espira_iso(self.condutor_sel['parametros'],disposicao['col'],disposicao['lin'])
             
-            espessura_iso = self.bobinas.parede_iso(medidas_espira['b_espira'],largura_ranhura,folga)
+            
+            espessura_iso = self.bobinas.parede_iso
 
             tensao = self.dados['maquina']['tensao_v']
 
             campo_eletrico = self.eletrica.campo_eletrico(tensao,espessura_iso) 
-            altura_util_ranhura = self.dados['dados_geometricos']['ranhura_c']
-
-            iso_sel_espessura = self.verificar_iso(self.iso_sel)
-            altura_bobina = self.bobinas.altura_bobina(n_espiras_bobina,medidas_espira['h_espira'],iso_sel_espessura)
-            altura_bobina_iso = self.bobinas.altura_bobina_iso(altura_bobina,espessura_iso)
-            espaco_calco = self.bobinas.espaco_para_calco(altura_util_ranhura,altura_bobina_iso)  
+            espaco_calco = self.bobinas.espaco_para_calco
 
             return {
                 "Área do Condutor": [area_condutor,'mm²'],
@@ -114,20 +109,28 @@ class Filtros:
         else:
             return None
 
-    def calcularisolacao(self, sobreposicao, coef):
-        print(f"calcularisolacao: {self.dados}")
-        largura_ranhura = self.dados['dados_geometricos']['ranhura_b']
-        n_condutores_espira = self.dados['dados_estator']['numero_condutores_por_espira']
-        disposicao = self.condutor.disposicao_condutores(largura_ranhura,n_condutores_espira)
-        medidas_espira = self.bobinas.medidas_espira_iso(self.condutor_sel['parametros'],disposicao['col'],disposicao['lin'])
+    def calcularisolacao(self, sobreposicao, coef, espessura_iso):
+        sobrep = sobreposicao/100
+        coefseg = coef      
         
-        sobrep = sobreposicao
-        coefseg = coef
+        altura_bobina = self.bobinas.altura_bobina
+        altura_bobina_iso = self.bobinas.altura_bobina_iso
+        largura_bobina = self.bobinas.largura_bobina
+        largura_bobina_iso = self.bobinas.altura_bobina_iso
+
+
+        perimetro_ext = self.bobinas.perimetro_externo
+        perimetro_int = self.bobinas.perimetro_interno
+        perimetro = self.bobinas.perimetro_medio
         fita_param = self.iso_principal['parametros']
         if "Largura" in fita_param:
             largura_fita = fita_param['Largura']['valor']
             espessura_fita = fita_param['Espessura']['valor']
             comp_rolo = fita_param['Comprimento do rolo']['valor']
+
+            camadas = espessura_iso / (espessura_fita / (1 - sobrep))
+
+        print(f"perimetro médio: {perimetro}")
 
         
                 

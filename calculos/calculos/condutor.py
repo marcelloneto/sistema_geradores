@@ -23,16 +23,22 @@ class Areas:
             return math.pow( valor / 4 , 2 ) * math.pi()
 
 class ResultadosCondutor:
-    def __init__(self,dados, bobina):
-        self.dados = dados
-        self.l_bobina = bobina.comprimento()
+    def __init__(self,dados,dados_cond, comprimento_bobina):
+        self.dados = dados_cond
+        self.l_bobina = comprimento_bobina
         self.altura = self.dados['parametros']['altura']['valor']
         self.largura = self.dados['parametros']['largura']['valor']
         self.altura_iso = self.dados['parametros']['altura isolação']['valor']
         self.largura_iso = self.dados['parametros']['largura isolação']['valor']
         self.densidade = self.dados['parametros']['densidade']['valor']
+        self.ranhura = dados['dados_geometricos']['ranhura_b']
+        self.n_condutores_espira = dados['dados_estator']['numero_condutores_por_espira']
+
+        self.disp_condutores = self.disposicao_condutores(self.ranhura,self.n_condutores_espira)
+
+        self.area = self.calcular_area()
         
-    def area(self):
+    def calcular_area(self):
         
         area = Areas.area_retangulo(self.altura,self.largura)
         

@@ -82,12 +82,17 @@ class ResultadosCondutor:
                 "coeficiente_seguranca_bobinas",
                 "1.10"
             )
+
+            print(iso_escolhido)
+
+            folga_dados = dados['dados_geometricos']['folga_ranhura']
+
             folga = request.session['resultados'].get(
                 "folga_ran",
-                "0.40"
+                str(folga_dados)
             )
-
-            calculoservice = Filtros(dados,iso_sel=iso_escolhido,condutor=escolhido)
+            
+            calculoservice = Filtros(dados,iso_sel=iso_escolhido,condutor=escolhido,folga=folga)
             
             resultados = calculoservice.calcularcondutor(coeficiente_seguranca,folga)
             
@@ -146,6 +151,8 @@ class ResultadosIsolamento:
             dados = DadosMaquinaService(secao).obter_dados(ordem_selecionada)
             d_material_s = DadosMaterialService(fita)
             material = d_material_s.obter_dados(ordem_selecionada.maquina) 
+            d_material_cond = DadosMaterialService('condutor')
+            condutor = d_material_cond.obter_dados(ordem_selecionada.maquina)
             rss = RSS(secao)    
             
             rss.atualizar_pagina(request)
@@ -160,9 +167,14 @@ class ResultadosIsolamento:
             
             if request.method == "POST":
                 processar = rss.processar_post(request)
-            
+
+            cond_escolhido = rss.escolha(request,dados,condutor,'condutor')
             iso_escolhido = rss.escolha(request,dados,material,secao)
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material)
+
+            iso_cond = rss.escolha(request,dados,material,'isolacao_cond')
+            index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material)
+
             coeficiente_seguranca = request.session['resultados'].get(
                 "coeficiente_seguranca_isolacao",
                 "1.10"
@@ -171,13 +183,23 @@ class ResultadosIsolamento:
                 "fator_sobreposicao",
                 Decimal(50)
             )
+
+            coeficiente_seguranca_bobinas = request.session['resultados'].get(
+                            "coeficiente_seguranca_bobinas",
+                            "1.10"
+                        )
+            folga = request.session['resultados'].get(
+                "folga_ran",
+                "0.40"
+            )
             
-            resultados = Filtros(dados,iso_principal=iso_escolhido)
-            resultados.calcularisolacao(fator_sobreposicao,coeficiente_seguranca)
+            resultados = Filtros(dados,iso_principal=iso_escolhido,condutor=cond_escolhido,iso_sel=iso_cond)
+            resultadoscondutor = resultados.calcularcondutor(coeficiente_seguranca_bobinas, folga)
+            espessura_iso = resultadoscondutor['Espessura da Isolação'][0]
+            resultadosisolacao = resultados.calcularisolacao(fator_sobreposicao,coeficiente_seguranca,espessura_iso)
 
-            print(index_iso)
+            
 
-            print(iso_escolhido)
 
 
             return render(request, "calculos/isolamento.html", {

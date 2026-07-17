@@ -132,6 +132,8 @@ class GeometricosView:
             ordem_selecionada,
         )
 
+        print(f"Geometricos: {dados.folga_ranhura}")
+
         temp = model_to_dict(dados)
         if f"{secao}_temp" in request.session:
             pass
