@@ -62,6 +62,9 @@ class ResultadosCondutor:
             material_iso = dados_material_iso.obter_dados(ordem_selecionada.maquina)
             dados = dms.obter_dados(ordem_selecionada)
             material = d_material_s.obter_dados(ordem_selecionada.maquina)
+
+
+            iso_principal = material_iso['material_utilizado']
             
             rss.atualizar_pagina(request)
             rss.verificar_mudanca_pagina(request)
@@ -83,8 +86,6 @@ class ResultadosCondutor:
                 "1.10"
             )
 
-            print(iso_escolhido)
-
             folga_dados = dados['dados_geometricos']['folga_ranhura']
 
             folga = request.session['resultados'].get(
@@ -92,9 +93,9 @@ class ResultadosCondutor:
                 str(folga_dados)
             )
             
-            calculoservice = Filtros(dados,iso_sel=iso_escolhido,condutor=escolhido,folga=folga)
+            calculoservice = Filtros(dados,iso_sel=iso_escolhido,condutor=escolhido,folga=folga,iso_principal=iso_principal)
             
-            resultados = calculoservice.calcularcondutor(coeficiente_seguranca,folga)
+            resultados = calculoservice.calcular_condutor(coeficiente_seguranca)
             
             return render(request, f"calculos/{secao}.html", {
                     "ordens": ordens,
@@ -151,9 +152,19 @@ class ResultadosIsolamento:
             dados = DadosMaquinaService(secao).obter_dados(ordem_selecionada)
             d_material_s = DadosMaterialService(fita)
             material = d_material_s.obter_dados(ordem_selecionada.maquina) 
+            
             d_material_cond = DadosMaterialService('condutor')
             condutor = d_material_cond.obter_dados(ordem_selecionada.maquina)
             rss = RSS(secao)    
+
+            d_material_condutiva = DadosMaterialService('fita_condutiva')
+            fita_condutiva = d_material_condutiva.obter_dados(ordem_selecionada.maquina)
+
+            d_material_semicondutiva = DadosMaterialService('fita_semicondutiva')
+            fita_semicondutiva = d_material_semicondutiva.obter_dados(ordem_selecionada.maquina)
+            
+            d_material_acabamento = DadosMaterialService('fita_acabamento')
+            fita_acabamento = d_material_acabamento.obter_dados(ordem_selecionada.maquina)
             
             rss.atualizar_pagina(request)
             
@@ -164,6 +175,8 @@ class ResultadosIsolamento:
             rss.verificar_mudanca_os(request,ordem_selecionada)
             
             opcoes = rss.obter_opcoes_secao( material)
+
+            opcoes_fitas = rss.obter_opcoes_secao(fita_condutiva)
             
             if request.method == "POST":
                 processar = rss.processar_post(request)
@@ -175,33 +188,77 @@ class ResultadosIsolamento:
             iso_cond = rss.escolha(request,dados,material,'isolacao_cond')
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material)
 
+            fita_condutiva_escolhida = rss.escolha(request,dados,fita_condutiva,'fita_condutiva')
+            index_fita_condutiva = ResultadosCondutor.selecao_iso(fita_condutiva_escolhida,rss,fita_condutiva)
+
+            fita_semicondutiva_escolhida = rss.escolha(request,dados,fita_semicondutiva,'fita_semicondutiva')
+            index_fita_semicondutiva = ResultadosCondutor.selecao_iso(fita_semicondutiva_escolhida,rss,fita_semicondutiva)
+
+            fita_acabamento_escolhida = rss.escolha(request,dados,fita_acabamento,'fita_acabamento')
+            index_fita_acabamento = ResultadosCondutor.selecao_iso(fita_acabamento_escolhida,rss,fita_acabamento)
+
+            index_fitas = {
+                "index_fita_condutiva": index_fita_condutiva,
+                "index_fita_semicondutiva": index_fita_semicondutiva,
+                "index_fita_acabamento": index_fita_acabamento,
+            }
+
+            folga_dados = dados['dados_geometricos']['folga_ranhura']
+            sobreposicao_dados = dados['dados_geometricos']['sobreposicao_isolante']
+
             coeficiente_seguranca = request.session['resultados'].get(
                 "coeficiente_seguranca_isolacao",
                 "1.10"
             )
-            fator_sobreposicao = request.session['resultados'].get(
-                "fator_sobreposicao",
-                Decimal(50)
-            )
+            fator_sobreposicao = str(Decimal(request.session['resultados'].get(
+                "sobreposicao",
+                str(sobreposicao_dados)
+            ))*100)
 
             coeficiente_seguranca_bobinas = request.session['resultados'].get(
-                            "coeficiente_seguranca_bobinas",
-                            "1.10"
-                        )
+                "coeficiente_seguranca_bobinas",
+                "1.10"
+            )
             folga = request.session['resultados'].get(
                 "folga_ran",
-                "0.40"
+                str(folga_dados)
             )
+
+            fitas = {"fita_condutiva":{"escolhida":fita_condutiva_escolhida, "label": "Fita Condutiva"},
+            "fita_semicondutiva": {"escolhida":fita_semicondutiva_escolhida, "label": "Fita Semicondutiva"},
+            "fita_acabamento":{"escolhida":fita_acabamento_escolhida, "label": "Fita de Acabamento"}}
+
+            print(f"REQUEST: {request.session['resultados']}")
+
+            for chave in fitas:
+                if fitas[chave]['escolhida'] != None:
+                    fitas[chave]['coeficiente_seguranca'] = request.session['resultados'].get(
+                        f"coeficiente_seguranca_{chave}",
+                        "1.10"
+                    )
+                    if chave != "fita_condutiva":
+                        sobreposicao = "0.30"
+                    else:
+                        sobreposicao = "0.50"
+                    fitas[chave]['sobreposicao'] = str(Decimal(request.session['resultados'].get(
+                        f"sobreposicao_{chave}",
+                        sobreposicao
+                    ))*100)
+
+            resultados = Filtros(dados,
+                                 iso_principal=iso_escolhido,
+                                 condutor=cond_escolhido,iso_sel=iso_cond,
+                                 sobreposicao=fator_sobreposicao,
+                                 folga=folga,
+                                 fitas=fitas)
+            resultados_isolacao = resultados.calcular_isolacao(coeficiente_seguranca)
+            resultados_fitas = resultados.calcular_fitas(coeficiente_seguranca)
             
-            resultados = Filtros(dados,iso_principal=iso_escolhido,condutor=cond_escolhido,iso_sel=iso_cond)
-            resultadoscondutor = resultados.calcularcondutor(coeficiente_seguranca_bobinas, folga)
-            espessura_iso = resultadoscondutor['Espessura da Isolação'][0]
-            resultadosisolacao = resultados.calcularisolacao(fator_sobreposicao,coeficiente_seguranca,espessura_iso)
+            for chave in fitas:
+                if fitas[chave]['escolhida'] != None:
+                    fitas[chave]['resultados'] = resultados_fitas[chave]
 
             
-
-
-
             return render(request, "calculos/isolamento.html", {
                     "ordens": ordens,
                     "ordem_selecionada": ordem_selecionada,
@@ -211,7 +268,23 @@ class ResultadosIsolamento:
                     "index_iso": str(index_iso),
                     "coeficiente_seguranca": coeficiente_seguranca,
                     "sobreposicao": fator_sobreposicao,
+                    "resultados": resultados_isolacao,
+                    "fitas":fitas,
+                    "opcoes_fitas": opcoes_fitas,
+                    "index_fitas": index_fitas,
                 })
+
+    @staticmethod
+    def selecao_fita(fita_escolhida,rss,material_fita):
+        if fita_escolhida is None:
+            index = "-1"
+        elif fita_escolhida == -1:
+            index = "-1"
+            print(f"fita_escolhida: {type(fita_escolhida)}")
+        else:
+            index = rss.obter_indice_por_id(material_fita['materiais_disponiveis'],fita_escolhida['id'])
+
+        return index
 
 class ResultadosPintura(View):
     @staticmethod

@@ -55,7 +55,7 @@ class ResultadosSessionService:
 
     def processar_post(self,request):
         """processa o evento para atualizar os dados do materiais"""
-        
+        print(f"POST: {request.POST}")
         if "condutor_1" in request.POST:
             acao = request.POST.get("acao")
             secao = request.POST.get(f"{self.secao}_1")
@@ -78,15 +78,49 @@ class ResultadosSessionService:
         if "isolacao_principal" in request.POST:
             coeficiente = request.POST.get("coeficiente_seguranca")
             iso = request.POST.get("isolacao_principal")
+            sobreposicao = request.POST.get("sobreposicao")
+            
+
+            print(f"Sobreposição: {sobreposicao}")
 
             request.session['resultados']['isolacao_selecionado'] = iso
             request.session['resultados']['coeficiente_seguranca_isolacao'] = coeficiente
+            request.session['resultados']['sobreposicao'] = str(float(sobreposicao)/100)
+            
 
 
-            return {
-                "isolacao_principal_selecionado": iso,
-                "coeficiente_seguranca_isolacao": coeficiente,
-            }
+        if "fita_condutiva" in request.POST:
+            fita_condutiva = request.POST.get("fita_condutiva")
+            sobreposicao_fita_condutiva = request.POST.get("sobreposicao_fita_condutiva")
+            coeficiente_seguranca_fita_condutiva = request.POST.get("coeficiente_seguranca_fita_condutiva")
+
+            
+
+            request.session['resultados']['fita_condutiva_selecionado'] = fita_condutiva
+            request.session['resultados']['sobreposicao_fita_condutiva'] = str(float(sobreposicao_fita_condutiva)/100)
+            request.session['resultados']['coeficiente_seguranca_fita_condutiva'] = coeficiente_seguranca_fita_condutiva
+
+
+        if "fita_semicondutiva" in request.POST:
+            fita_semicondutiva = request.POST.get("fita_semicondutiva")
+            sobreposicao_fita_semicondutiva = request.POST.get("sobreposicao_fita_semicondutiva")
+            coeficiente_seguranca_fita_semicondutiva = request.POST.get("coeficiente_seguranca_fita_semicondutiva")
+            
+
+            
+            request.session['resultados']['fita_semicondutiva_selecionado'] = fita_semicondutiva
+            request.session['resultados']['sobreposicao_fita_semicondutiva'] = str(float(sobreposicao_fita_semicondutiva)/100)
+            request.session['resultados']['coeficiente_seguranca_fita_semicondutiva'] = coeficiente_seguranca_fita_semicondutiva
+
+        if "fita_acabamento" in request.POST:
+            fita_acabamento = request.POST.get("fita_acabamento")
+            sobreposicao_fita_acabamento = request.POST.get("sobreposicao_fita_acabamento")
+            coeficiente_seguranca_fita_acabamento = request.POST.get("coeficiente_seguranca_fita_acabamento")
+            
+
+            request.session['resultados']['fita_acabamento_selecionado'] = fita_acabamento
+            request.session['resultados']['sobreposicao_fita_acabamento'] = str(float(sobreposicao_fita_acabamento)/100)
+            request.session['resultados']['coeficiente_seguranca_fita_acabamento'] = coeficiente_seguranca_fita_acabamento
 
         
 
@@ -115,6 +149,12 @@ class ResultadosSessionService:
                 material_1 = dados['dados_bobinagem_roebel']['isolacao_principal']
             elif secao == 'condutor':
                 material_1 = dados['dados_bobinagem_roebel'][secao]
+            elif secao == 'fita_condutiva':
+                material_1 = dados['dados_bobinagem_roebel']['fita_condutiva']
+            elif secao == 'fita_semicondutiva':
+                material_1 = dados['dados_bobinagem_roebel']['fita_semicondutiva']
+            elif secao == 'fita_acabamento':
+                material_1 = dados['dados_bobinagem_roebel']['fita_acabamento']
             else:
                 material_1 = dados['dados_bobinagem_roebel'][self.secao]
 

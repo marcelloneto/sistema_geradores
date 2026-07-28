@@ -1,7 +1,7 @@
 {% extends 'calculos/home.html' %}
 {% block content %}
-
-
+{% load humanize l10n %}
+<body>
 <form method="post">
     {% csrf_token %}
 
@@ -36,7 +36,7 @@
                     type="number"
                     name="sobreposicao"
                     class="form-control"
-                    step="0.01"
+                    step="1.00"
                     min="0"
                     max="100"
                     value="{{ sobreposicao }}">
@@ -71,6 +71,285 @@
         </div>
 
     </div>
-</form>
 
+
+    <div class="card mt-4">
+
+        <div class="card-header">
+            <strong>Resultados Técnicos do Isolante {{ iso_escolhido.nome }}</strong>
+        </div>
+
+        <div class="card-body">
+
+            {% if resultados %}
+
+                <div class="row">
+
+                    {% for campo, valor in resultados.items %}
+
+                        <div class="col-md-3 mb-3">
+
+                            <div class="border rounded p-2 h-100">
+
+                                <small class="text-muted d-block">
+                                    {{ campo }}
+                                </small>
+                                
+                                <strong>
+                                    
+                                    {{ valor.0|floatformat:"-2" }}
+                                    {{ valor.1 }}
+
+                                </strong>
+                                
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="alert alert-secondary mb-0">
+                    O condutor selecionado não possui dados cadastrados
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <strong>Dados Técnicos do Tecido Isolante {{ iso_escolhido.nome }}</strong>
+        </div>
+
+        <div class="card-body">
+
+            {% if iso_escolhido.parametros %}
+
+                <div class="row">
+
+                    {% for campo, valor in iso_escolhido.parametros.items %}
+
+                        <div class="col-md-4 mb-3">
+
+                            <div class="border rounded p-2 h-100">
+
+                                <small class="text-muted d-block">
+                                    {{ campo }}
+                                </small>
+
+                                <strong>
+                                    {% if valor.unidade %}
+                                        {{ valor.valor|floatformat:"-2" }}
+                                    {% else %}
+                                        {{ valor.valor }}
+                                    {% endif %}
+
+                                    {% if valor.unidade %}
+                                        {{ valor.unidade }}
+                                    {% endif %}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="alert alert-secondary mb-0">
+                    Nenhum dado encontrado.
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% for chave, fita in fitas.items %}
+    <hr>
+        
+        <div class="row align-items-end">
+
+            <div class="col-md-3">
+                <label class="form-label">
+                    {{ fita.label }}
+                </label>
+                
+                <select name="{{ chave }}"  class="form-select">
+                    
+                    {% for opcao in opcoes_fitas %}
+                        
+                            <option value="{{ forloop.counter0 }}"
+                                
+                                {% if chave|stringformat:"s" == "fita_condutiva" %}
+                            
+                                    {% if forloop.counter0|stringformat:"s" == index_fitas.index_fita_condutiva|stringformat:"s" %}
+                                        selected
+                                    {% endif %}
+                                
+                                {% elif chave|stringformat:"s" == "fita_semicondutiva" %}
+                            
+                                    {% if forloop.counter0|stringformat:"s" == index_fitas.index_fita_semicondutiva|stringformat:"s" %}
+                                        selected
+                                    {% endif %}
+
+                                {% elif chave|stringformat:"s" == "fita_acabamento" %}
+                        
+                                    {% if forloop.counter0|stringformat:"s" == index_fitas.index_fita_acabamento|stringformat:"s" %}
+                                        selected
+                                    {% endif %}
+                                {% endif %}
+                            >
+                                {{ opcao.nome }}
+                            </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">
+                    Fator de Sobreposição
+                </label>
+
+                <div class="input-group">
+                    <input
+                        type="number"
+                        name="sobreposicao_{{ chave }}"
+                        class="form-control"
+                        step="1.00"
+                        min="0"
+                        max="100"
+                        value="{{ fita.sobreposicao }}">
+
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">
+                    Coeficiente de Segurança
+                </label>
+
+                <input
+                    type="number"
+                    name="coeficiente_seguranca_{{ chave }}"
+                    class="form-control"
+                    step="0.1"
+                    min="1"
+                    value="{{ fita.coeficiente_seguranca }}">
+                    
+            </div>
+
+            <div class="col-md-2">
+                <button
+                    type="submit"
+                    name="acao"
+                    value="atualizar_sessao"
+                    class="btn btn-warning w-100">
+                    Aplicar
+                </button>
+            </div>
+
+        </div>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <strong>Resultados Técnicos da {{ fita.label }} {{ fita.escolhida.nome }}</strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for campo, valor in fita.resultados.items %}
+                
+                    <div class="col-md-3 mb-3">
+
+                        <div class="border rounded p-2 h-100">
+
+                            <small class="text-muted d-block">
+                                {{ campo }}
+                            </small>
+                            
+                            <strong>
+                                
+                                {{ valor.0|floatformat:"-2" }}
+                                {{ valor.1 }}
+
+                            </strong>
+                            
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>  
+    <div class="card mt-4">
+        <div class="card-header">
+            <strong>Dados Técnicos da {{ fita.label }} {{ fita.escolhida.nome }}</strong>
+        </div>
+
+        <div class="card-body">
+            
+            <div class="row">
+
+                {% for campo, valor in fita.escolhida.parametros.items %}
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="border rounded p-2 h-100">
+
+                            <small class="text-muted d-block">
+                                {{ campo }}
+                            </small>
+
+                            <strong>
+                                {% if valor.unidade %}
+                                    {{ valor.valor|floatformat:"-2" }}
+                                {% else %}
+                                    {{ valor.valor }}
+                                {% endif %}
+
+                                {% if valor.unidade %}
+                                    {{ valor.unidade }}
+                                {% endif %}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+{% endfor %}
+</form>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const scrollPos = sessionStorage.getItem("scrollPos");
+
+    if (scrollPos !== null) {
+        window.scrollTo(0, parseInt(scrollPos));
+        sessionStorage.removeItem("scrollPos");
+    }
+
+    document.querySelectorAll("form").forEach(form => {
+        form.addEventListener("submit", function () {
+            sessionStorage.setItem("scrollPos", window.scrollY);
+        });
+    });
+});
+</script>
+</body>
 {% endblock %}

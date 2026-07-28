@@ -32,6 +32,10 @@ class DadosMaterialService:
             "campo": "verniz_semicondutivo",
             "categoria": "Verniz",
         },
+        "fita_acabamento": {
+            "campo": "fita_acabamento",
+            "categoria": "Fita"
+        },
     }
 
     def __init__(self, secao):

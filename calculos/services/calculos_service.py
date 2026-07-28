@@ -6,6 +6,7 @@ from calculos.calculos.estator import ResultadosEstator
 from calculos.calculos.bobina import ResultadosBobinas
 from calculos.calculos.eletrica import ResultadosEletrica
 from decimal import Decimal
+import math
 
 class Verificacao:
     @staticmethod
@@ -23,7 +24,7 @@ class Verificacao:
                 pass
             else:
                 mensagem = "Material não possui dados registrados"
-                print(parametro)
+                
                 return mensagem
 
     def chamar_calculos(request,escolhido):
@@ -39,15 +40,16 @@ class Verificacao:
 
 
 class Filtros:
-    def __init__(self, dados,iso_sel={},condutor={},iso_principal={},folga=0.4):
+    def __init__(self, dados,iso_sel={},condutor={},iso_principal={},folga=0.4,sobreposicao=Decimal(0.5),fitas={}):
         self.dados = dados
         self.condutor_sel = condutor
         self.iso_principal = iso_principal
         self.iso_sel = iso_sel
+        self.fitas = fitas
         
         self.estator = ResultadosEstator(dados['dados_estator'])
         if self.validar_dados(self.condutor_sel) is True:
-            self.bobinas = ResultadosBobinas(self.dados,dados['dados_bobina'], condutor, iso_principal, iso_sel,folga)
+            self.bobinas = ResultadosBobinas(self.dados,dados['dados_bobina'], condutor, iso_principal, iso_sel,folga,sobreposicao,fitas)
             self.condutor = ResultadosCondutor(self.dados,condutor,self.bobinas.calcular_comprimento())
         self.eletrica = ResultadosEletrica(dados)
 
@@ -57,8 +59,7 @@ class Filtros:
         else:
             return False
 
-
-    def calcularcondutor(self, coef,folga):
+    def calcular_condutor(self, coef):
         
         if self.validar_dados(self.condutor_sel) is True:
 
@@ -109,28 +110,109 @@ class Filtros:
         else:
             return None
 
-    def calcularisolacao(self, sobreposicao, coef, espessura_iso):
-        sobrep = sobreposicao/100
-        coefseg = coef      
+    def calcular_isolacao(self,coef):
+            
         
         altura_bobina = self.bobinas.altura_bobina
         altura_bobina_iso = self.bobinas.altura_bobina_iso
         largura_bobina = self.bobinas.largura_bobina
-        largura_bobina_iso = self.bobinas.altura_bobina_iso
+        largura_bobina_iso = self.bobinas.largura_bobina_iso
 
 
         perimetro_ext = self.bobinas.perimetro_externo
         perimetro_int = self.bobinas.perimetro_interno
         perimetro = self.bobinas.perimetro_medio
-        fita_param = self.iso_principal['parametros']
-        if "Largura" in fita_param:
-            largura_fita = fita_param['Largura']['valor']
-            espessura_fita = fita_param['Espessura']['valor']
-            comp_rolo = fita_param['Comprimento do rolo']['valor']
+        
+        if self.iso_principal != None:
+            n_voltas = self.bobinas.voltas_isolacao
+            l_fita_isolante_bobina = self.bobinas.comprimento_fita_isolante_bobina
+            l_fita_isolante_total = self.bobinas.comprimento_fita_isolante_total
+            rolos_fita_isolante_bobina = self.bobinas.rolo_fita_isolante_bobina
+            rolos_fita_isolante = self.bobinas.rolo_fita_isolante_total
+            n_camadas = self.bobinas.n_camadas_isolacao
+            rolos_seguranca = rolos_fita_isolante * Decimal(coef)
 
-            camadas = espessura_iso / (espessura_fita / (1 - sobrep))
 
-        print(f"perimetro médio: {perimetro}")
+
+            return {
+                "Altura total da Bobina": [altura_bobina_iso, "mm"],
+                "Largura total da Bobina": [largura_bobina_iso, "mm"],
+                "Perímetro da Bobina (sem isolação)": [perimetro_int, "mm"],
+                "Perímetro da Bobina Isolada": [perimetro_ext, "mm"],
+                "Perímetro médio da Isolação da Bobina": [perimetro, "mm"],
+                "Número de voltas": [n_voltas, ""],
+                "Número de camadas": [math.ceil(n_camadas), ""],
+                "Comprimento de fita por Bobina": [math.ceil(l_fita_isolante_bobina/Decimal(1000)), "metros"],
+                "Rolos de fita necessários por bobina": [math.ceil(rolos_fita_isolante_bobina), "rolos"],
+                "Comprimento de fita total": [math.ceil(l_fita_isolante_total/Decimal(1000)), "metros"],
+                "Rolos de Fita Isolante necessários": [math.ceil(rolos_fita_isolante), "rolos"],
+                "Rolos de Fita Isolante Necessários (com segurança)": [math.ceil(rolos_seguranca), "rolos"],
+            }
+
+    def calcular_fitas(self,coef):
+        FITAS_LABEL = {
+            "aplicacao_fita": "Comprimento de Aplicação",
+            "camadas": "Número de camadas",
+            "n_voltas": "Número de voltas",
+            "rolos_bobina": "Rolos de Fita Necessários por Bobina",
+            "comprimento_fita_bobina": "Comprimento de Fita por Bobina",
+            "comprimento_fita_total": "Comprimento de Fita Total",
+            "rolos_total": "Rolos de Fita Necessários",
+            "rolos_seguranca": "Rolos de Fita Necessários (com segurança)"
+        }
+        FITAS_UNIDADES = {
+            "aplicacao_fita": "mm",
+            "camadas": "",
+            "n_voltas": "",
+            "rolos_bobina": "rolos",
+            "comprimento_fita_bobina": "m",
+            "comprimento_fita_total": "m",
+            "rolos_total": "rolos",
+            "rolos_seguranca": "rolos"
+        }
+
+        FITAS_MULTIPLICADOR = {
+            "aplicacao_fita": 1,
+            "camadas": 1,
+            "n_voltas": 1,
+            "rolos_bobina": 1,
+            "comprimento_fita_bobina": 0.001,
+            "comprimento_fita_total": 0.001,
+            "rolos_total": 1,
+            "rolos_seguranca": 1
+            }
+        
+        fitas = self.bobinas.resultados_fitas
+        
+        
+        
+        for fita in fitas:
+            fitas[fita]['rolos_seguranca'] = math.ceil(fitas[fita]['rolos_total']*Decimal(self.fitas[fita]['coeficiente_seguranca']))
+        if fitas != {}:
+            fita_condutiva = fitas['fita_condutiva']
+            fita_semicondutiva = fitas['fita_semicondutiva']
+            fita_acabamento = fitas['fita_acabamento']
+        
+            fita_condutiva = self.context_fitas(fita_condutiva,FITAS_LABEL,FITAS_UNIDADES,FITAS_MULTIPLICADOR)
+            fita_semicondutiva = self.context_fitas(fita_semicondutiva,FITAS_LABEL,FITAS_UNIDADES,FITAS_MULTIPLICADOR)
+            fita_acabamento = self.context_fitas(fita_acabamento,FITAS_LABEL,FITAS_UNIDADES,FITAS_MULTIPLICADOR)
+            return {
+                "fita_condutiva": fita_condutiva,
+                "fita_semicondutiva": fita_semicondutiva,
+                "fita_acabamento": fita_acabamento
+            }
+        
+    @staticmethod
+    def context_fitas (fita,label,unidades,multiplicador):
+        fita_corrigida = {}
+        for parametro in fita:
+            
+            fita_corrigida[label[parametro]] = [fita[parametro]*Decimal(multiplicador[parametro]),unidades[parametro]]
+
+        return fita_corrigida
+
+        
+        
 
         
                 
