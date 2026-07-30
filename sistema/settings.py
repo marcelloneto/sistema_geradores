@@ -133,3 +133,8 @@ DECIMAL_SEPARATOR = ','
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
