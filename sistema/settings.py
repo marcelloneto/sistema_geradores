@@ -26,9 +26,13 @@ SECRET_KEY = 'django-insecure-&)ld$)6jj=w$j(cu4ocjsc-s4=+ns*_xvs0=86zhiw+zz_l3=#
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "*"
+    "*",
+    "https://geradores-t7jsl8s0.b4a.run/"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://geradores-t7jsl8s0.b4a.run/",
+]
 
 # Application definition
 
