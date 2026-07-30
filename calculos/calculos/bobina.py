@@ -130,7 +130,7 @@ class ResultadosBobinas:
             self.perimetro_externo = self.calcular_perimetro_ext(self.altura_bobina_iso,self.largura_bobina_iso)
             self.perimetro_medio = self.calcular_perimetro_medio(self.perimetro_externo,self.perimetro_interno)
 
-        if self.iso_principal != None:
+        if self.iso_principal != {}:
             self.voltas_isolacao = self.calcular_voltas_fita(self.calcular_comprimento(),self.sobreposicao,self.iso_principal_largura)
             self.n_camadas_isolacao = self.calcular_camadas(self.parede_iso, self.iso_principal_espessura,self.sobreposicao)
             self.comprimento_fita_isolante_bobina = self.calcular_comprimento_fita_bobina(self.voltas_isolacao, self.perimetro_medio,self.n_camadas_isolacao)
@@ -144,25 +144,26 @@ class ResultadosBobinas:
         Cálculos para fitas, condutiva, semicondutiva e acabamento
         ===========================================================
         """
-
-        self.sobreposicao_fitas = {
-            "fita_condutiva": self.fitas['fita_condutiva']['sobreposicao'],
-            "fita_semicondutiva": self.fitas['fita_semicondutiva']['sobreposicao'],
-            "fita_acabamento": self.fitas['fita_acabamento']['sobreposicao'],
-        }
-        self.camadas_fitas = {
-            "fita_condutiva": Decimal(10),
-            "fita_semicondutiva": Decimal(1),
-            "fita_acabamento": Decimal(1),
-        }
-
-        self.comprimento_aplicacao_fitas = {
-            "fita_condutiva": self.calcular_comprimento_parte_reta(),
-            "fita_semicondutiva": Decimal(100*4),
-            "fita_acabamento": self.calcular_comprimento_area_acabamento()
-        }
-
         if self.fitas != {}:
+
+            self.sobreposicao_fitas = {
+                "fita_condutiva": self.fitas['fita_condutiva']['sobreposicao'],
+                "fita_semicondutiva": self.fitas['fita_semicondutiva']['sobreposicao'],
+                "fita_acabamento": self.fitas['fita_acabamento']['sobreposicao'],
+            }
+            self.camadas_fitas = {
+                "fita_condutiva": Decimal(10),
+                "fita_semicondutiva": Decimal(1),
+                "fita_acabamento": Decimal(1),
+            }
+
+            self.comprimento_aplicacao_fitas = {
+                "fita_condutiva": self.calcular_comprimento_parte_reta(),
+                "fita_semicondutiva": Decimal(100*4),
+                "fita_acabamento": self.calcular_comprimento_area_acabamento()
+            }
+
+        
             self.resultados_fitas = {}
             
             for fita in self.fitas:

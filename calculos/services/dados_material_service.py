@@ -105,3 +105,35 @@ class DadosMaterialService:
             "descricao": material.descricao,
             "parametros": parametros,
         }
+
+    @staticmethod
+    def separacao_verniz(opcoes):
+            opcoes_disponiveis = opcoes['materiais_disponiveis']
+            opcoes_condutivo = {}
+            opcoes_semicondutivo = {}
+            opcoes_isolante = {}
+            
+            cond = 0
+            semi = 0
+            iso = 0
+            for opcao in opcoes_disponiveis:
+                
+                if opcoes_disponiveis[opcao]['parametros']['finalidade']['valor'] == 'condutivo':
+                    opcoes_condutivo[str(cond)] = opcoes_disponiveis[opcao]
+                    
+                    cond = cond+1
+                if opcoes_disponiveis[opcao]['parametros']['finalidade']['valor'] == 'semicondutivo':
+                    opcoes_semicondutivo[str(semi)] = opcoes_disponiveis[opcao]
+                    
+                    semi = semi+1
+                if opcoes_disponiveis[opcao]['parametros']['finalidade']['valor'] == 'isolante':
+                    opcoes_isolante[str(iso)] = opcoes_disponiveis[opcao]
+                    
+                    iso = iso+1
+    
+            return {
+                "opcoes_condutivo": opcoes_condutivo,
+                "opcoes_semicondutivo": opcoes_semicondutivo,
+                "opcoes_isolante": opcoes_isolante,
+            }
+    

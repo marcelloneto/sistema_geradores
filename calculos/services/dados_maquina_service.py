@@ -36,6 +36,7 @@ class DadosMaquinaService:
             "maquina",
             "dados_estator",
             "dados_bobina",
+            "dados_geometricos",
             "dados_bobinagem_roebel",
         ],
         "geometria": [
@@ -88,4 +89,6 @@ class DadosMaquinaService:
             return {}
 
         return model_to_dict(objeto)
+    
+    
 

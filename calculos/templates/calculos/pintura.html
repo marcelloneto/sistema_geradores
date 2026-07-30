@@ -1,2 +1,96 @@
 {% extends 'calculos/home.html' %}
-<h1>PINTURA</h1>
+{% block content %}
+{% load humanize l10n %}
+
+
+<form method="post">
+{% csrf_token %}
+    {% for tipo, info in dados.items %}
+        
+        <div class="row align-items-end">
+
+            <div class="col-md-3">
+                <label class="form-label">
+                    Verniz {{ tipo.capitalize }}
+                </label>
+                
+                <select name="verniz_{{ tipo }}" class="form-select">
+                    
+                    {% for opcao in info.opcoes %}
+                        <option value="{{ forloop.counter0 }}"
+                            {% if forloop.counter0|stringformat:"s" == info.index|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ opcao.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            
+            <div class="col-md-2">
+                <button
+                    type="submit"
+                    name="acao"
+                    value="atualizar_sessao"
+                    class="btn btn-warning w-100">
+                    Aplicar
+                </button>
+            </div>
+
+        </div>
+
+
+        <div class="card mt-4">
+
+            <div class="card-header">
+                <strong>Informações Técnicas do verniz {{tipo}} {{ info.escolhido.nome }}</strong>
+            </div>
+            
+            <div class="card-body">
+                {% if "rendimento" not in info.escolhido.parametros %}
+                    <div class="alert alert-secondary mb-0">
+                        O Verniz condutivo selecionado não possui dados cadastrados
+                    </div>
+
+                {% else %}
+
+                    <div class="row">
+
+                        {% for campo, valor in info.escolhido.parametros.items %}
+                            {% if campo != "finalidade" %}
+                                <div class="col-md-3 mb-3">
+
+                                    <div class="border rounded p-2 h-100">
+
+                                        <small class="text-muted d-block">
+                                            {{ campo.capitalize }}
+                                        </small>
+                                        
+                                        <strong>
+                                            
+                                            {{ valor.valor|floatformat:"-2" }}
+                                            {{ valor.unidade }}
+
+                                        </strong>
+                                        
+
+                                    </div>
+                            
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+        <hr>
+    {% endfor %}
+
+</form>
+{% endblock %}

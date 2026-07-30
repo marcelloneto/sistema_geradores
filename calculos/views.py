@@ -72,14 +72,14 @@ class ResultadosCondutor:
             rss.verificar_secao(request, dados,'isolacao_cond',material_iso['materiais_disponiveis'])
             rss.verificar_mudanca_os(request,ordem_selecionada)
 
-            opcoes = rss.obter_opcoes_secao( material)
+            opcoes = rss.obter_opcoes_secao( material["materiais_disponiveis"])
             if request.method == "POST":
                 processar = rss.processar_post(request)
-            opcoes_iso = rss.obter_opcoes_secao(material_iso)
+            opcoes_iso = rss.obter_opcoes_secao(material_iso["materiais_disponiveis"])
              
-            escolhido = rss.escolha(request,dados,material,secao)
+            escolhido = rss.escolha(request,dados,material['materiais_disponiveis'],secao)
             index_cond = ResultadosCondutor.selecao_cond(escolhido,rss,material)
-            iso_escolhido = rss.escolha(request,dados,material_iso,'isolacao_cond')
+            iso_escolhido = rss.escolha(request,dados,material_iso['materiais_disponiveis'],'isolacao_cond')
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material_iso)
             coeficiente_seguranca = request.session['resultados'].get(
                 "coeficiente_seguranca_bobinas",
@@ -135,8 +135,8 @@ class ResultadosCondutor:
         return index_cond
 
 class ResultadosIsolamento:
-    @staticmethod
-    def isolamento(request):
+    
+    def isolamento(self,request):
         secao = 'isolacao'
         fita = 'isolamento_principal'
         request.session['resultados']['pagina_atual'] = "resultados_isolamento"
@@ -165,6 +165,8 @@ class ResultadosIsolamento:
             
             d_material_acabamento = DadosMaterialService('fita_acabamento')
             fita_acabamento = d_material_acabamento.obter_dados(ordem_selecionada.maquina)
+
+            
             
             rss.atualizar_pagina(request)
             
@@ -174,29 +176,29 @@ class ResultadosIsolamento:
             
             rss.verificar_mudanca_os(request,ordem_selecionada)
             
-            opcoes = rss.obter_opcoes_secao( material)
+            opcoes = rss.obter_opcoes_secao( material["materiais_disponiveis"])
 
             opcoes_fitas = rss.obter_opcoes_secao(fita_condutiva)
             
             if request.method == "POST":
                 processar = rss.processar_post(request)
 
-            cond_escolhido = rss.escolha(request,dados,condutor,'condutor')
-            iso_escolhido = rss.escolha(request,dados,material,secao)
+            cond_escolhido = rss.escolha(request,dados,condutor['materiais_disponiveis'],'condutor')
+            iso_escolhido = rss.escolha(request,dados,material['materiais_disponiveis'],secao)
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material)
 
-            iso_cond = rss.escolha(request,dados,material,'isolacao_cond')
+            iso_cond = rss.escolha(request,dados,material['materiais_disponiveis'],'isolacao_cond')
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material)
 
-            fita_condutiva_escolhida = rss.escolha(request,dados,fita_condutiva,'fita_condutiva')
+            fita_condutiva_escolhida = rss.escolha(request,dados,fita_condutiva['materiais_disponiveis'],'fita_condutiva')
             index_fita_condutiva = ResultadosCondutor.selecao_iso(fita_condutiva_escolhida,rss,fita_condutiva)
 
-            fita_semicondutiva_escolhida = rss.escolha(request,dados,fita_semicondutiva,'fita_semicondutiva')
+            fita_semicondutiva_escolhida = rss.escolha(request,dados,fita_semicondutiva['materiais_disponiveis'],'fita_semicondutiva')
             index_fita_semicondutiva = ResultadosCondutor.selecao_iso(fita_semicondutiva_escolhida,rss,fita_semicondutiva)
 
-            fita_acabamento_escolhida = rss.escolha(request,dados,fita_acabamento,'fita_acabamento')
+            fita_acabamento_escolhida = rss.escolha(request,dados,fita_acabamento['materiais_disponiveis'],'fita_acabamento')
             index_fita_acabamento = ResultadosCondutor.selecao_iso(fita_acabamento_escolhida,rss,fita_acabamento)
-
+            
             index_fitas = {
                 "index_fita_condutiva": index_fita_condutiva,
                 "index_fita_semicondutiva": index_fita_semicondutiva,
@@ -228,8 +230,6 @@ class ResultadosIsolamento:
             "fita_semicondutiva": {"escolhida":fita_semicondutiva_escolhida, "label": "Fita Semicondutiva"},
             "fita_acabamento":{"escolhida":fita_acabamento_escolhida, "label": "Fita de Acabamento"}}
 
-            print(f"REQUEST: {request.session['resultados']}")
-
             for chave in fitas:
                 if fitas[chave]['escolhida'] != None:
                     fitas[chave]['coeficiente_seguranca'] = request.session['resultados'].get(
@@ -245,14 +245,14 @@ class ResultadosIsolamento:
                         sobreposicao
                     ))*100)
 
-            resultados = Filtros(dados,
+            self.resultados = Filtros(dados,
                                  iso_principal=iso_escolhido,
                                  condutor=cond_escolhido,iso_sel=iso_cond,
                                  sobreposicao=fator_sobreposicao,
                                  folga=folga,
                                  fitas=fitas)
-            resultados_isolacao = resultados.calcular_isolacao(coeficiente_seguranca)
-            resultados_fitas = resultados.calcular_fitas(coeficiente_seguranca)
+            self.resultados_isolacao = self.resultados.calcular_isolacao(coeficiente_seguranca)
+            resultados_fitas = self.resultados.calcular_fitas(coeficiente_seguranca)
             
             for chave in fitas:
                 if fitas[chave]['escolhida'] != None:
@@ -268,7 +268,7 @@ class ResultadosIsolamento:
                     "index_iso": str(index_iso),
                     "coeficiente_seguranca": coeficiente_seguranca,
                     "sobreposicao": fator_sobreposicao,
-                    "resultados": resultados_isolacao,
+                    "resultados": self.resultados_isolacao,
                     "fitas":fitas,
                     "opcoes_fitas": opcoes_fitas,
                     "index_fitas": index_fitas,
@@ -292,15 +292,73 @@ class ResultadosPintura(View):
         secao = 'pintura'
         dados = DadosMaquinaService(secao)
         ordemservice = OrdemService("calculos")
+        material='verniz_condutivo'
             
         ordens = ordemservice.listar_ordens()
         
         ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
-        print(ordem_selecionada)
-        print(f"Resultados Pintura: {dados.obter_dados(ordem_selecionada)}")
+
+        request.session['resultados']['pagina_atual'] = "resultados_pintura"
+
+        rss = RSS(secao)
+
+        rss.atualizar_pagina(request)
+                    
+        rss.verificar_mudanca_pagina(request)
+        
+        rss.verificar_mudanca_os(request,ordem_selecionada)
+
+        rss.processar_post(request)
+
+        if ordem_selecionada is None:
+            return render(request, f"calculos/isolamento.html", {
+                            "ordens": ordens,
+                            })
+        else:
+            dados = dados.obter_dados(ordem_selecionada)
+            d_material_s = DadosMaterialService(material)
+
+            verniz = d_material_s.obter_dados(ordem_selecionada.maquina)
+            
+            dados_verniz = {
+                'condutivo':  {},
+                'semicondutivo':  {},
+                'isolante':  {},
+            }
+            for tipo in dados_verniz:
+                if tipo != "isolante":
+                    opcoes_verniz = DadosMaterialService.separacao_verniz(verniz)[f'opcoes_{tipo}']
+                    
+                    verniz_escolhido = rss.escolha(request,dados,opcoes_verniz,f'verniz_{tipo}')
+                    
+                    opcoes = rss.obter_opcoes_secao(opcoes_verniz)
+        
+                    index = ResultadosPintura.selecao(verniz_escolhido,rss,opcoes_verniz)
+
+                    dados_verniz[tipo] = {
+                        "escolhido": verniz_escolhido,
+                        "opcoes": opcoes,
+                        "index": index,
+                    }
+            
         return render(request, "calculos/pintura.html", {
                 "ordens": ordens,
                 "ordem_selecionada": ordem_selecionada,
                 "secao": secao,
+                "verniz_escolhido": verniz_escolhido,
+                "opcoes_condutivo": opcoes,
+                "index_condutivo": index,
+                "dados": dados_verniz
             })
 
+    @staticmethod
+    def selecao(iso_escolhido,rss,opcoes):
+        if iso_escolhido is None:
+            index_iso = "-1"
+        elif iso_escolhido == -1:
+            index_iso = "-1"
+            print(f"iso_escolhido: {type(iso_escolhido)}")
+        else:
+            index_iso = rss.obter_indice_por_id(opcoes,iso_escolhido['id'])
+
+        return index_iso
