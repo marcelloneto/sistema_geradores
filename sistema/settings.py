@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://sistemageradores-gjp03ecb.b4a.run/",
+    "https://sistemageradores-gjp03ecb.b4a.run",
 ]
 
 # Application definition
