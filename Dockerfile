@@ -11,7 +11,7 @@ COPY . /app
 RUN pip install -r requirements.txt
 
 # Informa ao Docker/Servidor a porta padrão do container
-EXPOSE 8000
+EXPOSE 8001
 
 # Inicializa o Django escutando na variável de ambiente PORT (padrão em deploys) ou na 8000
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8000}"]
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${PORT:-8001}"]
