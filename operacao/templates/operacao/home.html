@@ -1,5 +1,5 @@
 {% extends 'operacao/base.html' %}
-
+{% load static %}
 {% block content %}
 
 {% if ordem_selecionada %}
@@ -43,24 +43,46 @@
 
             </div>
         </div>
+        
         <div class="col-md-8">
-            <div class="row">
-            {% for field in form_maquina %}
-                
-                    <div class="col-md-3 mb-3">
+            <form id="basicos" method="post">
+                {% csrf_token %}
 
-                        <label class="form-label">
-                            {{ field.label }}
-                        </label>
+                <div class="row">
+                {% for field in form_maquina %}
+                    
+                        <div class="col-md-3 mb-3">
 
-                        {{ field }}
+                            <label class="form-label">
+                                {{ field.label }}
+                            </label>
 
-                    </div>
-                
-            {% endfor %}
-            </div>
+                            {{ field }}
+
+                        </div>
+                    
+                {% endfor %}
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button
+                        type="submit"
+                        name="restaurar"
+                        class="btn btn-danger m-2">
+                        Restaurar
+                    </button>
+                    <button
+                        type="submit"
+                        name="aplicar"
+                        class="btn btn-success m-2">
+                        Aplicar
+                    </button>
+                </div>
+            </form>
         </div>
+            
+        
     </div>
+    
     
 {% else %}
 

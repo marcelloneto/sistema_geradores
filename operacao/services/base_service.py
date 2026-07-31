@@ -72,7 +72,8 @@ class BaseService:
                 self.sessionservice.salvar_temp_secao(
                     request,
                     form.cleaned_data
-                )                
+                )        
+                    
             return form
         
         elif "salvar" in request.POST:

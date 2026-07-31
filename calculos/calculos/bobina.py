@@ -144,7 +144,9 @@ class ResultadosBobinas:
         Cálculos para fitas, condutiva, semicondutiva e acabamento
         ===========================================================
         """
-        if self.fitas != {}:
+        print(self.fitas['fita_condutiva']['escolhida'])
+        self.resultados_fitas = {}
+        if self.fitas['fita_condutiva']['escolhida'] != None:
 
             self.sobreposicao_fitas = {
                 "fita_condutiva": self.fitas['fita_condutiva']['sobreposicao'],
@@ -164,7 +166,7 @@ class ResultadosBobinas:
             }
 
         
-            self.resultados_fitas = {}
+            
             
             for fita in self.fitas:
                 if self.fitas[fita]['escolhida'] != None:

@@ -1,0 +1,4502 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$pAVWARbSEUCEb8VHcEPtP9$eb5kR2XekPYHrnED1TFL6CtFHX0r8+kHmmIrMtg+J/8=",
+    "last_login": "2026-07-17T13:44:01.534Z",
+    "is_superuser": true,
+    "username": "marceloneto",
+    "first_name": "Marcello",
+    "last_name": "Cesar",
+    "email": "marcelo.neto@groupinsight.com.br",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-06-02T11:58:42Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 1,
+  "fields": {
+    "nome": "São Marco",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.347Z",
+    "data_atualizacao": "2026-06-02T16:50:39.347Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 2,
+  "fields": {
+    "nome": "PPE",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.427Z",
+    "data_atualizacao": "2026-06-02T16:50:39.427Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 3,
+  "fields": {
+    "nome": "Von Roll",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.428Z",
+    "data_atualizacao": "2026-06-02T16:50:39.428Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 4,
+  "fields": {
+    "nome": "Krempel",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.429Z",
+    "data_atualizacao": "2026-06-02T16:50:39.429Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 5,
+  "fields": {
+    "nome": "Huntsman",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.429Z",
+    "data_atualizacao": "2026-06-02T16:50:39.429Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 6,
+  "fields": {
+    "nome": "DuPont",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.430Z",
+    "data_atualizacao": "2026-06-02T16:50:39.430Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 7,
+  "fields": {
+    "nome": "Isolasil",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.431Z",
+    "data_atualizacao": "2026-06-02T16:50:39.431Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 8,
+  "fields": {
+    "nome": "AEPI",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.431Z",
+    "data_atualizacao": "2026-06-02T16:50:39.431Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 9,
+  "fields": {
+    "nome": "Rhomos",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.432Z",
+    "data_atualizacao": "2026-06-02T16:50:39.432Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 10,
+  "fields": {
+    "nome": "Farmácia",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.432Z",
+    "data_atualizacao": "2026-06-02T16:50:39.432Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 11,
+  "fields": {
+    "nome": "Posto Combustível",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.433Z",
+    "data_atualizacao": "2026-06-02T16:50:39.433Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 12,
+  "fields": {
+    "nome": "Praça",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.433Z",
+    "data_atualizacao": "2026-06-02T16:50:39.433Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 13,
+  "fields": {
+    "nome": "Oficina",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.434Z",
+    "data_atualizacao": "2026-06-02T16:50:39.434Z"
+  }
+},
+{
+  "model": "cadastros.fornecedor",
+  "pk": 14,
+  "fields": {
+    "nome": "Mitexacta",
+    "razao_social": "",
+    "cnpj": "",
+    "email": "",
+    "telefone": "",
+    "site": "",
+    "observacoes": "",
+    "ativo": true,
+    "data_registro": "2026-06-02T16:50:39.434Z",
+    "data_atualizacao": "2026-06-02T16:50:39.434Z"
+  }
+},
+{
+  "model": "cadastros.cliente",
+  "pk": 1,
+  "fields": {
+    "nome": "CEMIG",
+    "localizacao": "Minas Gerais",
+    "meio_contato_1": "E-mail",
+    "contato_1": "",
+    "meio_contato_2": "Telefone",
+    "contato_2": "",
+    "data_registro": "2026-06-02T12:02:35.621Z"
+  }
+},
+{
+  "model": "cadastros.cliente",
+  "pk": 2,
+  "fields": {
+    "nome": "Enel Green Power",
+    "localizacao": "Minas Gerais",
+    "meio_contato_1": "",
+    "contato_1": "",
+    "meio_contato_2": "",
+    "contato_2": "",
+    "data_registro": "2026-06-02T12:02:52.132Z"
+  }
+},
+{
+  "model": "cadastros.cliente",
+  "pk": 3,
+  "fields": {
+    "nome": "Belém Bioenergia",
+    "localizacao": "Pará",
+    "meio_contato_1": "",
+    "contato_1": "",
+    "meio_contato_2": "",
+    "contato_2": "",
+    "data_registro": "2026-06-02T12:03:22.094Z"
+  }
+},
+{
+  "model": "cadastros.cliente",
+  "pk": 6,
+  "fields": {
+    "nome": "Petrobras",
+    "localizacao": "",
+    "meio_contato_1": "",
+    "contato_1": "",
+    "meio_contato_2": "",
+    "contato_2": "",
+    "data_registro": "2026-07-29T20:20:26.166Z"
+  }
+},
+{
+  "model": "cadastros.ordemservico",
+  "pk": 1,
+  "fields": {
+    "numero": "2450.07-2024",
+    "cliente": 1,
+    "maquina": 3,
+    "localizacao": "Braúnas-MG",
+    "tipo_servico": "Reforma",
+    "data_registro": "2026-06-02T12:57:43.496Z"
+  }
+},
+{
+  "model": "cadastros.ordemservico",
+  "pk": 2,
+  "fields": {
+    "numero": "2678.04/2025-387",
+    "cliente": 3,
+    "maquina": 2,
+    "localizacao": "Belém-PA",
+    "tipo_servico": "Fabricação",
+    "data_registro": "2026-06-02T12:58:11.843Z"
+  }
+},
+{
+  "model": "cadastros.ordemservico",
+  "pk": 3,
+  "fields": {
+    "numero": "2774.08/2025-445",
+    "cliente": 2,
+    "maquina": 1,
+    "localizacao": "Conceição das Alagoas-MG",
+    "tipo_servico": "Reforma",
+    "data_registro": "2026-06-02T12:59:00.450Z"
+  }
+},
+{
+  "model": "cadastros.ordemservico",
+  "pk": 6,
+  "fields": {
+    "numero": "2920.03-2026 - Reengenharia UG01",
+    "cliente": 2,
+    "maquina": 7,
+    "localizacao": "",
+    "tipo_servico": "",
+    "data_registro": "2026-06-18T18:39:07.153Z"
+  }
+},
+{
+  "model": "cadastros.ordemservico",
+  "pk": 7,
+  "fields": {
+    "numero": "2859.12/2025",
+    "cliente": 6,
+    "maquina": 8,
+    "localizacao": "Rio de Janeiro",
+    "tipo_servico": "Reforma",
+    "data_registro": "2026-07-29T20:21:43.701Z"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 5,
+  "fields": {
+    "nome": "Condutor"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 6,
+  "fields": {
+    "nome": "Isolação"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 7,
+  "fields": {
+    "nome": "Resina"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 8,
+  "fields": {
+    "nome": "Massa"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 9,
+  "fields": {
+    "nome": "Fita"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 10,
+  "fields": {
+    "nome": "Verniz"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 11,
+  "fields": {
+    "nome": "Amarração"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 12,
+  "fields": {
+    "nome": "Calço"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 13,
+  "fields": {
+    "nome": "Cunha"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 14,
+  "fields": {
+    "nome": "Barramento"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 15,
+  "fields": {
+    "nome": "Conexão"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 16,
+  "fields": {
+    "nome": "Sensor"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 17,
+  "fields": {
+    "nome": "Pavio"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 18,
+  "fields": {
+    "nome": "Aro"
+  }
+},
+{
+  "model": "cadastros.categoriamaterial",
+  "pk": 19,
+  "fields": {
+    "nome": "Cadarço"
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 1,
+  "fields": {
+    "material": 30,
+    "parametro": 1,
+    "valor_texto": "",
+    "valor_numero": "0.120000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 2,
+  "fields": {
+    "material": 30,
+    "parametro": 2,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 3,
+  "fields": {
+    "material": 30,
+    "parametro": 3,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 4,
+  "fields": {
+    "material": 6,
+    "parametro": 4,
+    "valor_texto": "",
+    "valor_numero": "5.500000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 5,
+  "fields": {
+    "material": 6,
+    "parametro": 5,
+    "valor_texto": "",
+    "valor_numero": "2.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 6,
+  "fields": {
+    "material": 6,
+    "parametro": 7,
+    "valor_texto": "",
+    "valor_numero": "5.800000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 7,
+  "fields": {
+    "material": 6,
+    "parametro": 8,
+    "valor_texto": "",
+    "valor_numero": "2.300000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 8,
+  "fields": {
+    "material": 6,
+    "parametro": 6,
+    "valor_texto": "",
+    "valor_numero": "8960.000000",
+    "valor_booleano": null,
+    "unidade": 38,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 9,
+  "fields": {
+    "material": 5,
+    "parametro": 4,
+    "valor_texto": "",
+    "valor_numero": "6.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 10,
+  "fields": {
+    "material": 5,
+    "parametro": 5,
+    "valor_texto": "",
+    "valor_numero": "3.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 11,
+  "fields": {
+    "material": 5,
+    "parametro": 7,
+    "valor_texto": "",
+    "valor_numero": "6.300000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 12,
+  "fields": {
+    "material": 5,
+    "parametro": 8,
+    "valor_texto": "",
+    "valor_numero": "3.300000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 13,
+  "fields": {
+    "material": 5,
+    "parametro": 6,
+    "valor_texto": "",
+    "valor_numero": "8960.000000",
+    "valor_booleano": null,
+    "unidade": 38,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 14,
+  "fields": {
+    "material": 6,
+    "parametro": 9,
+    "valor_texto": "Retangular",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 15,
+  "fields": {
+    "material": 5,
+    "parametro": 9,
+    "valor_texto": "Retangular",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 16,
+  "fields": {
+    "material": 4,
+    "parametro": 4,
+    "valor_texto": "",
+    "valor_numero": "2.500000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 17,
+  "fields": {
+    "material": 4,
+    "parametro": 5,
+    "valor_texto": "",
+    "valor_numero": "5.600000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 18,
+  "fields": {
+    "material": 4,
+    "parametro": 7,
+    "valor_texto": "",
+    "valor_numero": "5.900000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 19,
+  "fields": {
+    "material": 4,
+    "parametro": 8,
+    "valor_texto": "",
+    "valor_numero": "2.800000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 20,
+  "fields": {
+    "material": 4,
+    "parametro": 6,
+    "valor_texto": "",
+    "valor_numero": "8960.000000",
+    "valor_booleano": null,
+    "unidade": 38,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 21,
+  "fields": {
+    "material": 4,
+    "parametro": 9,
+    "valor_texto": "retangular",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 22,
+  "fields": {
+    "material": 3,
+    "parametro": 4,
+    "valor_texto": "",
+    "valor_numero": "5.600000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 23,
+  "fields": {
+    "material": 3,
+    "parametro": 5,
+    "valor_texto": "",
+    "valor_numero": "1.800000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 24,
+  "fields": {
+    "material": 3,
+    "parametro": 7,
+    "valor_texto": "",
+    "valor_numero": "5.710000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 25,
+  "fields": {
+    "material": 3,
+    "parametro": 8,
+    "valor_texto": "",
+    "valor_numero": "1.910000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 26,
+  "fields": {
+    "material": 3,
+    "parametro": 6,
+    "valor_texto": "",
+    "valor_numero": "8960.000000",
+    "valor_booleano": null,
+    "unidade": 38,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 27,
+  "fields": {
+    "material": 3,
+    "parametro": 9,
+    "valor_texto": "retangular",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 28,
+  "fields": {
+    "material": 2,
+    "parametro": 4,
+    "valor_texto": "",
+    "valor_numero": "5.600000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 29,
+  "fields": {
+    "material": 2,
+    "parametro": 5,
+    "valor_texto": "",
+    "valor_numero": "2.400000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 30,
+  "fields": {
+    "material": 2,
+    "parametro": 7,
+    "valor_texto": "",
+    "valor_numero": "5.900000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 31,
+  "fields": {
+    "material": 2,
+    "parametro": 8,
+    "valor_texto": "",
+    "valor_numero": "2.700000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 32,
+  "fields": {
+    "material": 2,
+    "parametro": 6,
+    "valor_texto": "",
+    "valor_numero": "8960.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 33,
+  "fields": {
+    "material": 2,
+    "parametro": 9,
+    "valor_texto": "retangular",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 34,
+  "fields": {
+    "material": 17,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.180000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 35,
+  "fields": {
+    "material": 17,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 36,
+  "fields": {
+    "material": 17,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 5,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 37,
+  "fields": {
+    "material": 9,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.240000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 38,
+  "fields": {
+    "material": 9,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 39,
+  "fields": {
+    "material": 9,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 40,
+  "fields": {
+    "material": 1,
+    "parametro": 4,
+    "valor_texto": "",
+    "valor_numero": "6.050000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 41,
+  "fields": {
+    "material": 1,
+    "parametro": 5,
+    "valor_texto": "",
+    "valor_numero": "2.400000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 42,
+  "fields": {
+    "material": 1,
+    "parametro": 7,
+    "valor_texto": "",
+    "valor_numero": "6.350000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 43,
+  "fields": {
+    "material": 1,
+    "parametro": 8,
+    "valor_texto": "",
+    "valor_numero": "2.700000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 44,
+  "fields": {
+    "material": 1,
+    "parametro": 6,
+    "valor_texto": "",
+    "valor_numero": "8960.000000",
+    "valor_booleano": null,
+    "unidade": 38,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 45,
+  "fields": {
+    "material": 1,
+    "parametro": 9,
+    "valor_texto": "retangular",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 46,
+  "fields": {
+    "material": 65,
+    "parametro": 4,
+    "valor_texto": "",
+    "valor_numero": "7.600000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 47,
+  "fields": {
+    "material": 65,
+    "parametro": 5,
+    "valor_texto": "",
+    "valor_numero": "2.100000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 48,
+  "fields": {
+    "material": 65,
+    "parametro": 7,
+    "valor_texto": "",
+    "valor_numero": "7.900000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 49,
+  "fields": {
+    "material": 65,
+    "parametro": 8,
+    "valor_texto": "",
+    "valor_numero": "2.400000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 50,
+  "fields": {
+    "material": 65,
+    "parametro": 6,
+    "valor_texto": "",
+    "valor_numero": "8960.000000",
+    "valor_booleano": null,
+    "unidade": 38,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 51,
+  "fields": {
+    "material": 65,
+    "parametro": 9,
+    "valor_texto": "retangular",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 52,
+  "fields": {
+    "material": 15,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.120000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 53,
+  "fields": {
+    "material": 15,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 54,
+  "fields": {
+    "material": 15,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 55,
+  "fields": {
+    "material": 8,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.120000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 56,
+  "fields": {
+    "material": 8,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 57,
+  "fields": {
+    "material": 8,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 58,
+  "fields": {
+    "material": 7,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.120000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 59,
+  "fields": {
+    "material": 7,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 60,
+  "fields": {
+    "material": 7,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 61,
+  "fields": {
+    "material": 14,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.150000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 62,
+  "fields": {
+    "material": 14,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 63,
+  "fields": {
+    "material": 14,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 64,
+  "fields": {
+    "material": 16,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.160000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 65,
+  "fields": {
+    "material": 16,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 66,
+  "fields": {
+    "material": 16,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 67,
+  "fields": {
+    "material": 18,
+    "parametro": 10,
+    "valor_texto": "",
+    "valor_numero": "0.120000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 68,
+  "fields": {
+    "material": 18,
+    "parametro": 11,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 69,
+  "fields": {
+    "material": 18,
+    "parametro": 12,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 70,
+  "fields": {
+    "material": 29,
+    "parametro": 1,
+    "valor_texto": "",
+    "valor_numero": "0.120000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 71,
+  "fields": {
+    "material": 29,
+    "parametro": 2,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 72,
+  "fields": {
+    "material": 29,
+    "parametro": 3,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 73,
+  "fields": {
+    "material": 25,
+    "parametro": 1,
+    "valor_texto": "",
+    "valor_numero": "0.120000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 74,
+  "fields": {
+    "material": 25,
+    "parametro": 2,
+    "valor_texto": "",
+    "valor_numero": "25.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 75,
+  "fields": {
+    "material": 25,
+    "parametro": 3,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 76,
+  "fields": {
+    "material": 21,
+    "parametro": 1,
+    "valor_texto": "",
+    "valor_numero": "0.150000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 77,
+  "fields": {
+    "material": 21,
+    "parametro": 2,
+    "valor_texto": "",
+    "valor_numero": "30.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 78,
+  "fields": {
+    "material": 21,
+    "parametro": 3,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 79,
+  "fields": {
+    "material": 19,
+    "parametro": 1,
+    "valor_texto": "",
+    "valor_numero": "0.200000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 80,
+  "fields": {
+    "material": 19,
+    "parametro": 2,
+    "valor_texto": "",
+    "valor_numero": "30.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 81,
+  "fields": {
+    "material": 19,
+    "parametro": 3,
+    "valor_texto": "",
+    "valor_numero": "50000.000000",
+    "valor_booleano": null,
+    "unidade": 3,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 83,
+  "fields": {
+    "material": 20,
+    "parametro": 14,
+    "valor_texto": "condutivo",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 84,
+  "fields": {
+    "material": 20,
+    "parametro": 15,
+    "valor_texto": "",
+    "valor_numero": "0.050000",
+    "valor_booleano": null,
+    "unidade": 40,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 85,
+  "fields": {
+    "material": 27,
+    "parametro": 14,
+    "valor_texto": "condutivo",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 86,
+  "fields": {
+    "material": 27,
+    "parametro": 15,
+    "valor_texto": "",
+    "valor_numero": "0.050000",
+    "valor_booleano": null,
+    "unidade": 40,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 87,
+  "fields": {
+    "material": 24,
+    "parametro": 14,
+    "valor_texto": "semicondutivo",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 88,
+  "fields": {
+    "material": 24,
+    "parametro": 15,
+    "valor_texto": "",
+    "valor_numero": "0.050000",
+    "valor_booleano": null,
+    "unidade": 40,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 89,
+  "fields": {
+    "material": 26,
+    "parametro": 14,
+    "valor_texto": "isolante",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 90,
+  "fields": {
+    "material": 26,
+    "parametro": 15,
+    "valor_texto": "",
+    "valor_numero": "0.050000",
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 91,
+  "fields": {
+    "material": 23,
+    "parametro": 14,
+    "valor_texto": "semicondutivo",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 92,
+  "fields": {
+    "material": 23,
+    "parametro": 15,
+    "valor_texto": "",
+    "valor_numero": "0.050000",
+    "valor_booleano": null,
+    "unidade": 40,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 93,
+  "fields": {
+    "material": 22,
+    "parametro": 14,
+    "valor_texto": "isolante",
+    "valor_numero": null,
+    "valor_booleano": null,
+    "unidade": null,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.materialparametrovalor",
+  "pk": 94,
+  "fields": {
+    "material": 22,
+    "parametro": 15,
+    "valor_texto": "",
+    "valor_numero": "0.050000",
+    "valor_booleano": null,
+    "unidade": 40,
+    "observacoes": ""
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 3,
+  "fields": {
+    "nome": "Milímetro",
+    "simbolo": "mm",
+    "fator_base": "0.0010000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 4,
+  "fields": {
+    "nome": "Centímetro",
+    "simbolo": "cm",
+    "fator_base": "0.0100000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 5,
+  "fields": {
+    "nome": "Metro",
+    "simbolo": "m",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 6,
+  "fields": {
+    "nome": "Quilômetro",
+    "simbolo": "km",
+    "fator_base": "1000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 7,
+  "fields": {
+    "nome": "Milímetro Quadrado",
+    "simbolo": "mm²",
+    "fator_base": "0.0000010000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 8,
+  "fields": {
+    "nome": "Centímetro Quadrado",
+    "simbolo": "cm²",
+    "fator_base": "0.0001000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 9,
+  "fields": {
+    "nome": "Metro Quadrado",
+    "simbolo": "m²",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 10,
+  "fields": {
+    "nome": "Milímetro Cúbico",
+    "simbolo": "mm³",
+    "fator_base": "1.0E-9",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 11,
+  "fields": {
+    "nome": "Centímetro Cúbico",
+    "simbolo": "cm³",
+    "fator_base": "0.0000010000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 12,
+  "fields": {
+    "nome": "Metro Cúbico",
+    "simbolo": "m³",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 13,
+  "fields": {
+    "nome": "Mililitro",
+    "simbolo": "mL",
+    "fator_base": "0.0000010000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 14,
+  "fields": {
+    "nome": "Litro",
+    "simbolo": "L",
+    "fator_base": "0.0010000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 15,
+  "fields": {
+    "nome": "Grama",
+    "simbolo": "g",
+    "fator_base": "0.0010000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 16,
+  "fields": {
+    "nome": "Quilograma",
+    "simbolo": "kg",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 17,
+  "fields": {
+    "nome": "Tonelada",
+    "simbolo": "t",
+    "fator_base": "1000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 18,
+  "fields": {
+    "nome": "Micrômetro",
+    "simbolo": "µm",
+    "fator_base": "0.0000010000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 19,
+  "fields": {
+    "nome": "Volt",
+    "simbolo": "V",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 20,
+  "fields": {
+    "nome": "Quilovolt",
+    "simbolo": "kV",
+    "fator_base": "1000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 21,
+  "fields": {
+    "nome": "Ampère",
+    "simbolo": "A",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 22,
+  "fields": {
+    "nome": "Quiloampère",
+    "simbolo": "kA",
+    "fator_base": "1000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 23,
+  "fields": {
+    "nome": "Ohm",
+    "simbolo": "Ω",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 24,
+  "fields": {
+    "nome": "Megaohm",
+    "simbolo": "MΩ",
+    "fator_base": "1000000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 25,
+  "fields": {
+    "nome": "Hertz",
+    "simbolo": "Hz",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 26,
+  "fields": {
+    "nome": "Watt",
+    "simbolo": "W",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 27,
+  "fields": {
+    "nome": "Quilowatt",
+    "simbolo": "kW",
+    "fator_base": "1000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 28,
+  "fields": {
+    "nome": "Volt-Ampère",
+    "simbolo": "VA",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 29,
+  "fields": {
+    "nome": "Quilovolt-Ampère",
+    "simbolo": "kVA",
+    "fator_base": "1000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 30,
+  "fields": {
+    "nome": "Megavolt-Ampère",
+    "simbolo": "MVA",
+    "fator_base": "1000000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 31,
+  "fields": {
+    "nome": "Pascal",
+    "simbolo": "Pa",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 32,
+  "fields": {
+    "nome": "Quilopascal",
+    "simbolo": "kPa",
+    "fator_base": "1000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 33,
+  "fields": {
+    "nome": "Megapascal",
+    "simbolo": "MPa",
+    "fator_base": "1000000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 34,
+  "fields": {
+    "nome": "Bar",
+    "simbolo": "bar",
+    "fator_base": "100000.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 35,
+  "fields": {
+    "nome": "Segundo",
+    "simbolo": "s",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 36,
+  "fields": {
+    "nome": "Minuto",
+    "simbolo": "min",
+    "fator_base": "60.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 37,
+  "fields": {
+    "nome": "Hora",
+    "simbolo": "h",
+    "fator_base": "3600.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 38,
+  "fields": {
+    "nome": "quilograma por metro cúbico",
+    "simbolo": "kg/m³",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 39,
+  "fields": {
+    "nome": "Massa por m²",
+    "simbolo": "kg/m²",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.unidademedida",
+  "pk": 40,
+  "fields": {
+    "nome": "Massa por metro",
+    "simbolo": "kg/m",
+    "fator_base": "1.0000000000",
+    "ativa": true
+  }
+},
+{
+  "model": "cadastros.maquina",
+  "pk": 1,
+  "fields": {
+    "numero_serie": "800.165",
+    "cliente": 2,
+    "tipo": "vertical",
+    "potencia_kva": "60000.00",
+    "tensao_v": "13800.00",
+    "corrente_a": "2510.00",
+    "rotacao_rpm": "128.60",
+    "numero_polos": 56,
+    "fator_potencia": "0.90",
+    "excitatriz": "Anel Coletor",
+    "tensao_excitatriz_v": "0.00",
+    "corrente_excitatriz_a": "999.00",
+    "frequencia_hz": "60.00",
+    "data_registro": "2026-06-02T12:55:55.254Z",
+    "data_atualizacao": "2026-06-02T14:42:43.636Z"
+  }
+},
+{
+  "model": "cadastros.maquina",
+  "pk": 2,
+  "fields": {
+    "numero_serie": "AMG 0560BL04LSP / 470824",
+    "cliente": 3,
+    "tipo": "horizontal",
+    "potencia_kva": "3375.00",
+    "tensao_v": "13800.00",
+    "corrente_a": "141.00",
+    "rotacao_rpm": "1800.00",
+    "numero_polos": 4,
+    "fator_potencia": "0.80",
+    "excitatriz": "PMG",
+    "tensao_excitatriz_v": "0.00",
+    "corrente_excitatriz_a": "0.00",
+    "frequencia_hz": "60.00",
+    "data_registro": "2026-06-02T12:56:23.014Z",
+    "data_atualizacao": "2026-06-02T14:42:38.463Z"
+  }
+},
+{
+  "model": "cadastros.maquina",
+  "pk": 3,
+  "fields": {
+    "numero_serie": "CEMIG",
+    "cliente": 1,
+    "tipo": "vertical",
+    "potencia_kva": "27777.00",
+    "tensao_v": "13800.00",
+    "corrente_a": "1162.00",
+    "rotacao_rpm": "257.00",
+    "numero_polos": 28,
+    "fator_potencia": "0.90",
+    "excitatriz": "Anel coletor + excitatriz",
+    "tensao_excitatriz_v": "250.00",
+    "corrente_excitatriz_a": "520.00",
+    "frequencia_hz": "60.00",
+    "data_registro": "2026-06-02T12:56:53.670Z",
+    "data_atualizacao": "2026-06-02T14:42:31.367Z"
+  }
+},
+{
+  "model": "cadastros.maquina",
+  "pk": 7,
+  "fields": {
+    "numero_serie": "70010014301",
+    "cliente": 2,
+    "tipo": "vertical",
+    "potencia_kva": "100000.00",
+    "tensao_v": "13800.00",
+    "corrente_a": "4183.00",
+    "rotacao_rpm": "85.70",
+    "numero_polos": 56,
+    "fator_potencia": "0.95",
+    "excitatriz": "",
+    "tensao_excitatriz_v": null,
+    "corrente_excitatriz_a": null,
+    "frequencia_hz": "60.00",
+    "data_registro": "2026-06-18T18:38:31.762Z",
+    "data_atualizacao": "2026-06-18T18:41:09.903Z"
+  }
+},
+{
+  "model": "cadastros.maquina",
+  "pk": 8,
+  "fields": {
+    "numero_serie": "90425.0109/BDAX7-290 ERJT",
+    "cliente": 6,
+    "tipo": "horizontal",
+    "potencia_kva": "71176.00",
+    "tensao_v": "13800.00",
+    "corrente_a": "2977.00",
+    "rotacao_rpm": "3600.00",
+    "numero_polos": 2,
+    "fator_potencia": "0.85",
+    "excitatriz": "Brushless PMG",
+    "tensao_excitatriz_v": "185.00",
+    "corrente_excitatriz_a": "952.00",
+    "frequencia_hz": "60.00",
+    "data_registro": "2026-07-29T20:21:03.459Z",
+    "data_atualizacao": "2026-07-29T20:31:08.975Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 1,
+  "fields": {
+    "codigo_material": "COND-SM-001",
+    "nome": "Cobre 99% - Coralglas- 6,05 x 2,4",
+    "categoria": 5,
+    "descricao": "Condutor de cobre 99% com isolação Coralglas.",
+    "fornecedor": 1,
+    "prioridade": 2,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.486Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 2,
+  "fields": {
+    "codigo_material": "COND-SM-002",
+    "nome": "Cobre 99% - Coralglas H - 5,6 x 2,4",
+    "categoria": 5,
+    "descricao": "Condutor de cobre 99% com isolação Coralglas H.",
+    "fornecedor": 1,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.541Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 3,
+  "fields": {
+    "codigo_material": "COND-SM-003",
+    "nome": "Cobre 99% - Coraltherm HG - 5,6 x 1,8",
+    "categoria": 5,
+    "descricao": "Condutor de cobre 99% com isolação Coraltherm HG.",
+    "fornecedor": 1,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.542Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 4,
+  "fields": {
+    "codigo_material": "COND-PPE-001",
+    "nome": "Cobre 99% - Poliglas ER1 - 5,6 x 2,5",
+    "categoria": 5,
+    "descricao": "Condutor de cobre 99% com isolação Poliglas ER1.",
+    "fornecedor": 2,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.543Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 5,
+  "fields": {
+    "codigo_material": "COND-PPE-002",
+    "nome": "Cobre 99% - Poliglas ER2 - 6,0 x 3,0",
+    "categoria": 5,
+    "descricao": "Condutor de cobre 99% com isolação Poliglas ER2.",
+    "fornecedor": 2,
+    "prioridade": 2,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.544Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 6,
+  "fields": {
+    "codigo_material": "COND-PPE-003",
+    "nome": "Cobre 99% - Esmaltado - 5,5 x 2,0",
+    "categoria": 5,
+    "descricao": "Condutor de cobre 99%, esmaltado.",
+    "fornecedor": 2,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.545Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 7,
+  "fields": {
+    "codigo_material": "ISO-VR-001",
+    "nome": "Thermopreg 406.25",
+    "categoria": 6,
+    "descricao": "Nomex impregnado com resina epóxi em estágio B.",
+    "fornecedor": 3,
+    "prioridade": 2,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.546Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 8,
+  "fields": {
+    "codigo_material": "ISO-KR-001",
+    "nome": "Thermopreg",
+    "categoria": 6,
+    "descricao": "Nomex impregnado com resina epóxi em estágio B.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.547Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 9,
+  "fields": {
+    "codigo_material": "ISO-KR-002",
+    "nome": "DMI 156",
+    "categoria": 6,
+    "descricao": "Material para isolamento de panquecas.",
+    "fornecedor": 4,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.549Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 10,
+  "fields": {
+    "codigo_material": "RES-HU-001",
+    "nome": "Araldite CY5538 + Aradur HY2123",
+    "categoria": 7,
+    "descricao": "Resina epóxi para consolidação de condutores.",
+    "fornecedor": 5,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.550Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 11,
+  "fields": {
+    "codigo_material": "MAS-VR-001",
+    "nome": "Conductive mastic 8004",
+    "categoria": 8,
+    "descricao": "Conductive mastic 8004.",
+    "fornecedor": 3,
+    "prioridade": 0,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.551Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 12,
+  "fields": {
+    "codigo_material": "MAS-KR-001",
+    "nome": "Kremkitt C",
+    "categoria": 8,
+    "descricao": "Kremkitt - C.",
+    "fornecedor": 4,
+    "prioridade": 0,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.552Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 13,
+  "fields": {
+    "codigo_material": "MAS-HU-001",
+    "nome": "Araldite CY5538 + Aradur HY2123",
+    "categoria": 8,
+    "descricao": "Resina epóxi utilizada como massa de enchimento.",
+    "fornecedor": 5,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.553Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 14,
+  "fields": {
+    "codigo_material": "ISO-DP-001",
+    "nome": "Nomex 410",
+    "categoria": 6,
+    "descricao": "Papel Nomex 410 nas espessuras 0,08 mm, 0,13 mm, 0,19 mm e 0,25 mm.",
+    "fornecedor": 6,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.553Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 15,
+  "fields": {
+    "codigo_material": "ISO-VR-002",
+    "nome": "Sisatherm 253.04-12",
+    "categoria": 6,
+    "descricao": "Material de isolação principal. Sisatherm 253.04-12 (Prepreg - Filme de vidro) - Acima de 6 kV (Vn)",
+    "fornecedor": 3,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.554Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 16,
+  "fields": {
+    "codigo_material": "ISO-VR-003",
+    "nome": "Sisatherm 253.03-16",
+    "categoria": 6,
+    "descricao": "Material de isolação principal. Sisatherm 253.03-16 (Prepreg - Filme de poliéster) - Abaixo de 6 kV (Vn)",
+    "fornecedor": 3,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.555Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 17,
+  "fields": {
+    "codigo_material": "ISO-KR-003",
+    "nome": "DMI 1265 G",
+    "categoria": 6,
+    "descricao": "Material de isolação principal. DMI 1265 G (Prepreg - Filme de vidro) - Acima de 6 kV (Vn)",
+    "fornecedor": 4,
+    "prioridade": 2,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.556Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 18,
+  "fields": {
+    "codigo_material": "ISO-KR-004",
+    "nome": "DMI 1265 M",
+    "categoria": 6,
+    "descricao": "Material de isolação principal. DMI 1265 M (Prepreg - Filme de poliéster) - Abaixo de 6 kV (Vn)",
+    "fornecedor": 4,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.557Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 19,
+  "fields": {
+    "codigo_material": "FIT-VR-001",
+    "nome": "Acuflex 76856",
+    "categoria": 9,
+    "descricao": "Acuflex 76856 (0,05 mm).",
+    "fornecedor": 3,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.558Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 20,
+  "fields": {
+    "codigo_material": "VER-VR-001",
+    "nome": "CoronaShield P8003",
+    "categoria": 10,
+    "descricao": "Verniz condutivo para aplicação em bobinas e barras.",
+    "fornecedor": 3,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.559Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 21,
+  "fields": {
+    "codigo_material": "FIT-VR-002",
+    "nome": "CoronaShield C 215.55",
+    "categoria": 9,
+    "descricao": "Fita condutiva para aplicação em bobinas e barras.",
+    "fornecedor": 3,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.560Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 22,
+  "fields": {
+    "codigo_material": "VER-IS-001",
+    "nome": "ISOBOND 795 A/B",
+    "categoria": 10,
+    "descricao": "Verniz condutivo para aplicação em bobinas e barras.",
+    "fornecedor": 7,
+    "prioridade": 2,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.561Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 23,
+  "fields": {
+    "codigo_material": "VER-AE-001",
+    "nome": "Sistema 9005",
+    "categoria": 10,
+    "descricao": "Verniz condutivo para aplicação em bobinas e barras.",
+    "fornecedor": 8,
+    "prioridade": 0,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.562Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 24,
+  "fields": {
+    "codigo_material": "VER-VR-002",
+    "nome": "CoronaShield P8001",
+    "categoria": 10,
+    "descricao": "Verniz semi-condutivo para aplicação em bobinas e barras.",
+    "fornecedor": 3,
+    "prioridade": 0,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.563Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 25,
+  "fields": {
+    "codigo_material": "FIT-VR-003",
+    "nome": "CoronaShield C 217.01",
+    "categoria": 9,
+    "descricao": "Fita semi-condutiva para aplicação em bobinas e barras.",
+    "fornecedor": 3,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.565Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 26,
+  "fields": {
+    "codigo_material": "VER-IS-002",
+    "nome": "ISOBOND 791 A/B",
+    "categoria": 10,
+    "descricao": "Verniz semi-condutivo para aplicação em bobinas e barras.",
+    "fornecedor": 7,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.566Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 27,
+  "fields": {
+    "codigo_material": "VER-AE-002",
+    "nome": "Sistema 9006",
+    "categoria": 10,
+    "descricao": "Verniz semi-condutivo para aplicação em bobinas e barras.",
+    "fornecedor": 8,
+    "prioridade": 0,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.567Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 28,
+  "fields": {
+    "codigo_material": "CAD-KR-001",
+    "nome": "Cadarço de fibra de vidro",
+    "categoria": 19,
+    "descricao": "Cadarço de fibra de vidro.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.568Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 29,
+  "fields": {
+    "codigo_material": "FIT-VR-004",
+    "nome": "Epoflex 324.03",
+    "categoria": 9,
+    "descricao": "Fita de acabamento para aplicação em bobinas e barras.",
+    "fornecedor": 3,
+    "prioridade": 2,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.569Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 30,
+  "fields": {
+    "codigo_material": "FIT-KR-001",
+    "nome": "Hyperseal V",
+    "categoria": 9,
+    "descricao": "Fita de acabamento para aplicação em bobinas e barras.",
+    "fornecedor": 4,
+    "prioridade": 1,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.570Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 31,
+  "fields": {
+    "codigo_material": "CAL-AE-001",
+    "nome": "Calços isolantes",
+    "categoria": 12,
+    "descricao": "Calços isolantes para calços radiais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.571Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 32,
+  "fields": {
+    "codigo_material": "CAL-AE-002",
+    "nome": "Camisa de fibra de vidro Ø10 mm",
+    "categoria": 12,
+    "descricao": "Camisa de fibra de vidro Ø10 mm para calços radiais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.572Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 33,
+  "fields": {
+    "codigo_material": "CAL-AE-003",
+    "nome": "Resina Araldite CY 5538 e Aradur HY 2123",
+    "categoria": 12,
+    "descricao": "Resina Araldite CY 5538 e Aradur HY 2123 para calços radiais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.573Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 34,
+  "fields": {
+    "codigo_material": "CAL-AE-004",
+    "nome": "Feltro nomex - 2 mm x 1000 mm",
+    "categoria": 12,
+    "descricao": "Feltro nomex - 2 mm x 1000 mm para calços radiais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.575Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 35,
+  "fields": {
+    "codigo_material": "CAL-AE-005",
+    "nome": "Feltro nomex - 2 mm x 1000 mm",
+    "categoria": 12,
+    "descricao": "Feltro nomex - 2 mm x 1000 mm para calços tangenciais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.576Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 36,
+  "fields": {
+    "codigo_material": "CAL-AE-006",
+    "nome": "Camisa de fibra de vidro Ø10 mm",
+    "categoria": 12,
+    "descricao": "Camisa de fibra de vidro Ø10 mm para calços tangenciais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.577Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 37,
+  "fields": {
+    "codigo_material": "CAL-AE-007",
+    "nome": "Resina Araldite CY 5538 e Aradur HY 2123",
+    "categoria": 12,
+    "descricao": "Resina Araldite CY 5538 e Aradur HY 2123 para calços tangenciais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.579Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 38,
+  "fields": {
+    "codigo_material": "CAL-AE-008",
+    "nome": "Calços isolantes",
+    "categoria": 12,
+    "descricao": "Calços isolantes para calços tangenciais.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.581Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 39,
+  "fields": {
+    "codigo_material": "CON-AE-001",
+    "nome": "Caixas isolantes",
+    "categoria": 15,
+    "descricao": "Caixas isolantes para conexões.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.582Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 40,
+  "fields": {
+    "codigo_material": "CON-AE-002",
+    "nome": "Massa de enchimento - AEPI 9002",
+    "categoria": 15,
+    "descricao": "Massa de enchimento - AEPI 9002 para conexões.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.583Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 41,
+  "fields": {
+    "codigo_material": "CON-AE-003",
+    "nome": "Farinha de quartzo - Malha 600 ou Aerosil",
+    "categoria": 15,
+    "descricao": "Farinha de quartzo - Malha 600 ou Aerosil para conexões.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.584Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 42,
+  "fields": {
+    "codigo_material": "CON-AE-004",
+    "nome": "Calços isolantes de amarração",
+    "categoria": 15,
+    "descricao": "Calços isolantes de amarração para conexões.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.585Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 43,
+  "fields": {
+    "codigo_material": "CON-KR-001",
+    "nome": "Camisa de fibra de vidro Ø10 mm",
+    "categoria": 15,
+    "descricao": "Camisa de fibra de vidro Ø10 mm para conexões.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.586Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 44,
+  "fields": {
+    "codigo_material": "CON-RH-001",
+    "nome": "Silfoscoper 15% - Ø2,5 mm",
+    "categoria": 15,
+    "descricao": "Silfoscoper 15% - Ø2,5 mm para conexões.",
+    "fornecedor": 9,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.587Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 45,
+  "fields": {
+    "codigo_material": "CON-FA-001",
+    "nome": "Algodão (500g)",
+    "categoria": 15,
+    "descricao": "Algodão (500g) para conexões.",
+    "fornecedor": 10,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.588Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 46,
+  "fields": {
+    "codigo_material": "CON-RH-002",
+    "nome": "Lâmina prata 15% prata 2,50 x 500 mm",
+    "categoria": 15,
+    "descricao": "Lâmina prata 15% prata 2,50 x 500 mm para conexões.",
+    "fornecedor": 9,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.589Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 47,
+  "fields": {
+    "codigo_material": "CON-PC-001",
+    "nome": "Etanol",
+    "categoria": 15,
+    "descricao": "Etanol para conexões.",
+    "fornecedor": 11,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.590Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 48,
+  "fields": {
+    "codigo_material": "CON-PR-001",
+    "nome": "Caixa leiteira (Colocar água e alcool)",
+    "categoria": 15,
+    "descricao": "Caixa leiteira (Colocar água e alcool) para conexões.",
+    "fornecedor": 12,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.591Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 49,
+  "fields": {
+    "codigo_material": "CON-PR-002",
+    "nome": "Chapa de cobre",
+    "categoria": 15,
+    "descricao": "Chapa de cobre para conexões.",
+    "fornecedor": 12,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.592Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 50,
+  "fields": {
+    "codigo_material": "BAR-KR-001",
+    "nome": "Mica comum de fibra de vidro 0,16 x 25 mm x 30 m",
+    "categoria": 14,
+    "descricao": "Mica comum de fibra de vidro 0,16 x 25 mm x 30 m para barramentos de ligação.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.593Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 51,
+  "fields": {
+    "codigo_material": "BAR-HU-001",
+    "nome": "Araldite F + Aradur 140",
+    "categoria": 14,
+    "descricao": "Araldite F + Aradur 140 para barramentos de ligação.",
+    "fornecedor": 5,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.594Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 52,
+  "fields": {
+    "codigo_material": "BAR-KR-002",
+    "nome": "Camisa de fibra de vidro Ø10 mm",
+    "categoria": 14,
+    "descricao": "Camisa de fibra de vidro Ø10 mm para barramentos de ligação.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.595Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 53,
+  "fields": {
+    "codigo_material": "BAR-HU-002",
+    "nome": "Resina Araldite CY 5538 e Aradur HY 2123",
+    "categoria": 14,
+    "descricao": "Resina Araldite CY 5538 e Aradur HY 2123 para barramentos de ligação.",
+    "fornecedor": 5,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.596Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 54,
+  "fields": {
+    "codigo_material": "PAV-KR-001",
+    "nome": "Pavio de fibra de vidro Ø30 mm",
+    "categoria": 17,
+    "descricao": "Pavio de fibra de vidro Ø30 mm para pavio central.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.597Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 55,
+  "fields": {
+    "codigo_material": "PAV-HU-001",
+    "nome": "Resina Araldite CY 5538 e Aradur HY 2123",
+    "categoria": 17,
+    "descricao": "Resina Araldite CY 5538 e Aradur HY 2123 para pavio central.",
+    "fornecedor": 5,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.598Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 56,
+  "fields": {
+    "codigo_material": "CUN-AE-001",
+    "nome": "Cunhas isolantes (DT.1445.013-R00 e DT.1445.014-R00)",
+    "categoria": 13,
+    "descricao": "Cunhas isolantes (DT.1445.013-R00 e DT.1445.014-R00) para cunhagem.",
+    "fornecedor": 8,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.599Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 57,
+  "fields": {
+    "codigo_material": "CUN-KR-001",
+    "nome": "Delpormat 2 x 17 x 2460 mm",
+    "categoria": 13,
+    "descricao": "Delpormat 2 x 17 x 2460 mm para cunhagem.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.600Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 58,
+  "fields": {
+    "codigo_material": "CUN-HU-001",
+    "nome": "Resina Araldite CY 5538 e Aradur HY 2123",
+    "categoria": 13,
+    "descricao": "Resina Araldite CY 5538 e Aradur HY 2123 para cunhagem.",
+    "fornecedor": 5,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.601Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 59,
+  "fields": {
+    "codigo_material": "CUN-PR-001",
+    "nome": "Batedores",
+    "categoria": 13,
+    "descricao": "Batedores para cunhagem.",
+    "fornecedor": 12,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.602Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 60,
+  "fields": {
+    "codigo_material": "CUN-OF-001",
+    "nome": "Macaquinhos/Cachorrinho",
+    "categoria": 13,
+    "descricao": "Macaquinhos/Cachorrinho para cunhagem.",
+    "fornecedor": 13,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.603Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 61,
+  "fields": {
+    "codigo_material": "SEN-MI-001",
+    "nome": "PT100",
+    "categoria": 16,
+    "descricao": "Sensor de temperatura para máquina elétrica.",
+    "fornecedor": 14,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.604Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 62,
+  "fields": {
+    "codigo_material": "ARO-HU-001",
+    "nome": "Resina Araldite CY 5538 e Aradur HY 2123",
+    "categoria": 18,
+    "descricao": "Resina Araldite CY 5538 e Aradur HY 2123 para aros de amarração.",
+    "fornecedor": 5,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.605Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 63,
+  "fields": {
+    "codigo_material": "ARO-KR-001",
+    "nome": "Pavio de fibra de vidro Ø25 mm",
+    "categoria": 18,
+    "descricao": "Pavio de fibra de vidro Ø25 mm para aros de amarração.",
+    "fornecedor": 4,
+    "prioridade": 3,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-02T17:54:10.606Z"
+  }
+},
+{
+  "model": "cadastros.material",
+  "pk": 65,
+  "fields": {
+    "codigo_material": "COND-SMA-004",
+    "nome": "Cobre 99% - Poliglas ER1 - 7,6 x 2,1",
+    "categoria": 5,
+    "descricao": "Condutor de cobre 99% com isolação Poliglas ER1.",
+    "fornecedor": 1,
+    "prioridade": 2,
+    "preco": null,
+    "unidade_preco": null,
+    "ativo": true,
+    "data_registro": "2026-06-18T18:58:58.784Z"
+  }
+},
+{
+  "model": "cadastros.dadosestator",
+  "pk": 1,
+  "fields": {
+    "maquina": 1,
+    "tipo_bobina": "barra_roebel",
+    "tipo_bobinado": "imbricado",
+    "numero_bobinas": 432,
+    "numero_condutores_por_espira": 18,
+    "numero_espiras_por_bobina": 3,
+    "numero_series": 14,
+    "tipo_condutor": "Cobre Poliglass",
+    "numero_elementos": 2,
+    "numero_saidas": 6,
+    "numero_paralelos": 4,
+    "tipo_ligacao": "Y",
+    "numero_sensores": 6,
+    "tipo_cunha": "Isolante",
+    "passo": 8,
+    "tipo_sensor": "PT100",
+    "local_sensor": "Cabeceira",
+    "peso_cobre_total": "8424.00",
+    "peso_bobina": "19.50",
+    "area_espira": "1800.00",
+    "comprimento_nucleo_magnetico": "1070.00",
+    "numero_canais_ventilacao": 19,
+    "diametro_interno_nucleo": "7676.00",
+    "diametro_externo_nucleo": "0.00",
+    "diametro_rotor": "7640.00",
+    "entreferro_gerador": "18.00",
+    "cor_estator": "Vermelho"
+  }
+},
+{
+  "model": "cadastros.dadosestator",
+  "pk": 2,
+  "fields": {
+    "maquina": 3,
+    "tipo_bobina": "barra_roebel",
+    "tipo_bobinado": "imbricado",
+    "numero_bobinas": 264,
+    "numero_condutores_por_espira": 8,
+    "numero_espiras_por_bobina": 4,
+    "numero_series": 6,
+    "tipo_condutor": "Retangular",
+    "numero_elementos": 3,
+    "numero_saidas": 6,
+    "numero_paralelos": 4,
+    "tipo_ligacao": "Y",
+    "numero_sensores": 28,
+    "tipo_cunha": "Isolante",
+    "passo": 8,
+    "tipo_sensor": "PT100",
+    "local_sensor": "Entre Bobinas",
+    "peso_cobre_total": "3964.20",
+    "peso_bobina": "15.00",
+    "area_espira": "10.69",
+    "comprimento_nucleo_magnetico": "1440.00",
+    "numero_canais_ventilacao": 27,
+    "diametro_interno_nucleo": "4341.40",
+    "diametro_externo_nucleo": "4844.00",
+    "diametro_rotor": "4303.00",
+    "entreferro_gerador": "18.00",
+    "cor_estator": "Azul"
+  }
+},
+{
+  "model": "cadastros.dadosestator",
+  "pk": 3,
+  "fields": {
+    "maquina": 2,
+    "tipo_bobina": "multiespiras",
+    "tipo_bobinado": "",
+    "numero_bobinas": 60,
+    "numero_condutores_por_espira": 2,
+    "numero_espiras_por_bobina": 8,
+    "numero_series": 12,
+    "tipo_condutor": "Retangular",
+    "numero_elementos": 5,
+    "numero_saidas": 6,
+    "numero_paralelos": 1,
+    "tipo_ligacao": "Y",
+    "numero_sensores": 6,
+    "tipo_cunha": "isolante",
+    "passo": 13,
+    "tipo_sensor": "PT100",
+    "local_sensor": "cabeceira",
+    "peso_cobre_total": "0.00",
+    "peso_bobina": "0.00",
+    "area_espira": "0.00",
+    "comprimento_nucleo_magnetico": "800.00",
+    "numero_canais_ventilacao": 10,
+    "diametro_interno_nucleo": "720.00",
+    "diametro_externo_nucleo": "1100.00",
+    "diametro_rotor": "0.00",
+    "entreferro_gerador": "0.00",
+    "cor_estator": "Vermelho"
+  }
+},
+{
+  "model": "cadastros.dadosestator",
+  "pk": 5,
+  "fields": {
+    "maquina": 7,
+    "tipo_bobina": "multiespiras",
+    "tipo_bobinado": "imbricado",
+    "numero_bobinas": 1152,
+    "numero_condutores_por_espira": 40,
+    "numero_espiras_por_bobina": 1,
+    "numero_series": 42,
+    "tipo_condutor": "Poliglas ER1",
+    "numero_elementos": null,
+    "numero_saidas": 9,
+    "numero_paralelos": 2,
+    "tipo_ligacao": "Y",
+    "numero_sensores": 36,
+    "tipo_cunha": "Isolante",
+    "passo": 8,
+    "tipo_sensor": "PT100",
+    "local_sensor": "Parte Reta",
+    "peso_cobre_total": "15424.37",
+    "peso_bobina": "11.06",
+    "area_espira": "638.40",
+    "comprimento_nucleo_magnetico": null,
+    "numero_canais_ventilacao": null,
+    "diametro_interno_nucleo": null,
+    "diametro_externo_nucleo": null,
+    "diametro_rotor": null,
+    "entreferro_gerador": null,
+    "cor_estator": "Vermelho"
+  }
+},
+{
+  "model": "cadastros.dadosestator",
+  "pk": 6,
+  "fields": {
+    "maquina": 8,
+    "tipo_bobina": "multiespiras",
+    "tipo_bobinado": "imbricado",
+    "numero_bobinas": 96,
+    "numero_condutores_por_espira": 16,
+    "numero_espiras_por_bobina": 2,
+    "numero_series": 2,
+    "tipo_condutor": "Retangular",
+    "numero_elementos": 8,
+    "numero_saidas": 6,
+    "numero_paralelos": 1,
+    "tipo_ligacao": "Estrela",
+    "numero_sensores": 24,
+    "tipo_cunha": "",
+    "passo": 21,
+    "tipo_sensor": "PT100",
+    "local_sensor": "",
+    "peso_cobre_total": null,
+    "peso_bobina": null,
+    "area_espira": null,
+    "comprimento_nucleo_magnetico": "2895.00",
+    "numero_canais_ventilacao": null,
+    "diametro_interno_nucleo": null,
+    "diametro_externo_nucleo": null,
+    "diametro_rotor": null,
+    "entreferro_gerador": null,
+    "cor_estator": "Vermelho óxido"
+  }
+},
+{
+  "model": "cadastros.dadosperifericos",
+  "pk": 1,
+  "fields": {
+    "maquina": 2,
+    "aro_amarracao_ll": 2,
+    "aro_amarracao_lol": 2,
+    "material_aro_ll": "Pavio FB 20 mm",
+    "material_aro_lol": "Pavio FB 20 mm",
+    "calco_amarracao_inferior_ll": 3,
+    "obs_calco_amarracao_inferior_ll": "",
+    "calco_amarracao_inferior_lol": 3,
+    "obs_calco_amarracao_inferior_lol": "",
+    "calco_amarracao_superior_ll": 3,
+    "obs_calco_amarracao_superior_ll": "",
+    "calco_amarracao_superior_lol": 3,
+    "obs_calco_amarracao_superior_lol": "",
+    "material_calcos": "Feltro Nomex",
+    "campo_eletrico": "0.00",
+    "densidade_corrente": "0.00",
+    "tensao_cabo": null,
+    "classe_termica_cabo": "",
+    "comprimento_cabo_interno": "Verso",
+    "descricao_terminal": "7,9",
+    "comprimento_cabo_externo": "Verso",
+    "data_registro": "2026-06-02T15:22:11.825Z",
+    "data_atualizacao": "2026-06-02T15:22:11.825Z"
+  }
+},
+{
+  "model": "cadastros.dadosperifericos",
+  "pk": 2,
+  "fields": {
+    "maquina": 1,
+    "aro_amarracao_ll": 2,
+    "aro_amarracao_lol": 2,
+    "material_aro_ll": "Inox",
+    "material_aro_lol": "Inox",
+    "calco_amarracao_inferior_ll": 1,
+    "obs_calco_amarracao_inferior_ll": "Amarrado entre aros",
+    "calco_amarracao_inferior_lol": 1,
+    "obs_calco_amarracao_inferior_lol": "Amarrado entre aros",
+    "calco_amarracao_superior_ll": 1,
+    "obs_calco_amarracao_superior_ll": "Amarrado",
+    "calco_amarracao_superior_lol": 1,
+    "obs_calco_amarracao_superior_lol": "Amarrado",
+    "material_calcos": "Celeron",
+    "campo_eletrico": "1.75",
+    "densidade_corrente": "3.03",
+    "tensao_cabo": null,
+    "classe_termica_cabo": "Isolado",
+    "comprimento_cabo_interno": "Barramento",
+    "descricao_terminal": "Cordoalha",
+    "comprimento_cabo_externo": "Circular",
+    "data_registro": "2026-06-02T15:22:11.834Z",
+    "data_atualizacao": "2026-06-05T18:15:21.219Z"
+  }
+},
+{
+  "model": "cadastros.dadosperifericos",
+  "pk": 3,
+  "fields": {
+    "maquina": 3,
+    "aro_amarracao_ll": 1,
+    "aro_amarracao_lol": 1,
+    "material_aro_ll": "Matex",
+    "material_aro_lol": "Matex",
+    "calco_amarracao_inferior_ll": null,
+    "obs_calco_amarracao_inferior_ll": "",
+    "calco_amarracao_inferior_lol": null,
+    "obs_calco_amarracao_inferior_lol": "",
+    "calco_amarracao_superior_ll": null,
+    "obs_calco_amarracao_superior_ll": "",
+    "calco_amarracao_superior_lol": null,
+    "obs_calco_amarracao_superior_lol": "",
+    "material_calcos": "Matex",
+    "campo_eletrico": "52.00",
+    "densidade_corrente": "3.35",
+    "tensao_cabo": null,
+    "classe_termica_cabo": "Isolado",
+    "comprimento_cabo_interno": "Barramento",
+    "descricao_terminal": "Barramento",
+    "comprimento_cabo_externo": "Retangular",
+    "data_registro": "2026-06-02T15:22:11.835Z",
+    "data_atualizacao": "2026-06-02T15:22:11.835Z"
+  }
+},
+{
+  "model": "cadastros.dadosperifericos",
+  "pk": 5,
+  "fields": {
+    "maquina": 7,
+    "aro_amarracao_ll": null,
+    "aro_amarracao_lol": null,
+    "material_aro_ll": "",
+    "material_aro_lol": "",
+    "calco_amarracao_inferior_ll": null,
+    "obs_calco_amarracao_inferior_ll": "",
+    "calco_amarracao_inferior_lol": null,
+    "obs_calco_amarracao_inferior_lol": "",
+    "calco_amarracao_superior_ll": null,
+    "obs_calco_amarracao_superior_ll": "",
+    "calco_amarracao_superior_lol": null,
+    "obs_calco_amarracao_superior_lol": "",
+    "material_calcos": "",
+    "campo_eletrico": null,
+    "densidade_corrente": null,
+    "tensao_cabo": null,
+    "classe_termica_cabo": "",
+    "comprimento_cabo_interno": "",
+    "descricao_terminal": "",
+    "comprimento_cabo_externo": "",
+    "data_registro": "2026-06-18T18:38:31.767Z",
+    "data_atualizacao": "2026-06-18T18:38:31.767Z"
+  }
+},
+{
+  "model": "cadastros.dadosperifericos",
+  "pk": 6,
+  "fields": {
+    "maquina": 8,
+    "aro_amarracao_ll": null,
+    "aro_amarracao_lol": null,
+    "material_aro_ll": "",
+    "material_aro_lol": "",
+    "calco_amarracao_inferior_ll": null,
+    "obs_calco_amarracao_inferior_ll": "",
+    "calco_amarracao_inferior_lol": null,
+    "obs_calco_amarracao_inferior_lol": "",
+    "calco_amarracao_superior_ll": null,
+    "obs_calco_amarracao_superior_ll": "",
+    "calco_amarracao_superior_lol": null,
+    "obs_calco_amarracao_superior_lol": "",
+    "material_calcos": "",
+    "campo_eletrico": null,
+    "densidade_corrente": null,
+    "tensao_cabo": null,
+    "classe_termica_cabo": "",
+    "comprimento_cabo_interno": "",
+    "descricao_terminal": "",
+    "comprimento_cabo_externo": "",
+    "data_registro": "2026-07-29T20:21:03.463Z",
+    "data_atualizacao": "2026-07-29T20:21:03.463Z"
+  }
+},
+{
+  "model": "cadastros.dadosgeometricosmaquina",
+  "pk": 1,
+  "fields": {
+    "maquina": 3,
+    "tipo_ranhura": "ranhura1",
+    "ranhura_a": "110.00",
+    "ranhura_b": "22.60",
+    "ranhura_c": "99.50",
+    "ranhura_d": "0.00",
+    "ranhura_e": "0.00",
+    "ranhura_f": null,
+    "folga_ranhura": "0.40",
+    "bobina_e": "11.60",
+    "bobina_f": "37.50",
+    "bobina_g": "19.10",
+    "bobina_h": "45.00",
+    "sobreposicao_isolante": "0.50",
+    "condutor_e": "5.50",
+    "condutor_f": "2.00",
+    "condutor_E_iso": null,
+    "condutor_F_iso": null,
+    "tipo_calco": "calco1",
+    "calco_a": "24.90",
+    "calco_b": "18.90",
+    "calco_c": "5.90",
+    "calco_d": "17.40"
+  }
+},
+{
+  "model": "cadastros.dadosgeometricosmaquina",
+  "pk": 2,
+  "fields": {
+    "maquina": 2,
+    "tipo_ranhura": "ranhura1",
+    "ranhura_a": "74.00",
+    "ranhura_b": "18.70",
+    "ranhura_c": "70.00",
+    "ranhura_d": "4.00",
+    "ranhura_e": "16.40",
+    "ranhura_f": null,
+    "folga_ranhura": "0.40",
+    "bobina_e": "11.80",
+    "bobina_f": "22.40",
+    "bobina_g": "18.30",
+    "bobina_h": "28.90",
+    "sobreposicao_isolante": "0.50",
+    "condutor_e": "5.50",
+    "condutor_f": "2.70",
+    "condutor_E_iso": "5.80",
+    "condutor_F_iso": "3.00",
+    "tipo_calco": "calco1",
+    "calco_a": "0.00",
+    "calco_b": "0.00",
+    "calco_c": "0.00",
+    "calco_d": "0.00"
+  }
+},
+{
+  "model": "cadastros.dadosgeometricosmaquina",
+  "pk": 3,
+  "fields": {
+    "maquina": 1,
+    "tipo_ranhura": "ranhura1",
+    "ranhura_a": "144.60",
+    "ranhura_b": "20.50",
+    "ranhura_c": "140.00",
+    "ranhura_d": "4.50",
+    "ranhura_e": "24.50",
+    "ranhura_f": null,
+    "folga_ranhura": "0.40",
+    "bobina_e": "10.00",
+    "bobina_f": "60.00",
+    "bobina_g": "19.80",
+    "bobina_h": "69.50",
+    "sobreposicao_isolante": "0.50",
+    "condutor_e": "5.00",
+    "condutor_f": "2.00",
+    "condutor_E_iso": "5.80",
+    "condutor_F_iso": "2.80",
+    "tipo_calco": "calco1",
+    "calco_a": "23.20",
+    "calco_b": "21.00",
+    "calco_c": "20.00",
+    "calco_d": "4.20"
+  }
+},
+{
+  "model": "cadastros.dadosgeometricosmaquina",
+  "pk": 5,
+  "fields": {
+    "maquina": 7,
+    "tipo_ranhura": "ranhura1",
+    "ranhura_a": "128.50",
+    "ranhura_b": "23.10",
+    "ranhura_c": "124.00",
+    "ranhura_d": "4.50",
+    "ranhura_e": null,
+    "ranhura_f": null,
+    "folga_ranhura": "0.40",
+    "bobina_e": "15.92",
+    "bobina_f": "50.64",
+    "bobina_g": "22.30",
+    "bobina_h": "57.02",
+    "sobreposicao_isolante": "0.50",
+    "condutor_e": "7.60",
+    "condutor_f": "2.10",
+    "condutor_E_iso": "7.90",
+    "condutor_F_iso": "2.40",
+    "tipo_calco": "calco1",
+    "calco_a": "2.40",
+    "calco_b": "5.00",
+    "calco_c": "1.00",
+    "calco_d": null
+  }
+},
+{
+  "model": "cadastros.dadosgeometricosmaquina",
+  "pk": 6,
+  "fields": {
+    "maquina": 8,
+    "tipo_ranhura": "ranhura1",
+    "ranhura_a": "100.00",
+    "ranhura_b": "20.00",
+    "ranhura_c": "90.00",
+    "ranhura_d": "5.00",
+    "ranhura_e": null,
+    "ranhura_f": null,
+    "folga_ranhura": "0.40",
+    "bobina_e": null,
+    "bobina_f": null,
+    "bobina_g": null,
+    "bobina_h": null,
+    "sobreposicao_isolante": "0.50",
+    "condutor_e": null,
+    "condutor_f": null,
+    "condutor_E_iso": null,
+    "condutor_F_iso": null,
+    "tipo_calco": "",
+    "calco_a": null,
+    "calco_b": null,
+    "calco_c": null,
+    "calco_d": null
+  }
+},
+{
+  "model": "cadastros.dadosconstrutivosbobina",
+  "pk": 1,
+  "fields": {
+    "maquina": 3,
+    "croqui_g": "2215.90",
+    "croqui_h": "1604.40",
+    "croqui_i": "410.90",
+    "croqui_j": "302.70",
+    "croqui_k": "1604.40",
+    "croqui_l": "410.90",
+    "croqui_ponta": "300.00",
+    "amarracao_a1": "0.00",
+    "amarracao_a2": "0.00",
+    "amarracao_b1": "0.00",
+    "amarracao_b2": "0.00",
+    "amarracao_c1": "0.00",
+    "amarracao_c2": "0.00",
+    "amarracao_d1": null,
+    "amarracao_d2": null,
+    "configuracao_a1": "0.00",
+    "configuracao_a2": "0.00",
+    "configuracao_b1": "0.00",
+    "configuracao_b2": "0.00",
+    "configuracao_c1": "0.00",
+    "configuracao_c2": "0.00",
+    "configuracao_d1": "0.00",
+    "configuracao_d2": "0.00",
+    "montada_a": "0.00",
+    "montada_b": "0.00",
+    "montada_c": "0.00",
+    "montada_d": "0.00",
+    "montada_e1": "0.00",
+    "montada_e2": "0.00",
+    "montada_f": "0.00",
+    "montada_f_sem_isolacao": "0.00"
+  }
+},
+{
+  "model": "cadastros.dadosconstrutivosbobina",
+  "pk": 2,
+  "fields": {
+    "maquina": 2,
+    "croqui_g": "1480.00",
+    "croqui_h": "441.00",
+    "croqui_i": "441.00",
+    "croqui_j": "330.00",
+    "croqui_k": "930.00",
+    "croqui_l": "330.00",
+    "croqui_ponta": "250.00",
+    "amarracao_a1": "240.00",
+    "amarracao_a2": "225.00",
+    "amarracao_b1": "180.00",
+    "amarracao_b2": "170.00",
+    "amarracao_c1": "110.00",
+    "amarracao_c2": "110.00",
+    "amarracao_d1": null,
+    "amarracao_d2": null,
+    "configuracao_a1": "0.00",
+    "configuracao_a2": "0.00",
+    "configuracao_b1": "0.00",
+    "configuracao_b2": "0.00",
+    "configuracao_c1": "0.00",
+    "configuracao_c2": "0.00",
+    "configuracao_d1": "0.00",
+    "configuracao_d2": "0.00",
+    "montada_a": "340.00",
+    "montada_b": "360.00",
+    "montada_c": "380.00",
+    "montada_d": "330.00",
+    "montada_e1": "780.00",
+    "montada_e2": "770.00",
+    "montada_f": "810.00",
+    "montada_f_sem_isolacao": "810.00"
+  }
+},
+{
+  "model": "cadastros.dadosconstrutivosbobina",
+  "pk": 3,
+  "fields": {
+    "maquina": 1,
+    "croqui_g": "1720.00",
+    "croqui_h": null,
+    "croqui_i": "330.00",
+    "croqui_j": "150.00",
+    "croqui_k": "1220.00",
+    "croqui_l": "330.00",
+    "croqui_ponta": "0.00",
+    "amarracao_a1": "0.00",
+    "amarracao_a2": "0.00",
+    "amarracao_b1": "157.00",
+    "amarracao_b2": "160.00",
+    "amarracao_c1": "0.00",
+    "amarracao_c2": "0.00",
+    "amarracao_d1": null,
+    "amarracao_d2": null,
+    "configuracao_a1": "0.00",
+    "configuracao_a2": "0.00",
+    "configuracao_b1": "0.00",
+    "configuracao_b2": "0.00",
+    "configuracao_c1": "0.00",
+    "configuracao_c2": "0.00",
+    "configuracao_d1": "0.00",
+    "configuracao_d2": "0.00",
+    "montada_a": "290.00",
+    "montada_b": "386.00",
+    "montada_c": "442.00",
+    "montada_d": "0.00",
+    "montada_e1": "7696.00",
+    "montada_e2": "7696.00",
+    "montada_f": "1142.00",
+    "montada_f_sem_isolacao": "1178.00"
+  }
+},
+{
+  "model": "cadastros.dadosconstrutivosbobina",
+  "pk": 5,
+  "fields": {
+    "maquina": 7,
+    "croqui_g": "1925.00",
+    "croqui_h": "381.00",
+    "croqui_i": "381.00",
+    "croqui_j": "330.00",
+    "croqui_k": "1266.00",
+    "croqui_l": "350.00",
+    "croqui_ponta": "100.00",
+    "amarracao_a1": null,
+    "amarracao_a2": null,
+    "amarracao_b1": "199.00",
+    "amarracao_b2": "199.00",
+    "amarracao_c1": null,
+    "amarracao_c2": null,
+    "amarracao_d1": null,
+    "amarracao_d2": null,
+    "configuracao_a1": null,
+    "configuracao_a2": null,
+    "configuracao_b1": null,
+    "configuracao_b2": null,
+    "configuracao_c1": null,
+    "configuracao_c2": null,
+    "configuracao_d1": null,
+    "configuracao_d2": null,
+    "montada_a": null,
+    "montada_b": null,
+    "montada_c": null,
+    "montada_d": null,
+    "montada_e1": null,
+    "montada_e2": null,
+    "montada_f": null,
+    "montada_f_sem_isolacao": null
+  }
+},
+{
+  "model": "cadastros.dadosconstrutivosbobina",
+  "pk": 6,
+  "fields": {
+    "maquina": 8,
+    "croqui_g": "3800.00",
+    "croqui_h": "250.00",
+    "croqui_i": "250.00",
+    "croqui_j": "300.00",
+    "croqui_k": "3335.00",
+    "croqui_l": "300.00",
+    "croqui_ponta": "200.00",
+    "amarracao_a1": null,
+    "amarracao_a2": null,
+    "amarracao_b1": null,
+    "amarracao_b2": null,
+    "amarracao_c1": null,
+    "amarracao_c2": null,
+    "amarracao_d1": null,
+    "amarracao_d2": null,
+    "configuracao_a1": null,
+    "configuracao_a2": null,
+    "configuracao_b1": null,
+    "configuracao_b2": null,
+    "configuracao_c1": null,
+    "configuracao_c2": null,
+    "configuracao_d1": null,
+    "configuracao_d2": null,
+    "montada_a": null,
+    "montada_b": null,
+    "montada_c": null,
+    "montada_d": null,
+    "montada_e1": null,
+    "montada_e2": null,
+    "montada_f": null,
+    "montada_f_sem_isolacao": null
+  }
+},
+{
+  "model": "cadastros.materiaisbobinagemroebel",
+  "pk": 1,
+  "fields": {
+    "maquina": 1,
+    "condutor": 3,
+    "isolacao_panqueca": 14,
+    "consolidacao_condutores": 10,
+    "massa_enchimento": 11,
+    "isolacao_condutores": 14,
+    "isolacao_principal": 14,
+    "fita_sacrificio": 19,
+    "verniz_condutivo": 20,
+    "fita_condutiva": 30,
+    "verniz_semicondutivo": 23,
+    "fita_semicondutiva": 30,
+    "cadarco_fibra_vidro": 28,
+    "fita_acabamento": 30,
+    "calcos_radiais": 31,
+    "calcos_tangenciais": 31,
+    "conexoes": 42,
+    "barramentos_ligacao": 53,
+    "pavio_central": 55,
+    "cunhagem": 56,
+    "sensor": 61,
+    "aros_amarracao": 62,
+    "sobressalente_bobinas": "10.00",
+    "coeficiente_seguranca_bobinas": "1.10"
+  }
+},
+{
+  "model": "cadastros.materiaisbobinagemroebel",
+  "pk": 2,
+  "fields": {
+    "maquina": 2,
+    "condutor": 4,
+    "isolacao_panqueca": 7,
+    "consolidacao_condutores": null,
+    "massa_enchimento": null,
+    "isolacao_condutores": null,
+    "isolacao_principal": 15,
+    "fita_sacrificio": null,
+    "verniz_condutivo": 20,
+    "fita_condutiva": 30,
+    "verniz_semicondutivo": 24,
+    "fita_semicondutiva": 19,
+    "cadarco_fibra_vidro": null,
+    "fita_acabamento": 30,
+    "calcos_radiais": null,
+    "calcos_tangenciais": null,
+    "conexoes": null,
+    "barramentos_ligacao": null,
+    "pavio_central": null,
+    "cunhagem": null,
+    "sensor": null,
+    "aros_amarracao": null,
+    "sobressalente_bobinas": "0.05",
+    "coeficiente_seguranca_bobinas": "1.10"
+  }
+},
+{
+  "model": "cadastros.materiaisbobinagemroebel",
+  "pk": 3,
+  "fields": {
+    "maquina": 3,
+    "condutor": 5,
+    "isolacao_panqueca": null,
+    "consolidacao_condutores": null,
+    "massa_enchimento": null,
+    "isolacao_condutores": 9,
+    "isolacao_principal": null,
+    "fita_sacrificio": null,
+    "verniz_condutivo": null,
+    "fita_condutiva": 19,
+    "verniz_semicondutivo": null,
+    "fita_semicondutiva": 21,
+    "cadarco_fibra_vidro": null,
+    "fita_acabamento": 19,
+    "calcos_radiais": null,
+    "calcos_tangenciais": null,
+    "conexoes": null,
+    "barramentos_ligacao": null,
+    "pavio_central": null,
+    "cunhagem": null,
+    "sensor": null,
+    "aros_amarracao": null,
+    "sobressalente_bobinas": "0.00",
+    "coeficiente_seguranca_bobinas": "1.00"
+  }
+},
+{
+  "model": "cadastros.materiaisbobinagemroebel",
+  "pk": 4,
+  "fields": {
+    "maquina": 7,
+    "condutor": 65,
+    "isolacao_panqueca": null,
+    "consolidacao_condutores": null,
+    "massa_enchimento": null,
+    "isolacao_condutores": null,
+    "isolacao_principal": 15,
+    "fita_sacrificio": null,
+    "verniz_condutivo": null,
+    "fita_condutiva": null,
+    "verniz_semicondutivo": null,
+    "fita_semicondutiva": null,
+    "cadarco_fibra_vidro": null,
+    "fita_acabamento": null,
+    "calcos_radiais": null,
+    "calcos_tangenciais": null,
+    "conexoes": null,
+    "barramentos_ligacao": null,
+    "pavio_central": null,
+    "cunhagem": null,
+    "sensor": null,
+    "aros_amarracao": null,
+    "sobressalente_bobinas": "0.00",
+    "coeficiente_seguranca_bobinas": "1.00"
+  }
+},
+{
+  "model": "cadastros.materiaisbobinagemroebel",
+  "pk": 5,
+  "fields": {
+    "maquina": 8,
+    "condutor": 5,
+    "isolacao_panqueca": 14,
+    "consolidacao_condutores": 10,
+    "massa_enchimento": 13,
+    "isolacao_condutores": 14,
+    "isolacao_principal": 15,
+    "fita_sacrificio": 30,
+    "verniz_condutivo": 20,
+    "fita_condutiva": 19,
+    "verniz_semicondutivo": 24,
+    "fita_semicondutiva": 19,
+    "cadarco_fibra_vidro": 28,
+    "fita_acabamento": 30,
+    "calcos_radiais": 33,
+    "calcos_tangenciais": 33,
+    "conexoes": 49,
+    "barramentos_ligacao": 51,
+    "pavio_central": 55,
+    "cunhagem": 56,
+    "sensor": 61,
+    "aros_amarracao": 62,
+    "sobressalente_bobinas": "0.10",
+    "coeficiente_seguranca_bobinas": "1.10"
+  }
+},
+{
+  "model": "cadastros.resisolamento",
+  "pk": 1,
+  "fields": {
+    "maquina": 3,
+    "tensao": "0.00",
+    "temperatura": "0.00",
+    "umidade": "0.00",
+    "tempo": "0.00",
+    "Ø01xm": "0.00",
+    "Ø02xm": "0.00",
+    "Ø03xm": "0.00",
+    "Ø04xm": "0.00",
+    "res_ohmica_t": "0.00",
+    "Ø01": "0.00",
+    "Ø02": "0.00",
+    "Ø03": "0.00"
+  }
+},
+{
+  "model": "cadastros.resisolamento",
+  "pk": 2,
+  "fields": {
+    "maquina": 2,
+    "tensao": "5.00",
+    "temperatura": "19.00",
+    "umidade": "58.00",
+    "tempo": "1.00",
+    "Ø01xm": "0.00",
+    "Ø02xm": "0.00",
+    "Ø03xm": "0.00",
+    "Ø04xm": "0.00",
+    "res_ohmica_t": "0.00",
+    "Ø01": "0.00",
+    "Ø02": "0.00",
+    "Ø03": "0.00"
+  }
+},
+{
+  "model": "cadastros.resisolamento",
+  "pk": 3,
+  "fields": {
+    "maquina": 1,
+    "tensao": "5.00",
+    "temperatura": "46.00",
+    "umidade": "53.00",
+    "tempo": "1.00",
+    "Ø01xm": "488.00",
+    "Ø02xm": "777.00",
+    "Ø03xm": "48.00",
+    "Ø04xm": "0.00",
+    "res_ohmica_t": "46.00",
+    "Ø01": "11.82",
+    "Ø02": "11.77",
+    "Ø03": "11.75"
+  }
+},
+{
+  "model": "cadastros.resisolamento",
+  "pk": 5,
+  "fields": {
+    "maquina": 7,
+    "tensao": "0.00",
+    "temperatura": "0.00",
+    "umidade": "0.00",
+    "tempo": "0.00",
+    "Ø01xm": "0.00",
+    "Ø02xm": "0.00",
+    "Ø03xm": "0.00",
+    "Ø04xm": "0.00",
+    "res_ohmica_t": "0.00",
+    "Ø01": "0.00",
+    "Ø02": "0.00",
+    "Ø03": "0.00"
+  }
+},
+{
+  "model": "cadastros.resisolamento",
+  "pk": 6,
+  "fields": {
+    "maquina": 8,
+    "tensao": "0.00",
+    "temperatura": "0.00",
+    "umidade": "0.00",
+    "tempo": "0.00",
+    "Ø01xm": "0.00",
+    "Ø02xm": "0.00",
+    "Ø03xm": "0.00",
+    "Ø04xm": "0.00",
+    "res_ohmica_t": "0.00",
+    "Ø01": "0.00",
+    "Ø02": "0.00",
+    "Ø03": "0.00"
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 4,
+  "fields": {
+    "categoria": 5,
+    "nome": "largura",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 5,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "9999.0000",
+    "obrigatorio": true,
+    "ordem": 0,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 5,
+  "fields": {
+    "categoria": 5,
+    "nome": "altura",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 5,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "9999.0000",
+    "obrigatorio": true,
+    "ordem": 1,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 7,
+  "fields": {
+    "categoria": 5,
+    "nome": "largura isolação",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 5,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "9999.0000",
+    "obrigatorio": true,
+    "ordem": 2,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 8,
+  "fields": {
+    "categoria": 5,
+    "nome": "altura isolação",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 5,
+    "inteiro": false,
+    "usar_limites": false,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "9999.0000",
+    "obrigatorio": true,
+    "ordem": 3,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 6,
+  "fields": {
+    "categoria": 5,
+    "nome": "densidade",
+    "tipo": "numero",
+    "grandeza": 4,
+    "unidade": 38,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "99999.0000",
+    "obrigatorio": true,
+    "ordem": 4,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 9,
+  "fields": {
+    "categoria": 5,
+    "nome": "tipo de condutor",
+    "tipo": "texto",
+    "grandeza": null,
+    "unidade": null,
+    "inteiro": false,
+    "usar_limites": false,
+    "valor_minimo": null,
+    "valor_maximo": null,
+    "obrigatorio": true,
+    "ordem": 5,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 10,
+  "fields": {
+    "categoria": 6,
+    "nome": "Espessura",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 3,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "999.0000",
+    "obrigatorio": true,
+    "ordem": 0,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 11,
+  "fields": {
+    "categoria": 6,
+    "nome": "Largura",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 3,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "999.0000",
+    "obrigatorio": true,
+    "ordem": 1,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 12,
+  "fields": {
+    "categoria": 6,
+    "nome": "Comprimento do rolo",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 5,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "1.0000",
+    "valor_maximo": "999999.0000",
+    "obrigatorio": true,
+    "ordem": 2,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 1,
+  "fields": {
+    "categoria": 9,
+    "nome": "Espessura",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 3,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "99999.0000",
+    "obrigatorio": true,
+    "ordem": 1,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 2,
+  "fields": {
+    "categoria": 9,
+    "nome": "Largura",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 3,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "99999.0000",
+    "obrigatorio": true,
+    "ordem": 2,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 3,
+  "fields": {
+    "categoria": 9,
+    "nome": "Comprimento do rolo",
+    "tipo": "numero",
+    "grandeza": 1,
+    "unidade": 5,
+    "inteiro": false,
+    "usar_limites": false,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "99999.0000",
+    "obrigatorio": false,
+    "ordem": 3,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 14,
+  "fields": {
+    "categoria": 10,
+    "nome": "finalidade",
+    "tipo": "checkbox",
+    "grandeza": null,
+    "unidade": null,
+    "inteiro": false,
+    "usar_limites": false,
+    "valor_minimo": null,
+    "valor_maximo": null,
+    "obrigatorio": false,
+    "ordem": 0,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametro",
+  "pk": 15,
+  "fields": {
+    "categoria": 10,
+    "nome": "rendimento",
+    "tipo": "numero",
+    "grandeza": 19,
+    "unidade": 40,
+    "inteiro": false,
+    "usar_limites": true,
+    "valor_minimo": "0.0000",
+    "valor_maximo": "999999.0000",
+    "obrigatorio": false,
+    "ordem": 1,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametroopcao",
+  "pk": 1,
+  "fields": {
+    "parametro": 14,
+    "nome": "condutivo",
+    "ordem": 0,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametroopcao",
+  "pk": 3,
+  "fields": {
+    "parametro": 14,
+    "nome": "isolante",
+    "ordem": 0,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.categoriamaterialparametroopcao",
+  "pk": 2,
+  "fields": {
+    "parametro": 14,
+    "nome": "semicondutivo",
+    "ordem": 0,
+    "ativo": true
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 1,
+  "fields": {
+    "nome": "Comprimento",
+    "unidade_padrao": 5
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 5,
+  "fields": {
+    "nome": "Condutividade",
+    "unidade_padrao": null
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 10,
+  "fields": {
+    "nome": "Corrente",
+    "unidade_padrao": 21
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 4,
+  "fields": {
+    "nome": "Densidade",
+    "unidade_padrao": 38
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 14,
+  "fields": {
+    "nome": "Frequência",
+    "unidade_padrao": 25
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 3,
+  "fields": {
+    "nome": "Massa",
+    "unidade_padrao": 16
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 19,
+  "fields": {
+    "nome": "Massa/Comprimento",
+    "unidade_padrao": 40
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 18,
+  "fields": {
+    "nome": "Massa/Área",
+    "unidade_padrao": 39
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 11,
+  "fields": {
+    "nome": "Potência",
+    "unidade_padrao": 26
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 15,
+  "fields": {
+    "nome": "Potência Aparente",
+    "unidade_padrao": 29
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 9,
+  "fields": {
+    "nome": "Pressão",
+    "unidade_padrao": 31
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 6,
+  "fields": {
+    "nome": "Resistividade",
+    "unidade_padrao": null
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 17,
+  "fields": {
+    "nome": "Resistência",
+    "unidade_padrao": 23
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 16,
+  "fields": {
+    "nome": "Tempo",
+    "unidade_padrao": 35
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 8,
+  "fields": {
+    "nome": "Tensão elétrica",
+    "unidade_padrao": 20
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 7,
+  "fields": {
+    "nome": "Tensão mecânica",
+    "unidade_padrao": 33
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 12,
+  "fields": {
+    "nome": "Vazão",
+    "unidade_padrao": null
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 13,
+  "fields": {
+    "nome": "Volume",
+    "unidade_padrao": 12
+  }
+},
+{
+  "model": "cadastros.grandeza",
+  "pk": 2,
+  "fields": {
+    "nome": "Área",
+    "unidade_padrao": 9
+  }
+}
+]

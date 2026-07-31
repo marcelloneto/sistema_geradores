@@ -257,8 +257,8 @@ class ResultadosIsolamento:
             for chave in fitas:
                 if fitas[chave]['escolhida'] != None:
                     fitas[chave]['resultados'] = resultados_fitas[chave]
-
-            
+            for opcao in opcoes_fitas[1]:
+                print(opcoes_fitas[1][opcao])
             return render(request, "calculos/isolamento.html", {
                     "ordens": ordens,
                     "ordem_selecionada": ordem_selecionada,
@@ -270,7 +270,7 @@ class ResultadosIsolamento:
                     "sobreposicao": fator_sobreposicao,
                     "resultados": self.resultados_isolacao,
                     "fitas":fitas,
-                    "opcoes_fitas": opcoes_fitas,
+                    "opcoes_fitas": opcoes_fitas[1],
                     "index_fitas": index_fitas,
                 })
 
