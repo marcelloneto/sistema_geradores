@@ -29,11 +29,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "*",
-    "https://sistemageradores-gjp03ecb.b4a.run/"
+    "https://sistemageradores-jn4eu54b.b4a.run"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://sistemageradores-gjp03ecb.b4a.run",
+    "https://sistemageradores-jn4eu54b.b4a.run",
 ]
 
 # Application definition
