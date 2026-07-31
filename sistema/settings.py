@@ -22,17 +22,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&)ld$)6jj=w$j(cu4ocjsc-s4=+ns*_xvs0=86zhiw+zz_l3=#'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "*",
+    "sistemageradores-oc1w3hk5.b4a.run",
+    "localhost",
+    "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://sistemageradores-oc1w3hk5.b4a.run/",
+    "https://sistemageradores-oc1w3hk5.b4a.run",
 ]
 
 # Application definition
@@ -88,10 +90,10 @@ WSGI_APPLICATION = 'sistema.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-
+SECRET_KEY = os.getenv("SECRET_KEY")
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
-print("DB_NAME:", os.getenv("DB_NAME"))
+
 if os.getenv("DB_NAME"):
     DATABASES = {
         "default": {
