@@ -30,13 +30,13 @@ load_dotenv(BASE_DIR / ".env")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "sistemageradores-mcmfok62.b4a.run",
+    "sistemageradores-gk08ys7h.b4a.run",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://sistemageradores-mcmfok62.b4a.run",
+    "https://sistemageradores-gk08ys7h.b4a.run",
 ]
 
 # Application definition
