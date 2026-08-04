@@ -30,7 +30,7 @@ load_dotenv(BASE_DIR / ".env")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "https://sistemageradores-mcmfok62.b4a.run",
+    "sistemageradores-mcmfok62.b4a.run",
     "localhost",
     "127.0.0.1",
 ]
