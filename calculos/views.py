@@ -80,6 +80,7 @@ class ResultadosCondutor:
             escolhido = rss.escolha(request,dados,material['materiais_disponiveis'],secao)
             index_cond = ResultadosCondutor.selecao_cond(escolhido,rss,material)
             iso_escolhido = rss.escolha(request,dados,material_iso['materiais_disponiveis'],'isolacao_cond')
+            
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material_iso)
             coeficiente_seguranca = request.session['resultados'].get(
                 "coeficiente_seguranca_bobinas",
@@ -120,7 +121,7 @@ class ResultadosCondutor:
             index_iso = "-1"
         elif iso_escolhido == -1:
             index_iso = "-1"
-            print(f"iso_escolhido: {type(iso_escolhido)}")
+            
         else:
             index_iso = rss.obter_indice_por_id(material_iso['materiais_disponiveis'],iso_escolhido['id'])
 
@@ -191,13 +192,13 @@ class ResultadosIsolamento:
             index_iso = ResultadosCondutor.selecao_iso(iso_escolhido,rss,material)
 
             fita_condutiva_escolhida = rss.escolha(request,dados,fita_condutiva['materiais_disponiveis'],'fita_condutiva')
-            index_fita_condutiva = ResultadosCondutor.selecao_iso(fita_condutiva_escolhida,rss,fita_condutiva)
+            index_fita_condutiva = ResultadosIsolamento.selecao_fita(fita_condutiva_escolhida,rss,fita_condutiva)
 
             fita_semicondutiva_escolhida = rss.escolha(request,dados,fita_semicondutiva['materiais_disponiveis'],'fita_semicondutiva')
-            index_fita_semicondutiva = ResultadosCondutor.selecao_iso(fita_semicondutiva_escolhida,rss,fita_semicondutiva)
+            index_fita_semicondutiva = ResultadosIsolamento.selecao_fita(fita_semicondutiva_escolhida,rss,fita_semicondutiva)
 
             fita_acabamento_escolhida = rss.escolha(request,dados,fita_acabamento['materiais_disponiveis'],'fita_acabamento')
-            index_fita_acabamento = ResultadosCondutor.selecao_iso(fita_acabamento_escolhida,rss,fita_acabamento)
+            index_fita_acabamento = ResultadosIsolamento.selecao_fita(fita_acabamento_escolhida,rss,fita_acabamento)
             
             index_fitas = {
                 "index_fita_condutiva": index_fita_condutiva,
@@ -257,8 +258,7 @@ class ResultadosIsolamento:
             for chave in fitas:
                 if fitas[chave]['escolhida'] != None:
                     fitas[chave]['resultados'] = resultados_fitas[chave]
-            for opcao in opcoes_fitas[1]:
-                print(opcoes_fitas[1][opcao])
+            
             return render(request, "calculos/isolamento.html", {
                     "ordens": ordens,
                     "ordem_selecionada": ordem_selecionada,
@@ -280,7 +280,7 @@ class ResultadosIsolamento:
             index = "-1"
         elif fita_escolhida == -1:
             index = "-1"
-            print(f"fita_escolhida: {type(fita_escolhida)}")
+            
         else:
             index = rss.obter_indice_por_id(material_fita['materiais_disponiveis'],fita_escolhida['id'])
 
@@ -326,7 +326,7 @@ class ResultadosPintura(View):
                 'isolante':  {},
             }
             for tipo in dados_verniz:
-                if tipo != "isolante":
+                if tipo != "isolante": #retirar esse if quando definir onde será escolhido o verniz isolante
                     opcoes_verniz = DadosMaterialService.separacao_verniz(verniz)[f'opcoes_{tipo}']
                     
                     verniz_escolhido = rss.escolha(request,dados,opcoes_verniz,f'verniz_{tipo}')

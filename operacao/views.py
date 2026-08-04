@@ -25,13 +25,14 @@ class home:
                 "ordem_selecionada": None,
                 "dados": None,
             })
-        
+        sessionservice.atualizar_os_anterior(request)
         ordens = ordemservice.listar_ordens()
         dados = ordem_selecionada.maquina
         
         temp = model_to_dict(dados)
         
         if f"{secao}_temp" in request.session:
+            print(f"salvar temp secao: {temp}")
             pass
         else:
             
@@ -53,7 +54,7 @@ class home:
         contexto_form = baseservice.montar_contexto_form(
             form
                 )
-        
+        print(f"dados: {model_to_dict(dados)}")
 
         return render(request, "operacao/home.html", {
             "ordens": ordens,
@@ -104,6 +105,8 @@ class EstatorView:
         contexto_form = baseservice.montar_contexto_form(
             form
         )
+
+        
 
         return render(request, "operacao/estator.html", {
             "ordens": ordens,

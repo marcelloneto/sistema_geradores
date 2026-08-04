@@ -39,12 +39,15 @@ class SessionService:
             else:
                 temp[campo] = str(valor)
 
+        
+
         request.session[f"{self.secao}_temp"] = temp
         request.session.modified = True
         
 
     
     def obter_temp_secao(self,request):
+        
         return request.session.get(f"{self.secao}_temp")
 
     @staticmethod

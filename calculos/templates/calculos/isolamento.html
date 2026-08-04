@@ -183,13 +183,11 @@
                 <label class="form-label">
                     {{ fita.label }}
                 </label>
-                {% for opcao in opcoes_fitas %}
-                <pre>{{ opcoes_fitas.opcao.nome }}</pre>
-                {% endfor %}
+                
                 <select name="{{ chave }}"  class="form-select">
                     
-                    {% for opcao in opcoes_fitas %}
-                            <pre>{{ opcao }}</pre>
+                    {% for opcao, dados in opcoes_fitas.items %}
+                            
                             <option value="{{ forloop.counter0 }}"
                                 
                                 {% if chave|stringformat:"s" == "fita_condutiva" %}
@@ -211,7 +209,7 @@
                                     {% endif %}
                                 {% endif %}
                             >
-                                {{ opcao.nome }}
+                                {{ dados.nome }}
                             </option>
                     {% endfor %}
                 </select>

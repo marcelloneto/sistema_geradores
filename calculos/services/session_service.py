@@ -55,7 +55,7 @@ class ResultadosSessionService:
 
     def processar_post(self,request):
         """processa o evento para atualizar os dados do materiais"""
-        #print(f"POST: {request.POST}")
+        
         if "condutor_1" in request.POST:
             acao = request.POST.get("acao")
             secao = request.POST.get(f"{self.secao}_1")
@@ -65,7 +65,7 @@ class ResultadosSessionService:
             
             request.session['resultados'][f'{self.secao}_selecionado'] = int(secao)
             request.session['resultados']['coeficiente_seguranca_bobinas'] = coeficiente
-            request.session['resultados']['isolacao_selecionado'] = iso
+            request.session['resultados']['isolacao_cond_selecionado'] = iso
             request.session['resultados']['folga_ran'] = folga
 
             return {
@@ -185,7 +185,7 @@ class ResultadosSessionService:
 
     def escolha(self,request,dados,material,secao):
         
-        
+        #print(request.session['resultados'])
         if f'{secao}_selecionado' in request.session['resultados']:
             
             selecionado = request.session['resultados'][f'{secao}_selecionado']

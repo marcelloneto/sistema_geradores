@@ -114,7 +114,7 @@ class ResultadosBobinas:
         ==============================================
         """
         if self.condutor != {}:
-
+            
             self.altura_espira = self.calcular_medidas_espira_iso(self.condutor,self.n_col,self.n_lin)['h_espira']
             self.largura_espira = self.calcular_medidas_espira_iso(self.condutor,self.n_col,self.n_lin)['b_espira']
             self.area_espira = self.calcular_area_espira(self.area_condutor,self.n_cond_esp)
@@ -144,63 +144,61 @@ class ResultadosBobinas:
         Cálculos para fitas, condutiva, semicondutiva e acabamento
         ===========================================================
         """
-        print(self.fitas['fita_condutiva']['escolhida'])
-        self.resultados_fitas = {}
-        if self.fitas['fita_condutiva']['escolhida'] != None:
-
-            self.sobreposicao_fitas = {
-                "fita_condutiva": self.fitas['fita_condutiva']['sobreposicao'],
-                "fita_semicondutiva": self.fitas['fita_semicondutiva']['sobreposicao'],
-                "fita_acabamento": self.fitas['fita_acabamento']['sobreposicao'],
-            }
-            self.camadas_fitas = {
-                "fita_condutiva": Decimal(10),
-                "fita_semicondutiva": Decimal(1),
-                "fita_acabamento": Decimal(1),
-            }
-
-            self.comprimento_aplicacao_fitas = {
-                "fita_condutiva": self.calcular_comprimento_parte_reta(),
-                "fita_semicondutiva": Decimal(100*4),
-                "fita_acabamento": self.calcular_comprimento_area_acabamento()
-            }
-
         
-            
-            
-            for fita in self.fitas:
-                if self.fitas[fita]['escolhida'] != None:
-                    self.resultados_fitas[fita] = {}
-                    
-                    sobreposicao_fita = Decimal(self.sobreposicao_fitas[fita])/100
-                    
-                    camadas_fita = self.camadas_fitas[fita]
-                    comprimento_aplicacao_fita = self.comprimento_aplicacao_fitas[fita]
-                    largura_fita = self.largura_fitas[fita]
-                    comprimento_fita = self.comprimento_fitas[fita]
+        self.resultados_fitas = {}
+        if self.fitas != {}:
+            if self.fitas['fita_condutiva']['escolhida'] != None:
+                
+                self.sobreposicao_fitas = {
+                    "fita_condutiva": self.fitas['fita_condutiva']['sobreposicao'],
+                    "fita_semicondutiva": self.fitas['fita_semicondutiva']['sobreposicao'],
+                    "fita_acabamento": self.fitas['fita_acabamento']['sobreposicao'],
+                }
+                self.camadas_fitas = {
+                    "fita_condutiva": Decimal(10),
+                    "fita_semicondutiva": Decimal(1),
+                    "fita_acabamento": Decimal(1),
+                }
 
-                    self.resultados_fitas[fita]['aplicacao_fita'] = comprimento_aplicacao_fita
-                    self.resultados_fitas[fita]['camadas'] = camadas_fita
-                    
-                    self.resultados_fitas[fita]['n_voltas'] = math.ceil(self.calcular_voltas_fita(comprimento_aplicacao_fita,sobreposicao_fita,largura_fita))
-                    self.resultados_fitas[fita]['comprimento_fita_bobina'] = math.ceil(self.calcular_comprimento_fita_bobina(
-                                                                                self.resultados_fitas[fita]['n_voltas'],
-                                                                                self.perimetro_externo,
-                                                                                camadas_fita
+                self.comprimento_aplicacao_fitas = {
+                    "fita_condutiva": self.calcular_comprimento_parte_reta(),
+                    "fita_semicondutiva": Decimal(100*4),
+                    "fita_acabamento": self.calcular_comprimento_area_acabamento()
+                }
+
+                for fita in self.fitas:
+                    if self.fitas[fita]['escolhida'] != None:
+                        self.resultados_fitas[fita] = {}
+                        
+                        sobreposicao_fita = Decimal(self.sobreposicao_fitas[fita])/100
+                        
+                        camadas_fita = self.camadas_fitas[fita]
+                        comprimento_aplicacao_fita = self.comprimento_aplicacao_fitas[fita]
+                        largura_fita = self.largura_fitas[fita]
+                        comprimento_fita = self.comprimento_fitas[fita]
+
+                        self.resultados_fitas[fita]['aplicacao_fita'] = comprimento_aplicacao_fita
+                        self.resultados_fitas[fita]['camadas'] = camadas_fita
+                        
+                        self.resultados_fitas[fita]['n_voltas'] = math.ceil(self.calcular_voltas_fita(comprimento_aplicacao_fita,sobreposicao_fita,largura_fita))
+                        self.resultados_fitas[fita]['comprimento_fita_bobina'] = math.ceil(self.calcular_comprimento_fita_bobina(
+                                                                                    self.resultados_fitas[fita]['n_voltas'],
+                                                                                    self.perimetro_externo,
+                                                                                    camadas_fita
+                                                                                    ))
+                        self.resultados_fitas[fita]['rolos_bobina'] = math.ceil(self.calcular_rolo_fita(
+                                                                        self.resultados_fitas[fita]['comprimento_fita_bobina'],
+                                                                        comprimento_fita
+                                                                    ))
+                        self.resultados_fitas[fita]['comprimento_fita_total'] = math.ceil(self.calcular_comprimento_fita_total(
+                                                                                    self.resultados_fitas[fita]['comprimento_fita_bobina'],
+                                                                                    self.numero_bobinas
                                                                                 ))
-                    self.resultados_fitas[fita]['rolos_bobina'] = math.ceil(self.calcular_rolo_fita(
-                                                                    self.resultados_fitas[fita]['comprimento_fita_bobina'],
-                                                                    comprimento_fita
-                                                                ))
-                    self.resultados_fitas[fita]['comprimento_fita_total'] = math.ceil(self.calcular_comprimento_fita_total(
-                                                                                self.resultados_fitas[fita]['comprimento_fita_bobina'],
-                                                                                self.numero_bobinas
-                                                                            ))
-                    self.resultados_fitas[fita]['rolos_total'] = math.ceil(self.calcular_rolo_fita(
-                                                                    self.resultados_fitas[fita]['comprimento_fita_total'],
-                                                                    comprimento_fita
-                                                                ))
-
+                        self.resultados_fitas[fita]['rolos_total'] = math.ceil(self.calcular_rolo_fita(
+                                                                        self.resultados_fitas[fita]['comprimento_fita_total'],
+                                                                        comprimento_fita
+                                                                    ))
+        
 
     def calcular_comprimento(self):
        return (self.G*2 + self.H*2 + self.I*2 + 2*self.ponta)
@@ -237,6 +235,7 @@ class ResultadosBobinas:
         return (largura_ranhura - largura_espira - Decimal(folga))/2
 
     def calcular_altura_bobina(self, n_esp_b, h_esp,iso_esp=0):
+        print(f"espessura isolante espiras: {n_esp_b}")
         return n_esp_b * h_esp + (n_esp_b - 1) * iso_esp
 
     def calcular_altura_bobina_iso(self, h_bobina,iso):

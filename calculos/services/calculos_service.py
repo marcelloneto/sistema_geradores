@@ -48,11 +48,14 @@ class Filtros:
         self.fitas = fitas
         
         self.estator = ResultadosEstator(dados['dados_estator'])
+        
         if self.validar_dados(self.condutor_sel) is True:
             self.bobinas = ResultadosBobinas(self.dados,dados['dados_bobina'], condutor, iso_principal, iso_sel,folga,sobreposicao,fitas)
+            
             self.condutor = ResultadosCondutor(self.dados,condutor,self.bobinas.calcular_comprimento())
-        self.eletrica = ResultadosEletrica(dados)
 
+        self.eletrica = ResultadosEletrica(dados)
+        
     def validar_dados(self,secao):
         if 'parametros' in secao and secao['parametros'] != {}:
             return True
