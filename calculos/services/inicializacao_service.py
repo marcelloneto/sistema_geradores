@@ -6,19 +6,21 @@ from calculos.services.dados_material_service import DadosMaterialService
 class Iniciar:
     def __init__(self,request,secao):
         ordemservice = OrdemService("calculos")
-        ordens = ordemservice.listar_ordens()
-            
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
 
-        dados = DadosMaquinaService(secao).obter_dados(ordem_selecionada)
-        rss.validar_temp(request)
-        d_material_s = DadosMaterialService(secao)
-        rss = ResultadosSessionService(secao)
-        material = d_material_s.obter_dados(ordem_selecionada.maquina)
-        rss.atualizar_pagina(request)
+        self.rss = ResultadosSessionService(secao)
+
+        self.ordens = ordemservice.listar_ordens()  
+
+        self.ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
+
+        self.rss.validar_temp(request)
+
+        self.rss.atualizar_pagina(request)
                 
-        rss.verificar_mudanca_pagina(request)
+        self.rss.verificar_mudanca_pagina(request)
         
-        rss.verificar_secao(request, dados,secao,material["materiais_disponiveis"])
+        self.rss.verificar_mudanca_os(request,self.ordem_selecionada)
+
+        self.rss.processar_post(request)
+
         
-        rss.verificar_mudanca_os(request,ordem_selecionada)

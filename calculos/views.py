@@ -9,6 +9,7 @@ from calculos.services.session_service import ResultadosSessionService as RSS
 from calculos.calculos.condutor import ResultadosCondutor as calculos
 from calculos.services.calculos_service import Filtros
 from decimal import Decimal
+from calculos.services.inicializacao_service import Iniciar
 
 
 def home_calculos(request):
@@ -40,38 +41,31 @@ class ResultadosCondutor:
     @staticmethod
     def condutor(request):
         secao = 'condutor'
-        rss = RSS(secao)
-        dms = DadosMaquinaService(secao)
         
-        rss.validar_temp(request)
+        dms = DadosMaquinaService(secao)
+
+        iniciar = Iniciar(request,secao)
+
+        rss = iniciar.rss
+
         d_material_s = DadosMaterialService(secao)
         dados_material_iso = DadosMaterialService('isolamento_principal')
         
-        
-        ordemservice = OrdemService("calculos")
-            
-        ordens = ordemservice.listar_ordens()
-        
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
-        if ordem_selecionada is None:
+        if iniciar.ordem_selecionada is None:
             return render(request, f"calculos/{secao}.html", {
-                          "ordens": ordens,
+                          "ordens": iniciar.ordens,
                           })
         else:
 
-            material_iso = dados_material_iso.obter_dados(ordem_selecionada.maquina)
-            dados = dms.obter_dados(ordem_selecionada)
-            material = d_material_s.obter_dados(ordem_selecionada.maquina)
-
+            material_iso = dados_material_iso.obter_dados(iniciar.ordem_selecionada.maquina)
+            dados = dms.obter_dados(iniciar.ordem_selecionada)
+            material = d_material_s.obter_dados(iniciar.ordem_selecionada.maquina)
 
             iso_principal = material_iso['material_utilizado']
-            
-            rss.atualizar_pagina(request)
-            rss.verificar_mudanca_pagina(request)
+             
             rss.verificar_secao(request, dados,secao,material["materiais_disponiveis"])
             rss.verificar_secao(request, dados,'isolacao_cond',material_iso['materiais_disponiveis'])
-            rss.verificar_mudanca_os(request,ordem_selecionada)
-
+            
             opcoes = rss.obter_opcoes_secao( material["materiais_disponiveis"])
             if request.method == "POST":
                 processar = rss.processar_post(request)
@@ -99,8 +93,8 @@ class ResultadosCondutor:
             resultados = calculoservice.calcular_condutor(coeficiente_seguranca)
             
             return render(request, f"calculos/{secao}.html", {
-                    "ordens": ordens,
-                    "ordem_selecionada": ordem_selecionada,
+                    "ordens": iniciar.ordens,
+                    "ordem_selecionada": iniciar.ordem_selecionada,
                     "secao": secao,
                     "dados": dados,
                     "material": material,
@@ -141,41 +135,33 @@ class ResultadosIsolamento:
         secao = 'isolacao'
         fita = 'isolamento_principal'
         request.session['resultados']['pagina_atual'] = "resultados_isolamento"
-
-        ordemservice = OrdemService("calculos")
-        ordens = ordemservice.listar_ordens()
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
-        if ordem_selecionada is None:
+        
+        iniciar = Iniciar(request,secao)
+        if iniciar.ordem_selecionada is None:
                     return render(request, f"calculos/isolamento.html", {
-                                  "ordens": ordens,
+                                  "ordens": iniciar.ordens,
                                   })
         else:
-            dados = DadosMaquinaService(secao).obter_dados(ordem_selecionada)
+            rss = iniciar.rss
+
+            dados = DadosMaquinaService(secao).obter_dados(iniciar.ordem_selecionada)
             d_material_s = DadosMaterialService(fita)
-            material = d_material_s.obter_dados(ordem_selecionada.maquina) 
+            material = d_material_s.obter_dados(iniciar.ordem_selecionada.maquina) 
             
             d_material_cond = DadosMaterialService('condutor')
-            condutor = d_material_cond.obter_dados(ordem_selecionada.maquina)
-            rss = RSS(secao)    
+            condutor = d_material_cond.obter_dados(iniciar.ordem_selecionada.maquina)
+                
 
             d_material_condutiva = DadosMaterialService('fita_condutiva')
-            fita_condutiva = d_material_condutiva.obter_dados(ordem_selecionada.maquina)
+            fita_condutiva = d_material_condutiva.obter_dados(iniciar.ordem_selecionada.maquina)
 
             d_material_semicondutiva = DadosMaterialService('fita_semicondutiva')
-            fita_semicondutiva = d_material_semicondutiva.obter_dados(ordem_selecionada.maquina)
+            fita_semicondutiva = d_material_semicondutiva.obter_dados(iniciar.ordem_selecionada.maquina)
             
             d_material_acabamento = DadosMaterialService('fita_acabamento')
-            fita_acabamento = d_material_acabamento.obter_dados(ordem_selecionada.maquina)
+            fita_acabamento = d_material_acabamento.obter_dados(iniciar.ordem_selecionada.maquina)
 
-            
-            
-            rss.atualizar_pagina(request)
-            
-            rss.verificar_mudanca_pagina(request)
-            
             rss.verificar_secao(request, dados,secao,material["materiais_disponiveis"])
-            
-            rss.verificar_mudanca_os(request,ordem_selecionada)
             
             opcoes = rss.obter_opcoes_secao( material["materiais_disponiveis"])
 
@@ -260,8 +246,8 @@ class ResultadosIsolamento:
                     fitas[chave]['resultados'] = resultados_fitas[chave]
             
             return render(request, "calculos/isolamento.html", {
-                    "ordens": ordens,
-                    "ordem_selecionada": ordem_selecionada,
+                    "ordens": iniciar.ordens,
+                    "ordem_selecionada": iniciar.ordem_selecionada,
                     "secao": secao,
                     "opcoes": opcoes,
                     "iso_escolhido": iso_escolhido,
@@ -291,34 +277,23 @@ class ResultadosPintura(View):
     def pintura(request):
         secao = 'pintura'
         dados = DadosMaquinaService(secao)
-        ordemservice = OrdemService("calculos")
         material='verniz_condutivo'
-            
-        ordens = ordemservice.listar_ordens()
-        
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(request)
 
         request.session['resultados']['pagina_atual'] = "resultados_pintura"
 
-        rss = RSS(secao)
-
-        rss.atualizar_pagina(request)
-                    
-        rss.verificar_mudanca_pagina(request)
         
-        rss.verificar_mudanca_os(request,ordem_selecionada)
 
-        rss.processar_post(request)
+        iniciar = Iniciar(request,secao)
 
-        if ordem_selecionada is None:
+        if iniciar.ordem_selecionada is None:
             return render(request, f"calculos/isolamento.html", {
-                            "ordens": ordens,
+                            "ordens": iniciar.ordens,
                             })
         else:
-            dados = dados.obter_dados(ordem_selecionada)
+            dados = dados.obter_dados(iniciar.ordem_selecionada)
             d_material_s = DadosMaterialService(material)
 
-            verniz = d_material_s.obter_dados(ordem_selecionada.maquina)
+            verniz = d_material_s.obter_dados(iniciar.ordem_selecionada.maquina)
             
             dados_verniz = {
                 'condutivo':  {},
@@ -329,11 +304,11 @@ class ResultadosPintura(View):
                 if tipo != "isolante": #retirar esse if quando definir onde será escolhido o verniz isolante
                     opcoes_verniz = DadosMaterialService.separacao_verniz(verniz)[f'opcoes_{tipo}']
                     
-                    verniz_escolhido = rss.escolha(request,dados,opcoes_verniz,f'verniz_{tipo}')
+                    verniz_escolhido = iniciar.rss.escolha(request,dados,opcoes_verniz,f'verniz_{tipo}')
                     
-                    opcoes = rss.obter_opcoes_secao(opcoes_verniz)
+                    opcoes = iniciar.rss.obter_opcoes_secao(opcoes_verniz)
         
-                    index = ResultadosPintura.selecao(verniz_escolhido,rss,opcoes_verniz)
+                    index = ResultadosPintura.selecao(verniz_escolhido,iniciar.rss,opcoes_verniz)
 
                     dados_verniz[tipo] = {
                         "escolhido": verniz_escolhido,
@@ -342,8 +317,8 @@ class ResultadosPintura(View):
                     }
             
         return render(request, "calculos/pintura.html", {
-                "ordens": ordens,
-                "ordem_selecionada": ordem_selecionada,
+                "ordens": iniciar.ordens,
+                "ordem_selecionada": iniciar.ordem_selecionada,
                 "secao": secao,
                 "verniz_escolhido": verniz_escolhido,
                 "opcoes_condutivo": opcoes,

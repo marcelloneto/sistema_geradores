@@ -73,6 +73,8 @@ class Filtros:
             area_total_espiras = self.bobinas.area_secao_cobre
             comprimento_bobina = self.bobinas.calcular_comprimento_condutor()
             volume_condutor_bobina = self.bobinas.volume_cobre
+            peso_condutor_barra = self.condutor.peso(volume_condutor_bobina)/2
+            numero_barras = self.dados['dados_estator']['numero_bobinas']*2
             peso_condutor_bobina = self.condutor.peso(volume_condutor_bobina)
             numero_bobinas = self.dados['dados_estator']['numero_bobinas']
             peso_total_condutor = peso_condutor_bobina * numero_bobinas
@@ -98,6 +100,9 @@ class Filtros:
                 "Área da Espira": [area_espira,'mm²'],
                 "Quantidade de espiras por bobina": [n_espiras_bobina, ''],
                 "Área Total Espiras": [area_total_espiras,'mm²'],
+                "Comprimento da Barra": [comprimento_bobina/2, 'mm'],
+                "Peso de Cobre por Barra": [peso_condutor_barra, 'kg'],
+                "Quantidade de Barras":[numero_barras, 'unidades'],
                 "Comprimento da Bobina": [comprimento_bobina,'mm'],
                 "Peso de cobre por Bobina": [peso_condutor_bobina, 'kg'],
                 "Quantidade de Bobinas": [numero_bobinas, "unidades"],
