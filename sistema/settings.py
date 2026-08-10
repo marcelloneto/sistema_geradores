@@ -29,7 +29,7 @@ load_dotenv(BASE_DIR / ".env")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [8
+ALLOWED_HOSTS = [
     "sistemageradores-9xzlo0os.b4a.run",
     "localhost",
     "127.0.0.1",
