@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Materiais</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .rounded-custom { border-radius: 1rem !important; }
+        .sidebar { background: #f8f9fa; border-right: 1px solid #dee2e6; }
+        /* Deixa o cursor com formato de clique nas linhas da tabela */
+        tbody tr { cursor: pointer; }
+    </style>
+</head>
+<body class="bg-light p-4">
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar de Filtros -->
+        <div class="col-md-2 p-3 bg-white rounded-custom shadow-sm sidebar">
+            <a href="{% url 'portal:home' %}" class="btn btn-outline-secondary w-100 mb-4">Voltar</a>
+            <h5>Categorias</h5>
+            <div class="nav flex-column nav-pills mt-3">
+                <a href="?" class="nav-link {% if not request.GET.categoria %}active{% endif %}">Todas</a>
+                {% for cat in categorias %}
+                    <a href="?categoria={{ cat.id }}" 
+                       class="nav-link {% if request.GET.categoria|add:'0' == cat.id %}active{% endif %}">
+                       {{ cat.nome }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Tabela Principal -->
+        <div class="col-md-10">
+            <div class="card p-4 rounded-custom shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Materiais</h2>
+                    <div>
+                        <!-- Botão de Excluir Selecionados -->
+                        <button type="submit" form="form-lote" id="btn-deletar-lote" class="btn btn-outline-danger me-2" disabled>Excluir Selecionados</button>
+                        <a href="{% url 'materiais:material_novo' %}" class="btn btn-primary rounded-custom">Novo Material</a>
+                    </div>
+                </div>
+
+                <!-- Formulário que envolve a tabela para envio dos checkboxes -->
+                <form id="form-lote" method="post" action="{% url 'materiais:material_bulk_delete' %}">
+                    {% csrf_token %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 40px;">
+                                        <input type="checkbox" id="select-all" class="form-check-input">
+                                    </th>
+                                    <th>Código</th>
+                                    <th>Nome</th>
+                                    <th>Categoria</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for m in materiais %}
+                                <!-- Evento de clique duplo redireciona para a página de edição -->
+                                <tr ondblclick="window.location.href='{% url 'materiais:material_editar' m.pk %}'">
+                                    <td onclick="event.stopPropagation()">
+                                        <input type="checkbox" name="material_ids" value="{{ m.pk }}" class="form-check-input material-checkbox">
+                                    </td>
+                                    <td>{{ m.codigo_material }}</td>
+                                    <td class="fw-bold">{{ m.nome }}</td>
+                                    <td><span class="badge bg-info text-dark">{{ m.categoria.nome }}</span></td>
+                                    <td onclick="event.stopPropagation()">
+                                        <a href="{% url 'materiais:material_editar' m.pk %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                                        <a href="{% url 'materiais:material_remover' m.pk %}" class="btn btn-sm btn-outline-danger">Excluir</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="5" class="text-center">Nenhum material encontrado.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para gerenciar os checkboxes e o botão de exclusão em massa -->
+<script>
+    const selectAll = document.getElementById('select-all');
+    const checkboxes = document.querySelectorAll('.material-checkbox');
+    const btnDeletarLote = document.getElementById('btn-deletar-lote');
+
+    function atualizarBotaoLote() {
+        const algumMarcado = Array.from(checkboxes.values()).some(cb => cb.checked);
+        btnDeletarLote.disabled = !algumMarcado;
+    }
+
+    selectAll.addEventListener('change', function() {
+        checkboxes.forEach(cb => {
+            cb.checked = selectAll.checked;
+        });
+        atualizarBotaoLote();
+    });
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', atualizarBotaoLote);
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

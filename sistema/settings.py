@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'calculos',
     'ensaios',
     'listagem',
+    'materiais'
 ]
 
 MIDDLEWARE = [

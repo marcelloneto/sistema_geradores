@@ -1,0 +1,8 @@
+<h1>Remover Material</h1>
+<p>Você tem certeza que deseja remover "{{ object.nome }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar exclusão</button>
+    <a href="{% url 'lista_materiais' %}">Cancelar</a>
+</form>
