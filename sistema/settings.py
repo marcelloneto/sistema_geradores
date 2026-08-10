@@ -29,14 +29,14 @@ load_dotenv(BASE_DIR / ".env")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [
-    "sistemageradores-gk08ys7h.b4a.run",
+ALLOWED_HOSTS = [8
+    "sistemageradores-9xzlo0os.b4a.run",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://sistemageradores-gk08ys7h.b4a.run",
+    "https://sistemageradores-9xzlo0os.b4a.run",
 ]
 
 # Application definition
