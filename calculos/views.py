@@ -137,6 +137,7 @@ class ResultadosIsolamento:
         request.session['resultados']['pagina_atual'] = "resultados_isolamento"
         
         iniciar = Iniciar(request,secao)
+        
         if iniciar.ordem_selecionada is None:
                     return render(request, f"calculos/isolamento.html", {
                                   "ordens": iniciar.ordens,

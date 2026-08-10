@@ -23,4 +23,4 @@ class Iniciar:
 
         self.rss.processar_post(request)
 
-        
+                
