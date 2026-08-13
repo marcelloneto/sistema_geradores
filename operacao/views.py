@@ -1,411 +1,115 @@
-from django.shortcuts import render, redirect
-from django.forms.models import model_to_dict
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
+from django.http import JsonResponse
+from django.urls import reverse_lazy
+from cadastros.models import OrdemServico, Maquina, Cliente
+from .forms import OrdemServicoForm, RegistroClienteForm, RegistroMaquinaForm
 
-from operacao.services.ordem_service import OrdemService
-from operacao.services.base_service import BaseService
-from operacao.services.session_service import SessionService
+# 1. Página principal de Gestão de Ordens de Serviço
+class HomeOSView(View):
+    def get(self, request):
+        ordens = OrdemServico.objects.select_related('cliente', 'maquina').all().order_by('-id')
+        
+        # Captura a OS selecionada via parâmetro ?os=NUMERO na URL (se houver)
+        os_numero = request.GET.get('os')
+        ordem_selecionada = None
+        form = None
 
-class home:
+        if os_numero:
+            ordem_selecionada = OrdemServico.objects.filter(numero=os_numero).first()
+            if ordem_selecionada:
+                form = OrdemServicoForm(instance=ordem_selecionada)
+
+        return render(request, 'operacao/home.html', {
+            'ordens': ordens,
+            'ordem_selecionada': ordem_selecionada,
+            'form': form,
+        })
+
+    def post(self, request):
+        os_numero = request.GET.get('os')
+        if os_numero:
+            ordem_selecionada = get_object_or_404(OrdemServico, numero=os_numero)
+            form = OrdemServicoForm(request.POST, instance=ordem_selecionada)
+            if form.is_valid():
+                form.save()
+                return redirect(f"{request.path}?os={ordem_selecionada.numero}")
+        
+        return self.get(request)
+
+
+# 2. Tela dedicada para Abertura de Nova OS
+class NovaOrdemView:
     @staticmethod
-    def home(request):
-        secao = 'maquina'
-        ordemservice = OrdemService('home')
-        baseservice = BaseService(secao)
-        sessionservice = SessionService(secao)
-        
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(
-            request
-        )
-        print(ordem_selecionada)
-        if ordem_selecionada is None:
-            ordens = ordemservice.listar_ordens()
-
-            return render(request, "operacao/home.html", {
-                "ordens": ordens,
-                "ordem_selecionada": None,
-                "dados": None,
-            })
-        sessionservice.atualizar_os_anterior(request)
-        ordens = ordemservice.listar_ordens()
-        dados = ordem_selecionada.maquina
-        
-        temp = model_to_dict(dados)
-        
-        if f"{secao}_temp" in request.session:
-            print(f"salvar temp secao: {temp}")
-            pass
-        else:
-            
-            sessionservice.salvar_temp_secao(request,temp)
-        
+    def nova_os(request):
         if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                dados=dados
-            )
+            numero = request.POST.get('numero')
+            cliente_id = request.POST.get('cliente')
+            maquina_id = request.POST.get('maquina')
+            tipo_servico = request.POST.get('tipo_servico')
+            localizacao = request.POST.get('localizacao', '')
             
-        else:
-            
-            form = baseservice.criar_form_get(
-                request,
-                dados
-            )
-        
-        contexto_form = baseservice.montar_contexto_form(
-            form
+            if numero and cliente_id and maquina_id:
+                cliente = Cliente.objects.get(id=cliente_id)
+                maquina = Maquina.objects.get(id=maquina_id)
+                
+                nova_os = OrdemServico.objects.create(
+                    numero=numero,
+                    cliente=cliente,
+                    maquina=maquina,
+                    tipo_servico=tipo_servico,
+                    localizacao=localizacao
                 )
-        print(f"dados: {model_to_dict(dados)}")
+                # Redireciona para o painel da OS já selecionando a OS recém-criada
+                return redirect(f"{reverse_lazy('operacao:home')}?os={nova_os.numero}")
 
-        return render(request, "operacao/home.html", {
-            "ordens": ordens,
-            "ordem_selecionada": ordem_selecionada,
-            "maquina": dados,
-            **contexto_form,
+        clientes = Cliente.objects.all().order_by('nome')
+        return render(request, "operacao/nova_os.html", {
+            "clientes": clientes
         })
 
-class EstatorView:
-   
+
+# 3. API JSON para popular máquinas no formulário de criação
+class ApiOperacaoView:
     @staticmethod
-    def estator(request):
-        secao = 'estator'
-        sessionservice = SessionService(secao)
-        ordemservice =  OrdemService(secao)
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(
-            request
-        )
+    def carregar_maquinas_cliente(request):
+        cliente_id = request.GET.get('cliente_id')
+        if cliente_id:
+            maquinas = Maquina.objects.filter(cliente_id=cliente_id).values('id', 'numero_serie')
+            return JsonResponse(list(maquinas), safe=False)
+        return JsonResponse([], safe=False)
 
-        baseservice = BaseService(secao)
 
-        sessionservice.atualizar_os_anterior(request)
-
-        ordens = ordemservice.listar_ordens()
-
-        dados = baseservice.obter_dados(
-            ordem_selecionada,
-        )
-
-        temp = model_to_dict(dados)
-        if f"{secao}_temp" in request.session:
-            pass
-        else:
-            
-            sessionservice.salvar_temp_secao(request,temp)
-        
-        if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                dados=dados
-            )
-        else:
-            form = baseservice.criar_form_get(
-                request,
-                dados
-            )
-
-        contexto_form = baseservice.montar_contexto_form(
-            form
-        )
-
-        
-
-        return render(request, "operacao/estator.html", {
-            "ordens": ordens,
-            "ordem_selecionada": ordem_selecionada,
-            "dados_estator": dados,
-            "estatortemp": sessionservice.obter_temp_secao(request),
-            **contexto_form,
-        })
-    
-class GeometricosView:
-    @staticmethod
-    def geometricos(request):
-        secao = 'geometricos'
-        sessionservice = SessionService(secao)
-        ordemservice =  OrdemService(secao)
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(
-            request
-        )
-
-        baseservice = BaseService(secao)
-
-        sessionservice.atualizar_os_anterior(request)
-
-        ordens = ordemservice.listar_ordens()
-
-        dados = baseservice.obter_dados(
-            ordem_selecionada,
-        )
-
-        print(f"Geometricos: {dados.folga_ranhura}")
-
-        temp = model_to_dict(dados)
-        if f"{secao}_temp" in request.session:
-            pass
-        else:
-            print(False)
-            sessionservice.salvar_temp_secao(request,temp)
-
-        if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                dados=dados
-            )
-        else:
-            form = baseservice.criar_form_get(
-                request,
-                dados
-            )
-
-        contexto_form = baseservice.montar_contexto_form(
-            form
-        )
-
-        return render(request, "operacao/geometricos.html", {
-            "ordens": ordens,
-            "ordem_selecionada": ordem_selecionada,
-            "dados_geometricos": dados,
-            "geometricostemp": sessionservice.obter_temp_secao(request),
-            **contexto_form,
-        })
-
-class PerifericosView:
-    @staticmethod
-    def perifericos(request):
-        secao = 'perifericos'
-        sessionservice = SessionService(secao)
-        ordemservice =  OrdemService(secao)
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(
-            request
-        )
-
-        baseservice = BaseService(secao)
-
-        sessionservice.atualizar_os_anterior(request)
-
-        ordens = ordemservice.listar_ordens()
-
-        dados = baseservice.obter_dados(
-            ordem_selecionada,
-        )
-
-        temp = model_to_dict(dados)
-        if f"{secao}_temp" in request.session:
-            pass
-        else:
-            print(False)
-            sessionservice.salvar_temp_secao(request,temp)
-
-        if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                dados=dados
-            )
-        else:
-            form = baseservice.criar_form_get(
-                request,
-                dados
-            )
-
-        contexto_form = baseservice.montar_contexto_form(
-            form
-        )
-
-        return render(request, "operacao/perifericos.html", {
-            "ordens": ordens,
-            "ordem_selecionada": ordem_selecionada,
-            "dados_perifericos": dados,
-            "perifericostemp": sessionservice.obter_temp_secao(request),
-            **contexto_form,
-        })
-
-class ConstrutivosView:
-
-    @staticmethod
-    def construtivos(request):
-        secao = 'bobina'
-        sessionservice = SessionService(secao)
-        ordemservice =  OrdemService(secao)
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(
-            request
-        )
-
-        baseservice = BaseService(secao)
-
-        sessionservice.atualizar_os_anterior(request)
-
-        ordens = ordemservice.listar_ordens()
-
-        dados = baseservice.obter_dados(
-            ordem_selecionada,
-        )
-
-        temp = model_to_dict(dados)
-        
-        if f"{secao}_temp" in request.session:
-            pass
-        else:
-            print(False)
-            sessionservice.salvar_temp_secao(request,temp)
-
-        if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                dados=dados
-            )
-        else:
-            form = baseservice.criar_form_get(
-                request,
-                dados
-            )
-        
-        contexto_form = baseservice.montar_contexto_form_bobina(
-            request,
-            form,
-            ordem_selecionada.maquina
-        )
-
-        return render(request, "operacao/construtivos.html", {
-            "ordens": ordens,
-            "ordem_selecionada": ordem_selecionada,
-            "dados_bobina": dados,
-            "construtivostemp": sessionservice.obter_temp_secao(request),
-            **contexto_form,
-        })
-
-class EnsaioIsolamentoView:
-    @staticmethod
-    def ensaios(request):
-        secao = 'ensaios'
-        sessionservice = SessionService(secao)
-        ordemservice =  OrdemService(secao)
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(
-            request
-        )
-
-        baseservice = BaseService(secao)
-
-        sessionservice.atualizar_os_anterior(request)
-
-        ordens = ordemservice.listar_ordens()
-
-        dados = baseservice.obter_dados(
-            ordem_selecionada,
-        )
-        
-        temp = model_to_dict(dados)
-        if f"{secao}_temp" in request.session:
-            pass
-        else:
-            print(False)
-            sessionservice.salvar_temp_secao(request,temp)
-
-        if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                dados=dados
-            )
-        else:
-            form = baseservice.criar_form_get(
-                request,
-                dados
-            )
-
-        contexto_form = baseservice.montar_contexto_form_ensaios(
-            form,
-        )
-
-        return render(request, "operacao/ensaios.html", {
-            "ordens": ordens,
-            "ordem_selecionada": ordem_selecionada,
-            "dados_ensaios": dados,
-            "ensaiostemp": sessionservice.obter_temp_secao(request),
-            **contexto_form,
-        })
-
-class BobinagemView:
-    @staticmethod
-    def bobinagem_roebel(request):
-        secao = 'bobinagem_roebel'
-        sessionservice = SessionService(secao)
-        ordemservice =  OrdemService(secao)
-        ordem_selecionada = ordemservice.obter_ordem_selecionada(
-            request
-        )
-
-        baseservice = BaseService(secao)
-
-        sessionservice.atualizar_os_anterior(request)
-
-        ordens = ordemservice.listar_ordens()
-
-        dados = baseservice.obter_dados(
-            ordem_selecionada,
-        )
-        
-        
-        temp = model_to_dict(dados)
-        print(temp)
-        if f"{secao}_temp" in request.session:
-            pass
-        else:
-            print(False)
-            sessionservice.salvar_temp_secao(request,temp)
-
-        if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                dados=dados
-            )
-        else:
-            form = baseservice.criar_form_get(
-                request,
-                dados
-            )
-        print(list(request.session.keys()))
-        contexto_form = baseservice.montar_contexto_form_roebel(
-            form,
-        )
-
-        return render(request, "operacao/bobinagem_roebel.html", {
-            "ordens": ordens,
-            "ordem_selecionada": ordem_selecionada,
-            "dados_bobinagem": dados,
-            "bobinagemtemp": sessionservice.obter_temp_secao(request),
-            **contexto_form,
-        })
-
+# 4. Ações de Cadastro Rápido / Modais
 class Registro:
     @staticmethod
     def registrar_os(request):
-        secao = 'registrar_os'
-        baseservice = BaseService(secao)
-        
         if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                )
-
-
-        return redirect(request.META.get("HTTP_REFERER", "admin:index"))
+            form = OrdemServicoForm(request.POST)
+            if form.is_valid():
+                nova_os = form.save()
+                return redirect(f"{reverse_lazy('operacao:home')}?os={nova_os.numero}")
+        return redirect(request.META.get("HTTP_REFERER", "operacao:home"))
 
     @staticmethod
     def registrar_cliente(request):
-        secao = 'registrar_cliente'
-        baseservice = BaseService(secao)
-        print("registrar_cliente")
         if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                )
-        return redirect(request.META.get("HTTP_REFERER", "operacao:home") + "?abrir_modal_os=1")
+            form = RegistroClienteForm(request.POST)
+            if form.is_valid():
+                form.save()
+        return redirect(request.META.get("HTTP_REFERER", "operacao:home"))
 
     @staticmethod
     def registrar_maquina(request):
-        secao = 'registrar_maquina'
-        baseservice = BaseService(secao)
-        print("registrar_maquina")
         if request.method == "POST":
-            form = baseservice.processar_post(
-                request,
-                )
-        return redirect(request.META.get("HTTP_REFERER", "operacao:home") + "?abrir_modal_os=1")
+            form = RegistroMaquinaForm(request.POST)
+            if form.is_valid():
+                form.save()
+        return redirect(request.META.get("HTTP_REFERER", "operacao:home"))
+
+class DeletarOSView(View):
+    def post(self, request, pk):
+        # TODO: Reservado para validações futuras de permissões do usuário
+        ordem = get_object_or_404(OrdemServico, pk=pk)
+        ordem.delete()
+        return redirect('listagem:home') # Redireciona para a listagem principal após deletar

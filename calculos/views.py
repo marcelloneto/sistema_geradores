@@ -91,7 +91,7 @@ class ResultadosCondutor:
             calculoservice = Filtros(dados,iso_sel=iso_escolhido,condutor=escolhido,folga=folga,iso_principal=iso_principal)
             
             resultados = calculoservice.calcular_condutor(coeficiente_seguranca)
-            
+            print(resultados)
             return render(request, f"calculos/{secao}.html", {
                     "ordens": iniciar.ordens,
                     "ordem_selecionada": iniciar.ordem_selecionada,
@@ -233,14 +233,14 @@ class ResultadosIsolamento:
                         sobreposicao
                     ))*100)
 
-            self.resultados = Filtros(dados,
+            resultados = Filtros(dados,
                                  iso_principal=iso_escolhido,
                                  condutor=cond_escolhido,iso_sel=iso_cond,
                                  sobreposicao=fator_sobreposicao,
                                  folga=folga,
                                  fitas=fitas)
-            self.resultados_isolacao = self.resultados.calcular_isolacao(coeficiente_seguranca)
-            resultados_fitas = self.resultados.calcular_fitas(coeficiente_seguranca)
+            resultados_isolacao = resultados.calcular_isolacao(coeficiente_seguranca)
+            resultados_fitas = resultados.calcular_fitas(coeficiente_seguranca)
             
             for chave in fitas:
                 if fitas[chave]['escolhida'] != None:
@@ -255,7 +255,7 @@ class ResultadosIsolamento:
                     "index_iso": str(index_iso),
                     "coeficiente_seguranca": coeficiente_seguranca,
                     "sobreposicao": fator_sobreposicao,
-                    "resultados": self.resultados_isolacao,
+                    "resultados": resultados_isolacao,
                     "fitas":fitas,
                     "opcoes_fitas": opcoes_fitas[1],
                     "index_fitas": index_fitas,

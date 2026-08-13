@@ -1,0 +1,51 @@
+{% extends 'maquinas/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Dados da Resistência do Isolamento</h2>
+    
+    <div>
+        <button type="button" class="btn btn-primary btn-editar">
+            <i class="bi bi-pencil"></i> Editar Dados
+        </button>
+        <button type="button" class="btn btn-secondary btn-cancelar me-2">
+            <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+        <button type="submit" form="ensaios" class="btn btn-success btn-salvar" name="salvar">
+            <i class="bi bi-save"></i> Salvar Alterações
+        </button>
+    </div>
+</div>
+<hr>
+
+{% if not campos_parte1 %}
+    <div class="alert alert-info">Esta máquina ainda não possui dados de ensaios cadastrados.</div>
+{% endif %}
+
+<form id="ensaios" method="post" class="form-editavel">
+    {% csrf_token %}
+
+    <div class="row">
+        {% for field in campos_parte1 %}
+            <div class="col-md-3 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <label class="form-label">{{form.res_ohmica_t.label}}</label>
+            {{form.res_ohmica_t}}
+        </div>
+        {% for field in campos_parte2 %}
+            <div class="col-md-3 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+</form>
+
+{% endblock %}

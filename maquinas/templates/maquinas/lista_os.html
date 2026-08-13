@@ -1,0 +1,70 @@
+{% extends 'maquinas/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0"><i class="bi bi-folder2-open text-primary me-2"></i> Histórico de Ordens de Serviço</h2>
+        <div class="text-muted small">Todas as intervenções e serviços registrados para este ativo</div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="text-uppercase text-secondary small">Nº da OS</th>
+                    <th class="text-uppercase text-secondary small">Cliente</th>
+                    <th class="text-uppercase text-secondary small">Localização</th>
+                    <th class="text-uppercase text-secondary small">Tipo de Serviço</th>
+                    <th class="text-end text-uppercase text-secondary small">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ordem in ordens %}
+                <tr>
+                    <td class="fw-bold text-primary font-monospace">{{ ordem.numero }}</td>
+                    <td>{{ ordem.cliente.nome|default:"-" }}</td>
+                    <td>{{ ordem.localizacao|default:"-" }}</td>
+                    <td>
+                        <span class="badge bg-light text-dark border">
+                            {{ ordem.tipo_servico|default:"Não especificado" }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <!-- Esta URL apontará para o painel comercial no app 'operacao' futuramente -->
+                        <button class="btn btn-sm btn-outline-primary" title="Abrir Detalhes da OS" disabled>
+                            <i class="bi bi-box-arrow-up-right"></i> Ver OS
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox fs-2 d-block mb-2 text-black-50"></i>
+                        Nenhuma Ordem de Serviço registrada para esta máquina.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Lógica opcional para ocultar o menu lateral nesta aba (focando a tela na tabela) -->
+
+
+<script>
+    // Ajusta as cores das abas para indicar que estamos na Lista de OS
+    document.addEventListener("DOMContentLoaded", function() {
+        const topTabs = document.querySelector('.top-tabs');
+        if(topTabs) {
+            const btns = topTabs.querySelectorAll('a');
+            btns[0].classList.replace('btn-primary', 'btn-outline-primary');
+            btns[1].classList.replace('btn-outline-primary', 'btn-primary');
+        }
+    });
+</script>
+
+{% endblock %}

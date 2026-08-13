@@ -1,26 +1,29 @@
-{% extends 'operacao/base.html' %}
+{% extends 'maquinas/base.html' %}
 
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Materiais de Bobinagem Roebel</h2>
 
-    <button
-        type="submit"
-        form="materiais-roebel"
-        class="btn btn-success"
-        name="salvar">
-        Salvar
-    </button>
+    <div>
+        <button type="button" class="btn btn-primary btn-editar">
+            <i class="bi bi-pencil"></i> Editar Dados
+        </button>
+        <button type="button" class="btn btn-secondary btn-cancelar me-2">
+            <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+        <button type="submit" form="materiais-roebel" class="btn btn-success btn-salvar" name="salvar">
+            <i class="bi bi-save"></i> Salvar Alterações
+        </button>
+    </div>
 </div>
 
 <hr>
 
-<form id="materiais-roebel" method="post">
+<form id="materiais-roebel" method="post" class="form-editavel">
     {% csrf_token %}
 
     <h3>Condutor e Isolamento</h3>
-
     <div class="row">
         {% for field in campos_condutor_isolamento %}
             <div class="col-md-4 mb-3">
@@ -29,11 +32,9 @@
             </div>
         {% endfor %}
     </div>
-
     <hr>
 
     <h3>Consolidação e Enchimento</h3>
-
     <div class="row">
         {% for field in campos_resinas %}
             <div class="col-md-4 mb-3">
@@ -42,11 +43,9 @@
             </div>
         {% endfor %}
     </div>
-
     <hr>
 
     <h3>Sistema Condutivo</h3>
-
     <div class="row">
         {% for field in campos_condutivo %}
             <div class="col-md-4 mb-3">
@@ -55,11 +54,9 @@
             </div>
         {% endfor %}
     </div>
-
     <hr>
 
     <h3>Sistema Semicondutivo</h3>
-
     <div class="row">
         {% for field in campos_semicondutivo %}
             <div class="col-md-4 mb-3">
@@ -68,11 +65,9 @@
             </div>
         {% endfor %}
     </div>
-
     <hr>
 
     <h3>Acabamento e Amarração</h3>
-
     <div class="row">
         {% for field in campos_acabamento %}
             <div class="col-md-4 mb-3">
@@ -81,11 +76,9 @@
             </div>
         {% endfor %}
     </div>
-
     <hr>
 
     <h3>Componentes Mecânicos / Elétricos</h3>
-
     <div class="row">
         {% for field in campos_componentes %}
             <div class="col-md-4 mb-3">
@@ -94,11 +87,9 @@
             </div>
         {% endfor %}
     </div>
-
     <hr>
 
     <h3>Parâmetros de Cálculo</h3>
-
     <div class="row">
         {% for field in campos_parametros %}
             <div class="col-md-4 mb-3">
@@ -107,23 +98,6 @@
             </div>
         {% endfor %}
     </div>
-
-    <div class="d-flex justify-content-end mt-3">
-        <button
-            type="submit"
-            name="restaurar"
-            class="btn btn-danger m-2">
-            Restaurar
-        </button>
-
-        <button
-            type="submit"
-            name="aplicar"
-            class="btn btn-success m-2">
-            Aplicar
-        </button>
-    </div>
-
 </form>
 
 {% endblock %}

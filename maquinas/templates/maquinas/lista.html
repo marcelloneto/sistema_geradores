@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciamento de Máquinas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background: #f4f6f9; color: #212529; }
+        .erp-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e9ecef; }
+        .table thead th { background-color: #f8f9fa; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; transition: background-color 0.2s; }
+        .table tbody tr { cursor: pointer; transition: background-color 0.15s ease-in-out; }
+        .table thead th:hover { background-color: #e9ecef; }
+        .col-num { text-align: right; }
+    </style>
+</head>
+<body class="p-4">
+
+<div class="container-fluid">
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="bi bi-gear-wide-connected text-primary me-2"></i> Cadastro de Máquinas</h2>
+            <div class="text-muted small">Acesse o prontuário técnico completo dos ativos</div>
+        </div>
+        <div>
+            <!-- BOTÃO NOVA MÁQUINA -->
+            <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalNovaMaquina">
+                <i class="bi bi-plus-lg"></i> Nova Máquina
+            </button>
+            <a href="{% url 'portal:home' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Voltar ao Início</a>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="erp-card mb-4">
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label class="form-label small text-muted">Pesquisa Geral</label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="pesquisaTabela" class="form-control form-control-sm" placeholder="Nº de série, cliente...">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small text-muted">Filtrar por Cliente</label>
+                <select id="filtroCliente" class="form-select form-select-sm">
+                    <option value="">Todos os clientes</option>
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.nome }}">{{ cliente.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-sm btn-light border w-100 text-secondary" onclick="limparFiltros()">
+                    <i class="bi bi-x-circle"></i> Limpar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="erp-card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="tabelaMaquinas">
+                <thead>
+                    <tr>
+                        <th onclick="ordenarTabela(0)">Máquina / Nº Série <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th onclick="ordenarTabela(1)">Cliente Proprietário <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="col-num" onclick="ordenarTabela(2)">Potência [kVA] <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="col-num" onclick="ordenarTabela(3)">Nº Polos <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="col-num" onclick="ordenarTabela(4)">Rotação [rpm] <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for maquina in maquinas %}
+                    <tr ondblclick="window.location.href='{% url 'maquinas:home' maquina.id %}'" title="Duplo clique para abrir o prontuário">
+                        <td class="fw-bold text-primary font-monospace">{{ maquina.numero_serie }}</td>
+                        <td class="fw-semibold">{{ maquina.cliente.nome|default:"-" }}</td>
+                        <td class="col-num font-monospace">{{ maquina.potencia_kva|default:"-" }}</td>
+                        <td class="col-num font-monospace">{{ maquina.numero_polos|default:"-" }}</td>
+                        <td class="col-num font-monospace">{{ maquina.rotacao_rpm|default:"-" }}</td>
+                        <td class="text-end" onclick="event.stopPropagation()">
+                            <a href="{% url 'maquinas:home' maquina.id %}" class="btn btn-sm btn-outline-primary me-1" title="Abrir Prontuário">
+                                <i class="bi bi-clipboard2-data"></i> Prontuário
+                            </a>
+                            <!-- Botão Deletar que aciona o Modal específico da Máquina -->
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeletar{{ maquina.id }}" title="Excluir Máquina">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="modalDeletar{{ maquina.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white p-2 px-3">
+                                    <h6 class="modal-title mb-0"><i class="bi bi-exclamation-triangle me-1"></i> Confirmar Exclusão</h6>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center p-3">
+                                    <p class="mb-1">Tem certeza que deseja excluir a máquina?</p>
+                                    <span class="fw-bold font-monospace text-danger">{{ maquina.numero_serie }}</span>
+                                    <div class="text-muted mt-2" style="font-size: 0.75rem;">
+                                        Esta ação apagará todo o prontuário técnico e histórico associado a este ativo.
+                                    </div>
+                                </div>
+                                <div class="modal-footer p-2 bg-light justify-content-between">
+                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <form action="{% url 'maquinas:deletar_maquina' maquina.id %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash me-1"></i> Excluir
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">Nenhuma máquina encontrada.</td>
+                    </tr>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-3 text-muted" style="font-size: 0.8rem;">
+            <i class="bi bi-info-circle me-1"></i> Dica: Você pode dar duplo clique na linha para acessar o prontuário da máquina rapidamente.
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="modalNovaMaquina" tabindex="-1" aria-labelledby="modalNovaMaquinaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalNovaMaquinaLabel"><i class="bi bi-gear-plus me-2"></i> Cadastrar Nova Máquina</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'maquinas:nova_maquina' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Número de Série *</label>
+                            {{ form_nova_maquina.numero_serie }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Cliente Proprietário *</label>
+                            {{ form_nova_maquina.cliente }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-semibold">Potência (kVA)</label>
+                                {{ form_nova_maquina.potencia_kva }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-semibold">Polos</label>
+                                {{ form_nova_maquina.numero_polos }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-semibold">Rotação (RPM)</label>
+                                {{ form_nova_maquina.rotacao_rpm }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success"><i class="bi bi-check-lg"></i> Cadastrar e Abrir Prontuário</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+<script>
+    function aplicarFiltros() {
+        const pesquisa = document.getElementById("pesquisaTabela").value.toLowerCase();
+        const cliente = document.getElementById("filtroCliente").value.toLowerCase();
+
+        document.querySelectorAll("#tabelaMaquinas tbody tr").forEach(function(linha) {
+            if (linha.cells.length <= 1) return;
+
+            const texto = linha.innerText.toLowerCase();
+            const colCliente = linha.children[1].innerText.toLowerCase();
+
+            const okPesquisa = texto.includes(pesquisa);
+            const okCliente = !cliente || colCliente === cliente;
+
+            linha.style.display = (okPesquisa && okCliente) ? "" : "none";
+        });
+    }
+
+    function limparFiltros() {
+        document.getElementById("pesquisaTabela").value = "";
+        document.getElementById("filtroCliente").value = "";
+        aplicarFiltros();
+    }
+
+    function ordenarTabela(coluna) {
+        const tabela = document.getElementById("tabelaMaquinas");
+        const tbody = tabela.querySelector("tbody");
+        const linhas = Array.from(tbody.querySelectorAll("tr"));
+
+        if (linhas.length <= 1 && linhas[0].cells.length <= 1) return;
+
+        const ascendente = tabela.getAttribute("data-ordem") !== "asc";
+        tabela.setAttribute("data-ordem", ascendente ? "asc" : "desc");
+
+        linhas.sort(function(a, b) {
+            if (a.cells.length <= 1 || b.cells.length <= 1) return 0;
+            const textoA = a.children[coluna].innerText.trim().toLowerCase();
+            const textoB = b.children[coluna].innerText.trim().toLowerCase();
+
+            return ascendente
+                ? textoA.localeCompare(textoB, 'pt-BR', { numeric: true })
+                : textoB.localeCompare(textoA, 'pt-BR', { numeric: true });
+        });
+
+        linhas.forEach(linha => tbody.appendChild(linha));
+    }
+
+    document.getElementById("pesquisaTabela").addEventListener("keyup", aplicarFiltros);
+    document.getElementById("filtroCliente").addEventListener("change", aplicarFiltros);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+   
+</body>
+</html>

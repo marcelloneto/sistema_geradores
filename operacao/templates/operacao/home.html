@@ -4,94 +4,96 @@
 
 {% if ordem_selecionada %}
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>{{ ordem_selecionada.maquina }}</h2>
-   
-        <button type="submit" form="geometria" class="btn btn-success" name="salvar">Salvar</button>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card w-100">
+        <h2>
+            <span class="text-primary font-monospace">{{ ordem_selecionada.numero }}</span> 
+            <span class="fs-4 text-muted">| {{ ordem_selecionada.cliente.nome }}</span>
+        </h2>
+        
+        <div>
+            <!-- Botão de conexão direta com o App de Máquinas! -->
+            {% if ordem_selecionada %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    
+                    
+                    <div>
 
-                <div class="card-body">
+                        {% if ordem_selecionada.maquina %}
+                            <a href="{% url 'maquinas:home' ordem_selecionada.maquina.id %}" target="_blank" class="btn btn-outline-info me-2">
+                                <i class="bi bi-gear-wide-connected"></i> Prontuário da Máquina
+                            </a>
+                        {% endif %}
 
-                    <p>
-                        <strong>OS:</strong>
-                        {{ ordem_selecionada.numero }}
-                    </p>
-
-                    <p>
-                        <strong>Cliente:</strong>
-                        {{ ordem_selecionada.cliente }}
-                    </p>
-
-                    <p>
-                        <strong>Máquina:</strong>
-                        {{ ordem_selecionada.maquina }}
-                    </p>
-
-                    <p>
-                        <strong>Localização:</strong>
-                        {{ ordem_selecionada.localizacao }}
-                    </p>
-
-                    <p>
-                        <strong>Tipo de serviço:</strong>
-                        {{ ordem_selecionada.tipo_servico }}
-                    </p>
-
+                        <button type="button" class="btn btn-primary btn-editar">
+                            <i class="bi bi-pencil"></i> Editar OS
+                        </button>
+                    </div>
                 </div>
+            {% endif %}
 
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <!-- Resumo da Ordem de Serviço -->
+        <div class="col-md-4">
+            <div class="erp-card">
+                <h5 class="border-bottom pb-2 mb-3">Resumo da Manutenção</h5>
+
+                <p><strong>Número da OS:</strong> {{ ordem_selecionada.numero }}</p>
+                <p><strong>Cliente:</strong> {{ ordem_selecionada.cliente.nome }}</p>
+                <p>
+                    <strong>Máquina:</strong> 
+                    {% if ordem_selecionada.maquina %}
+                        <span class="badge bg-light text-dark border">{{ ordem_selecionada.maquina.numero_serie }}</span>
+                    {% else %}
+                        <span class="text-danger">Não vinculada</span>
+                    {% endif %}
+                </p>
+                <p><strong>Localização Atual:</strong> {{ ordem_selecionada.localizacao|default:"Não informada" }}</p>
+                <p><strong>Tipo de Serviço:</strong> {{ ordem_selecionada.tipo_servico|default:"Não informado" }}</p>
+
+                <div class="mt-4 pt-3 border-top">
+                    <a href="{% url 'operacao:home' %}" class="btn btn-sm btn-outline-secondary w-100">
+                        <i class="bi bi-x-circle"></i> Fechar Seleção
+                    </a>
+                </div>
             </div>
         </div>
         
+        <!-- Formulário para Ajuste/Edição Comercial -->
         <div class="col-md-8">
-            <form id="basicos" method="post">
-                {% csrf_token %}
-
-                <div class="row">
-                {% for field in form_maquina %}
+            <div class="erp-card">
+                <h5 class="border-bottom pb-2 mb-3">Dados Cadastrais da OS</h5>
+                <form method="post" class="form-editavel">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        {% for field in form %}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                    </div>
                     
-                        <div class="col-md-3 mb-3">
-
-                            <label class="form-label">
-                                {{ field.label }}
-                            </label>
-
-                            {{ field }}
-
-                        </div>
-                    
-                {% endfor %}
-                </div>
-                <div class="d-flex justify-content-end mt-3">
-                    <button
-                        type="submit"
-                        name="restaurar"
-                        class="btn btn-danger m-2">
-                        Restaurar
-                    </button>
-                    <button
-                        type="submit"
-                        name="aplicar"
-                        class="btn btn-success m-2">
-                        Aplicar
-                    </button>
-                </div>
-            </form>
+                    <div class="d-flex justify-content-end mt-4 border-top pt-3">
+                        <button type="button" class="btn btn-secondary me-2 btn-cancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-success btn-salvar">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
         </div>
-            
-        
     </div>
     
-    
 {% else %}
-
-    <h2>Nenhum projeto carregado</h2>
-
-    <p>
-        Clique em <strong>Alterar Projeto</strong> para selecionar uma Ordem de Serviço.
-    </p>
-
+    <!-- Caso não tenha nenhuma OS selecionada na URL, mostra aviso amigável -->
+    <div class="erp-card text-center py-5">
+        <i class="bi bi-folder2-open text-primary display-4 d-block mb-3"></i>
+        <h3>Nenhuma Ordem de Serviço selecionada</h3>
+        <p class="text-muted">Selecione uma OS na lista de projetos para visualizar ou editar os dados comerciais.</p>
+        <a href="{% url 'operacao:nova_os' %}" class="btn btn-primary mt-2">
+            <i class="bi bi-plus-lg"></i> Abrir Nova OS
+        </a>
+    </div>
 {% endif %}
 
 {% endblock %}

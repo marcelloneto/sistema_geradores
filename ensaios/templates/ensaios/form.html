@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f4f6f9; }
+        .erp-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+        .sub-form { display: none; background-color: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 20px;}
+    </style>
+</head>
+<body class="p-4">
+
+<div class="container max-w-4xl">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>{{ titulo }}</h2>
+        <a href="{% url 'ensaios:lista' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="erp-card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Dados Gerais -->
+            <h5 class="text-secondary mb-3">Dados Gerais</h5>
+            <div class="row g-3 mb-4">
+                {% for field in form %}
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Formulários Específicos (Escondidos por padrão) -->
+            <h5 class="text-secondary mb-3">Dados Específicos do Ensaio</h5>
+            
+            <div id="bloco_tensao" class="sub-form">
+                <h6 class="text-primary">Tensão Aplicada (Hipot)</h6>
+                <div class="row g-3">
+                    {% for field in form_tensao %}<div class="col-md-4"><label class="form-label">{{ field.label }}</label>{{ field }}</div>{% endfor %}
+                </div>
+            </div>
+
+            <div id="bloco_surge" class="sub-form">
+                <h6 class="text-primary">Surge Test</h6>
+                <div class="row g-3">
+                    {% for field in form_surge %}<div class="col-md-4"><label class="form-label">{{ field.label }}</label>{{ field }}</div>{% endfor %}
+                </div>
+            </div>
+
+            <div id="bloco_bump" class="sub-form">
+                <h6 class="text-primary">Bump Test</h6>
+                <div class="row g-3">
+                    {% for field in form_bump %}<div class="col-md-4"><label class="form-label">{{ field.label }}</label>{{ field }}</div>{% endfor %}
+                </div>
+            </div>
+            <div id="bloco_loop" class="sub-form">
+                <h6 class="text-primary mb-3"><i class="bi bi-arrow-repeat"></i> Loop Test (Ensaio de Fluxo no Núcleo)</h6>
+                
+                <!-- DADOS FIXOS DA MÁQUINA (Sempre visível agora) -->
+                <div class="p-3 mb-4 bg-white border rounded">
+                    <h6 class="text-secondary small fw-bold text-uppercase mb-3">Parâmetros Fixos da Máquina (Consulta)</h6>
+                    <div class="row g-2 text-muted">
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Diâm. Externo</label>
+                            <input type="text" id="ro_diam_ext" class="form-control form-control-sm bg-light" value="{{ object.maquina.dados_estator.diametro_externo_nucleo|default:'-' }} mm" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Diâm. Interno</label>
+                            <input type="text" id="ro_diam_int" class="form-control form-control-sm bg-light" value="{{ object.maquina.dados_estator.diametro_interno_nucleo|default:'-' }} mm" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Altura do Núcleo</label>
+                            <input type="text" id="ro_alt_nuc" class="form-control form-control-sm bg-light" value="{{ object.maquina.dados_estator.comprimento_nucleo_magnetico|default:'-' }} mm" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Canais de Ventilação</label>
+                            <input type="text" id="ro_canais" class="form-control form-control-sm bg-light" value="{{ object.maquina.dados_estator.numero_canais_ventilacao|default:'-' }}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Prof. Ranhura (a)</label>
+                            <input type="text" id="ro_ran_a" class="form-control form-control-sm bg-light" value="{{ object.maquina.dados_geometricos.ranhura_a|default:'-' }} mm" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Prof. Rabo Andorinha</label>
+                            <input type="text" id="ro_ran_d" class="form-control form-control-sm bg-light" value="{{ object.maquina.dados_geometricos.ranhura_d|default:'-' }} mm" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Frequência</label>
+                            <input type="text" id="ro_freq" class="form-control form-control-sm bg-light" value="{{ object.maquina.frequencia_hz|default:'-' }} Hz" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label" style="font-size: 0.8rem;">Fator de Potência</label>
+                            <input type="text" id="ro_fp" class="form-control form-control-sm bg-light" value="{{ object.maquina.fator_potencia|default:'-' }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMPOS EDITÁVEIS DO ENSAIO -->
+                <h6 class="text-secondary small fw-bold text-uppercase mb-3">Dados Variáveis do Ensaio</h6>
+                <div class="row g-3">
+                    {% for field in form_loop %}
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold" style="font-size: 0.85rem;">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="text-danger small">{{ field.errors }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <button type="submit" class="btn btn-success">Salvar Registro</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const selectTipo = document.getElementById("id_tipo_ensaio");
+        const blocoTensao = document.getElementById("bloco_tensao");
+        const blocoSurge = document.getElementById("bloco_surge");
+        const blocoBump = document.getElementById("bloco_bump");
+        const blocoLoop = document.getElementById("bloco_loop");
+        const selectMaquina = document.getElementById("id_maquina");
+        const selectOS = document.getElementById("id_ordem_servico");
+
+        // Evento disparado quando o usuário escolhe/muda a máquina
+        if (selectMaquina) {
+            selectMaquina.addEventListener("change", function() {
+                const maquinaId = this.value;
+                
+                // Se a máquina ficar vazia, limpamos a OS
+                if (!maquinaId) {
+                    selectOS.innerHTML = '<option value="">---------</option>';
+                    return;
+                }
+
+                // Faz a busca na API que criamos
+                fetch(`/ensaios/api/carregar-dados-maquina/?maquina_id=${maquinaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // 1. Atualizar o menu suspenso de OS
+                        selectOS.innerHTML = '<option value="">Selecione a OS...</option>';
+                        data.ordens.forEach(os => {
+                            const option = document.createElement("option");
+                            option.value = os.id;
+                            option.textContent = os.numero;
+                            selectOS.appendChild(option);
+                        });
+
+                        // 2. Preencher os campos de consulta do Loop Test
+                        document.getElementById("ro_diam_ext").value = data.dados.diam_ext !== '-' ? data.dados.diam_ext + ' mm' : '-';
+                        document.getElementById("ro_diam_int").value = data.dados.diam_int !== '-' ? data.dados.diam_int + ' mm' : '-';
+                        document.getElementById("ro_alt_nuc").value = data.dados.alt_nuc !== '-' ? data.dados.alt_nuc + ' mm' : '-';
+                        document.getElementById("ro_canais").value = data.dados.canais;
+                        document.getElementById("ro_ran_a").value = data.dados.ranhura_a !== '-' ? data.dados.ranhura_a + ' mm' : '-';
+                        document.getElementById("ro_ran_d").value = data.dados.ranhura_d !== '-' ? data.dados.ranhura_d + ' mm' : '-';
+                        document.getElementById("ro_freq").value = data.dados.frequencia !== '-' ? data.dados.frequencia + ' Hz' : '-';
+                        document.getElementById("ro_fp").value = data.dados.fator_potencia;
+                    })
+                    .catch(error => console.error('Erro ao buscar dados:', error));
+            });
+        }
+
+        // Função que mostra/esconde e habilita/desabilita os campos
+        function toggleBloco(bloco, mostrar) {
+            if (!bloco) return;
+            
+            bloco.style.display = mostrar ? "block" : "none";
+            
+            // Encontra todos os inputs dentro do bloco e liga/desliga
+            const campos = bloco.querySelectorAll('input, select, textarea');
+            campos.forEach(campo => {
+                campo.disabled = !mostrar; // Se não for para mostrar, desabilita o campo
+            });
+        }
+
+        function atualizarFormulario() {
+            // 1. Esconde e desabilita TODOS os formulários específicos primeiro
+            toggleBloco(blocoTensao, false);
+            toggleBloco(blocoSurge, false);
+            toggleBloco(blocoBump, false);
+            toggleBloco(blocoLoop, false);
+
+            // 2. Habilita e mostra apenas o que foi selecionado
+            if(selectTipo.selectedIndex > 0) {
+                const textoSelecionado = selectTipo.options[selectTipo.selectedIndex].text.toLowerCase();
+                
+                if (textoSelecionado.includes("tensão") || textoSelecionado.includes("hipot")) {
+                    toggleBloco(blocoTensao, true);
+                } else if (textoSelecionado.includes("surge")) {
+                    toggleBloco(blocoSurge, true);
+                } else if (textoSelecionado.includes("bump")) {
+                    toggleBloco(blocoBump, true);
+                } else if (textoSelecionado.includes("loop")) {
+                    toggleBloco(blocoLoop, true);
+                }
+            }
+        }
+
+        // Roda ao carregar a página e sempre que houver mudança
+        atualizarFormulario();
+        selectTipo.addEventListener("change", atualizarFormulario);
+    });
+</script>
+</body>
+</html>

@@ -3,6 +3,8 @@ from django.db.models import Model
 class SessionService:
     def __init__(self,secao):
         self.secao = secao
+        
+
     @staticmethod
     def obter_os(request):
         return request.session.get("os")
@@ -11,58 +13,10 @@ class SessionService:
     def definir_os(request, os_numero):
         request.session["os"] = os_numero
         request.session.modified = True
-
     
-    def limpar_temp_secao(self,request):
-        request.session.pop(f"{self.secao}_temp", None)
-        request.session.modified = True
-
-    
-    def limpar_temp_(self,request):
-        
-        request.session.pop(f"{self.secao}_temp", None)
-        request.session.modified = True
-
-    
-    def salvar_temp_secao(self, request, dados):
-
-        temp = {}
-
-        for campo, valor in dados.items():
-
-            if valor is None:
-                temp[campo] = None
-
-            elif isinstance(valor, Model):
-                temp[campo] = valor.pk
-
-            else:
-                temp[campo] = str(valor)
-
-        
-
-        request.session[f"{self.secao}_temp"] = temp
-        request.session.modified = True
-        
-
-    
-    def obter_temp_secao(self,request):
-        
-        return request.session.get(f"{self.secao}_temp")
-
     @staticmethod
     def atualizar_os_anterior(request):
         os_atual = request.session.get("os")
         if os_atual:
             request.session["os_anterior"] = os_atual
             request.session.modified = True
-
-    @staticmethod
-    def limpar_temp_se_trocar_os(request, os_numero,secoes):
-        os_anterior = request.session.get("os_anterior")
-            
-        if os_anterior and os_anterior != os_numero:
-            for secao in secoes:
-                print(f"limpar temp se trocar os: {secao}")
-                if f"{secao}_temp" in request.session:
-                    request.session.pop(f"{secao}_temp", None)

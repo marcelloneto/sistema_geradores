@@ -1,0 +1,103 @@
+{% extends 'operacao/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="erp-card">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                <h4 class="mb-0 text-primary">
+                    <i class="bi bi-file-earmark-plus me-2"></i> Abertura de Nova Ordem de Serviço
+                </h4>
+                <a href="{% url 'listagem:home' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+            </div>
+
+            <form action="{% url 'operacao:nova_os' %}" method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Número da OS *</label>
+                        <input type="text" name="numero" class="form-control" placeholder="Ex: OS-2026-001" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Cliente Proprietário *</label>
+                        <div class="input-group">
+                            <select name="cliente" id="selectCliente" class="form-select" required>
+                                <option value="">Select a Client...</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Máquina Atendida *</label>
+                        <select name="maquina" id="selectMaquina" class="form-select" required disabled>
+                            <option value="">Selecione primeiro o cliente...</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Tipo de Serviço *</label>
+                        <input type="text" name="tipo_servico" class="form-control" placeholder="Ex: Manutenção Corretiva" required>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Localização / Observações</label>
+                        <input type="text" name="localizacao" class="form-control" placeholder="Ex: Usina Unidade 2 - Campo">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+                    <a href="{% url 'operacao:home' %}" class="btn btn-secondary me-2">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Abrir Ordem de Serviço
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script de Seleção Dinâmica: Carrega apenas as Máquinas do Cliente Selecionado -->
+<script>
+    document.getElementById("selectCliente").addEventListener("change", function() {
+        const clienteId = this.value;
+        const selectMaquina = document.getElementById("selectMaquina");
+
+        selectMaquina.innerHTML = '<option value="">Carregando máquinas...</option>';
+        selectMaquina.disabled = true;
+
+        if (!clienteId) {
+            selectMaquina.innerHTML = '<option value="">Selecione primeiro o cliente...</option>';
+            return;
+        }
+
+        fetch(`{% url 'operacao:api_maquinas_cliente' %}?cliente_id=${clienteId}`)
+            .then(response => response.json())
+            .then(data => {
+                selectMaquina.innerHTML = '<option value="">Selecione a máquina...</option>';
+                if (data.length === 0) {
+                    selectMaquina.innerHTML = '<option value="">Nenhuma máquina encontrada para este cliente</option>';
+                } else {
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.id;
+                        option.textContent = item.numero_serie;
+                        selectMaquina.appendChild(option);
+                    });
+                    selectMaquina.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao carregar máquinas:", error);
+                selectMaquina.innerHTML = '<option value="">Erro ao carregar máquinas</option>';
+            });
+    });
+</script>
+
+{% endblock %}

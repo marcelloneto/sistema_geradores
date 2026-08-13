@@ -133,6 +133,7 @@ class FornecedorResource(resources.ModelResource):
         import_id_fields = ("nome",)
         fields = (
             "nome",
+            "identificador",
             "razao_social",
             "cnpj",
             "email",
@@ -149,6 +150,7 @@ class FornecedorAdmin(ImportExportModelAdmin):
     list_display = (
         "id",
         "nome",
+        "identificador",
         "razao_social",
         "cnpj",
         "email",
@@ -179,6 +181,7 @@ class FornecedorAdmin(ImportExportModelAdmin):
         ("Identificação", {
             "fields": (
                 "nome",
+                "identificador",
                 "razao_social",
                 "cnpj",
                 "ativo",

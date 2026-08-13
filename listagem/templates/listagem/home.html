@@ -2,196 +2,221 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Listagem de Projetos</title>
-
+    <title>Projetos / Ordens de Serviço</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        body { background: #f4f6f9; }
-
-        .erp-header {
-            background: #fff;
-            border-bottom: 1px solid #dee2e6;
-            padding: 16px 24px;
-        }
-
-        .erp-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 6px 18px rgba(0,0,0,.08);
-        }
-
-        th {
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        tbody tr {
-            cursor: pointer;
-        }
-
-        tbody tr:hover {
-            background: #eef4ff;
-        }
-
-        .small-muted {
-            font-size: .85rem;
-            color: #6c757d;
-        }
+        body { background: #f4f6f9; color: #212529; }
+        .erp-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e9ecef; }
+        .table thead th { background-color: #f8f9fa; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; transition: background-color 0.2s; }
+        .table tbody tr { cursor: pointer; transition: background-color 0.15s ease-in-out; }
+        .table thead th:hover { background-color: #e9ecef; }
+        
+        .badge-tipo { background-color: #e0f2fe; color: #0369a1; font-weight: 500; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; }
+        .col-num { text-align: right; }
     </style>
 </head>
+<body class="p-4">
 
-<body>
-
-<div class="erp-header d-flex justify-content-between align-items-center">
-    <div>
-        <h4 class="mb-0">Projetos / Ordens de Serviço</h4>
-        <div class="small-muted">Pesquise, filtre e abra projetos existentes</div>
+<div class="container-fluid">
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="bi bi-folder2-open text-primary me-2"></i> Projetos / Ordens de Serviço</h2>
+            <div class="text-muted small">Pesquise, filtre e gerencie ordens de serviço e projetos ativos</div>
+        </div>
+        <div>
+            <a href="{% url 'operacao:nova_os' %}" class="btn btn-primary me-2">
+                <i class="bi bi-plus-lg"></i> Nova OS
+            </a>
+            
+            <a href="{% url 'portal:home' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar ao Início
+            </a>
+        </div>
     </div>
 
-    <a href="{% url 'portal:home' %}" class="btn btn-outline-secondary">
-        Voltar ao início
-    </a>
-</div>
-
-<div class="container-fluid p-4">
-
+    <!-- Filtros -->
     <div class="erp-card mb-4">
         <div class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Pesquisar</label>
-                <input type="text" id="pesquisaTabela" class="form-control"
-                       placeholder="OS, cliente, máquina, localização...">
+                <label class="form-label small text-muted">Pesquisa Geral</label>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="pesquisaTabela" class="form-control form-control-sm" placeholder="OS, cliente, máquina, nº de série...">
+                </div>
             </div>
 
             <div class="col-md-3">
-                <label class="form-label">Cliente</label>
-                <select id="filtroCliente" class="form-select">
-                    <option value="">Todos</option>
-
+                <label class="form-label small text-muted">Filtrar por Cliente</label>
+                <select id="filtroCliente" class="form-select form-select-sm">
+                    <option value="">Todos os clientes</option>
                     {% for cliente in clientes %}
-                        <option value="{{ cliente }}">
-                            {{ cliente }}
-                        </option>
+                        <option value="{{ cliente }}">{{ cliente }}</option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="col-md-3">
-                <label class="form-label">Tipo de serviço</label>
-                <select id="filtroTipo" class="form-select">
-                    <option value="">Todos</option>
-
+                <label class="form-label small text-muted">Tipo de Serviço</label>
+                <select id="filtroTipo" class="form-select form-select-sm">
+                    <option value="">Todos os tipos</option>
                     {% for tipo in tipos_servico %}
-                        <option value="{{ tipo }}">
-                            {{ tipo }}
-                        </option>
+                        <option value="{{ tipo }}">{{ tipo }}</option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="col-md-2 d-flex align-items-end">
-                <button class="btn btn-outline-primary w-100" onclick="limparFiltros()">
-                    Limpar filtros
+                <button class="btn btn-sm btn-light border w-100 text-secondary" onclick="limparFiltros()">
+                    <i class="bi bi-x-circle"></i> Limpar
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- Tabela -->
     <div class="erp-card">
         <div class="table-responsive">
-            <table class="table table-hover table-bordered align-middle mb-0" id="tabelaOS">
-                <thead class="table-light">
+            <table class="table table-hover align-middle mb-0" id="tabelaOS">
+                <thead>
                     <tr>
-                        <th onclick="ordenarTabela(0)">OS</th>
-                        <th onclick="ordenarTabela(1)">Máquina</th>
-                        <th onclick="ordenarTabela(2)">Cliente</th>
-                        <th onclick="ordenarTabela(3)">Tipo de serviço</th>
-                        <th onclick="ordenarTabela(4)">Potência [kVA]</th>
-                        <th onclick="ordenarTabela(5)">Nº polos</th>
-                        <th onclick="ordenarTabela(6)">Rotação [rpm]</th>
+                        <th onclick="ordenarTabela(0)">OS <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th onclick="ordenarTabela(1)">Máquina / Nº Série <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th onclick="ordenarTabela(2)">Cliente <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th onclick="ordenarTabela(3)">Tipo de Serviço <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="col-num" onclick="ordenarTabela(4)">Potência [kVA] <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="col-num" onclick="ordenarTabela(5)">Nº Polos <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="col-num" onclick="ordenarTabela(6)">Rotação [rpm] <i class="bi bi-arrow-down-up small text-muted ms-1"></i></th>
+                        <th class="text-end">Ações</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {% for ordem in ordens %}
-                    <tr ondblclick="abrirProjeto('{{ ordem.numero }}')">
-                        <td>{{ ordem.numero }}</td>
-                        <td>{{ ordem.maquina.numero_serie }}</td>
-                        <td>{{ ordem.cliente.nome }}</td>
-                        <td>{{ ordem.tipo_servico }}</td>
-                        <td>{{ ordem.maquina.potencia_kva }}</td>
-                        <td>{{ ordem.maquina.numero_polos }}</td>
-                        <td>{{ ordem.maquina.rotacao_rpm }}</td>
+                    <tr ondblclick="abrirProjeto('{{ ordem.numero }}')" title="Duplo clique para abrir">
+                        <td class="fw-bold text-primary">{{ ordem.numero }}</td>
+                        <td><span class="font-monospace text-secondary">{{ ordem.maquina.numero_serie }}</span></td>
+                        <td class="fw-semibold">{{ ordem.cliente.nome }}</td>
+                        <td><span class="badge-tipo">{{ ordem.tipo_servico }}</span></td>
+                        <td class="col-num font-monospace">{{ ordem.maquina.potencia_kva|floatformat:"-2" }}</td>
+                        <td class="col-num font-monospace">{{ ordem.maquina.numero_polos|floatformat:"-2" }}</td>
+                        <td class="col-num font-monospace">{{ ordem.maquina.rotacao_rpm|floatformat:"-2" }}</td>
+                        <td class="text-end" onclick="event.stopPropagation()">
+                            <!-- Abrir OS -->
+                            <button class="btn btn-sm btn-outline-primary me-1" title="Abrir OS" onclick="abrirProjeto('{{ ordem.numero }}')">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                            </button>
+                            <!-- Excluir OS -->
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeletarOS{{ ordem.id }}" title="Excluir OS">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal de Confirmação de Exclusão da OS -->
+                    <div class="modal fade" id="modalDeletarOS{{ ordem.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white p-2 px-3">
+                                    <h6 class="modal-title mb-0"><i class="bi bi-exclamation-triangle me-1"></i> Confirmar Exclusão</h6>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center p-3">
+                                    <p class="mb-1">Tem certeza que deseja excluir esta OS?</p>
+                                    <span class="fw-bold font-monospace text-danger fs-5">{{ ordem.numero }}</span>
+                                    <div class="text-muted mt-2" style="font-size: 0.75rem;">
+                                        Esta ação excluirá o registro comercial da Ordem de Serviço.
+                                    </div>
+                                </div>
+                                <div class="modal-footer p-2 bg-light justify-content-between">
+                                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <form action="{% url 'operacao:deletar_os' ordem.id %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash me-1"></i> Excluir
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">Nenhuma ordem de serviço encontrada.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-                            
             </table>
         </div>
-
-        <div class="small-muted mt-3">
-            Dê duplo clique em uma linha para abrir o projeto no app Operação.
+        
+        <div class="mt-3 text-muted" style="font-size: 0.8rem;">
+            <i class="bi bi-info-circle me-1"></i> Dica: Você pode dar duplo clique na linha para acessar o projeto rapidamente.
         </div>
     </div>
-
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-function abrirProjeto(numeroOS) {
-    window.location.href = "{% url 'operacao:home' %}?os=" + encodeURIComponent(numeroOS);
-}
+    function abrirProjeto(numeroOS) {
+        window.location.href = "{% url 'operacao:home' %}?os=" + encodeURIComponent(numeroOS);
+    }
 
-function aplicarFiltros() {
-    const pesquisa = document.getElementById("pesquisaTabela").value.toLowerCase();
-    const cliente = document.getElementById("filtroCliente").value.toLowerCase();
-    const tipo = document.getElementById("filtroTipo").value.toLowerCase();
+    function aplicarFiltros() {
+        const pesquisa = document.getElementById("pesquisaTabela").value.toLowerCase();
+        const cliente = document.getElementById("filtroCliente").value.toLowerCase();
+        const tipo = document.getElementById("filtroTipo").value.toLowerCase();
 
-    document.querySelectorAll("#tabelaOS tbody tr").forEach(function(linha) {
-        const texto = linha.innerText.toLowerCase();
-        const colCliente = linha.children[1].innerText.toLowerCase();
-        const colTipo = linha.children[4].innerText.toLowerCase();
+        document.querySelectorAll("#tabelaOS tbody tr").forEach(function(linha) {
+            if (linha.cells.length <= 1) return;
 
-        const okPesquisa = texto.includes(pesquisa);
-        const okCliente = !cliente || colCliente === cliente;
-        const okTipo = !tipo || colTipo === tipo;
+            const texto = linha.innerText.toLowerCase();
+            const colCliente = linha.children[2].innerText.toLowerCase();
+            const colTipo = linha.children[3].innerText.toLowerCase();
 
-        linha.style.display = (okPesquisa && okCliente && okTipo) ? "" : "none";
-    });
-}
+            const okPesquisa = texto.includes(pesquisa);
+            const okCliente = !cliente || colCliente === cliente;
+            const okTipo = !tipo || colTipo === tipo;
 
-function limparFiltros() {
-    document.getElementById("pesquisaTabela").value = "";
-    document.getElementById("filtroCliente").value = "";
-    document.getElementById("filtroTipo").value = "";
-    aplicarFiltros();
-}
+            linha.style.display = (okPesquisa && okCliente && okTipo) ? "" : "none";
+        });
+    }
 
-function ordenarTabela(coluna) {
-    const tabela = document.getElementById("tabelaOS");
-    const tbody = tabela.querySelector("tbody");
-    const linhas = Array.from(tbody.querySelectorAll("tr"));
+    function limparFiltros() {
+        document.getElementById("pesquisaTabela").value = "";
+        document.getElementById("filtroCliente").value = "";
+        document.getElementById("filtroTipo").value = "";
+        aplicarFiltros();
+    }
 
-    const ascendente = tabela.getAttribute("data-ordem") !== "asc";
-    tabela.setAttribute("data-ordem", ascendente ? "asc" : "desc");
+    function ordenarTabela(coluna) {
+        const tabela = document.getElementById("tabelaOS");
+        const tbody = tabela.querySelector("tbody");
+        const linhas = Array.from(tbody.querySelectorAll("tr"));
 
-    linhas.sort(function(a, b) {
-        const textoA = a.children[coluna].innerText.trim().toLowerCase();
-        const textoB = b.children[coluna].innerText.trim().toLowerCase();
+        if (linhas.length <= 1 && linhas[0].cells.length <= 1) return;
 
-        return ascendente
-            ? textoA.localeCompare(textoB)
-            : textoB.localeCompare(textoA);
-    });
+        const ascendente = tabela.getAttribute("data-ordem") !== "asc";
+        tabela.setAttribute("data-ordem", ascendente ? "asc" : "desc");
 
-    linhas.forEach(linha => tbody.appendChild(linha));
-    aplicarFiltros();
-}
+        linhas.sort(function(a, b) {
+            if (a.cells.length <= 1 || b.cells.length <= 1) return 0;
+            const textoA = a.children[coluna].innerText.trim().toLowerCase();
+            const textoB = b.children[coluna].innerText.trim().toLowerCase();
 
-document.getElementById("pesquisaTabela").addEventListener("keyup", aplicarFiltros);
-document.getElementById("filtroCliente").addEventListener("change", aplicarFiltros);
-document.getElementById("filtroTipo").addEventListener("change", aplicarFiltros);
+            return ascendente
+                ? textoA.localeCompare(textoA, 'pt-BR', { numeric: true })
+                : textoB.localeCompare(textoA, 'pt-BR', { numeric: true });
+        });
+
+        linhas.forEach(linha => tbody.appendChild(linha));
+    }
+
+    // Adiciona os eventos aos campos de filtro
+    document.getElementById("pesquisaTabela").addEventListener("keyup", aplicarFiltros);
+    document.getElementById("filtroCliente").addEventListener("change", aplicarFiltros);
+    document.getElementById("filtroTipo").addEventListener("change", aplicarFiltros);
 </script>
 
 </body>

@@ -41,6 +41,12 @@ class Fornecedor(models.Model):
         blank=True
     )
 
+    identificador = models.CharField(
+        "Identificador",
+        max_length=4,
+        blank=True
+    )
+
     ativo = models.BooleanField(
         "Ativo",
         default=True
@@ -112,6 +118,7 @@ class OrdemServico(models.Model):
 
 class CategoriaMaterial(models.Model):
     nome = models.CharField(max_length=100, unique=True)
+    identificador = models.CharField(max_length=100, unique=True,blank=True, null=True)
 
     def __str__(self):
         return self.nome

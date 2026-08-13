@@ -115,9 +115,29 @@ class MaterialCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Pega a categoria selecionada (seja via GET ao trocar o select, ou inicial)
         categoria_id = self.request.GET.get('categoria')
+        
+        if not categoria_id and self.object and self.object.categoria_id:
+            categoria_id = self.object.categoria_id
+            
+        parametros_da_categoria = []
         if categoria_id:
-            context['parametros_categoria'] = CategoriaMaterialParametro.objects.filter(categoria_id=categoria_id)
+            parametros_da_categoria = CategoriaMaterialParametro.objects.filter(
+                categoria_id=categoria_id, 
+                ativo=True
+            )
+            
+        lista_parametros_render = []
+        for param in parametros_da_categoria:
+            lista_parametros_render.append({
+                'parametro': param,
+                'valor_obj': None,
+                'num_str': '',
+            })
+            
+        context['lista_parametros_render'] = lista_parametros_render
         return context
 
     def form_valid(self, form):

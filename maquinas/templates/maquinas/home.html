@@ -1,0 +1,55 @@
+{% extends 'maquinas/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Dados Gerais do Ativo</h2>
+    
+    <div>
+        <button type="button" class="btn btn-primary btn-editar">
+            <i class="bi bi-pencil"></i> Editar Dados
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card w-100 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="card-title border-bottom pb-2 mb-3">Identificação</h5>
+                <p><strong>Nº de Série:</strong> <span class="font-monospace text-primary">{{ maquina.numero_serie }}</span></p>
+                <p><strong>Cliente Atual:</strong> {{ maquina.cliente.nome|default:"Não vinculado" }}</p>
+                <p><strong>Data de Cadastro:</strong> {{ maquina.data_cadastro|date:"d/m/Y"|default:"-" }}</p>
+                
+                <div class="alert alert-light border mt-4 mb-0 text-muted small">
+                    <i class="bi bi-info-circle me-1"></i> As características construtivas preenchidas ao lado ficarão salvas no prontuário permanente desta máquina.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <form id="basicos" method="post" class="form-editavel">
+            {% csrf_token %}
+            <div class="row">
+            {% for field in form_maquina %}
+                <div class="col-md-3 mb-3">
+                    <label class="form-label fw-semibold">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            </div>
+            
+            <div class="d-flex justify-content-end mt-3 border-top pt-3">
+                <button type="button" class="btn btn-secondary m-2 btn-cancelar">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button type="submit" name="salvar" class="btn btn-success m-2 btn-salvar">
+                    <i class="bi bi-save"></i> Salvar Alterações
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

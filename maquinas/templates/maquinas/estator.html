@@ -1,0 +1,52 @@
+{% extends 'maquinas/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Dados do Estator</h2>
+    
+    <div>
+        <button type="button" class="btn btn-primary btn-editar">
+            <i class="bi bi-pencil"></i> Editar Dados
+        </button>
+        <!-- Botão de Cancelar adicionado ao topo -->
+        <button type="button" class="btn btn-secondary btn-cancelar me-2">
+            <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+        <button type="submit" form="estator" class="btn btn-success btn-salvar" name="salvar">
+            <i class="bi bi-save"></i> Salvar Alterações
+        </button>
+    </div>
+</div>
+<hr>
+
+{% if not campos_bobinado %}
+    <div class="alert alert-info">Esta máquina ainda não possui dados de estator cadastrados.</div>
+{% endif %}
+
+<form id="estator" method="post" class="form-editavel">
+    {% csrf_token %}
+
+    <h3>Bobinado</h3>
+    <div class="row">
+        {% for field in campos_bobinado %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Núcleo</h3>
+    <div class="row">
+        {% for field in campos_nucleo %}
+            <div class="col-md-4 mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+</form>
+
+{% endblock %}

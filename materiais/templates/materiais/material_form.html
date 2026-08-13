@@ -106,7 +106,7 @@
                 const formData = new FormData(form);
                 const params = new URLSearchParams(formData);
                 params.set('categoria', categoriaId);
-                window.location.href = "{% url 'material_novo' %}?" + params.toString();
+                window.location.href = "{% url 'materiais:material_novo' %}?" + params.toString();
             }
         });
     }
