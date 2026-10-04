@@ -30,9 +30,7 @@ load_dotenv(BASE_DIR / ".env")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "sistemageradores-hbv0q136.b4a.run",
-    "localhost",
-    "127.0.0.1",
+    "*",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -58,6 +56,7 @@ INSTALLED_APPS = [
     'listagem',
     'materiais',
     'maquinas',
+    'organizador',
 ]
 
 MIDDLEWARE = [
