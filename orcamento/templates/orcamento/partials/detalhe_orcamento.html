@@ -1,0 +1,229 @@
+<div class="drawer-header">
+    <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <h2>ORC-{{ orcamento.id|stringformat:"04d" }}</h2>
+            {% if orcamento.esta_vencido %}
+                <span class="badge badge-vencido">Vencido</span>
+            {% else %}
+                <span class="badge badge-ativo">{{ orcamento.get_status_display }}</span>
+            {% endif %}
+        </div>
+        <p style="color: var(--muted); font-size: 0.9rem;">
+            <strong>{{ orcamento.cliente.nome }}</strong> • Criado em {{ orcamento.data_criacao|date:"d/m/Y H:i" }}
+        </p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <a href="{% url 'orcamento:editar' orcamento.id %}" class="btn btn-primary btn-sm">Editar</a>
+        <button type="button" class="drawer-close" onclick="closeDrawer()" title="Fechar (ESC)">✕</button>
+    </div>
+</div>
+
+<!-- Abas principais do painel -->
+<div class="drawer-tabs">
+    <button type="button" class="drawer-tab active" data-tab="especificacoes" onclick="switchDrawerTab(this)">
+        Especificações Técnicas
+    </button>
+    <button type="button" class="drawer-tab" data-tab="materiais" onclick="switchDrawerTab(this)">
+        Materiais Selecionados
+    </button>
+    <button type="button" class="drawer-tab" data-tab="resultados" onclick="switchDrawerTab(this)">
+        Resultados dos Cálculos
+    </button>
+</div>
+
+<div class="drawer-body">
+    <!-- ==================== ABA 1: ESPECIFICAÇÕES TÉCNICAS ==================== -->
+    <div class="drawer-tab-panel active" id="tab-especificacoes">
+        <div class="detail-section">
+            <div class="detail-section-title">Dados Gerais</div>
+            <div class="info-grid-3">
+                <div class="info-item">
+                    <span class="info-label">Tipo de Bobina</span>
+                    <span class="info-value">{{ orcamento.get_tipo_bobina_display }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Tipo de Bobinado</span>
+                    <span class="info-value">{{ orcamento.get_tipo_bobinado_display|default:"—" }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Quantidade</span>
+                    <span class="info-value">{{ orcamento.quantidade_barras }} barras/bobinas</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Validade</span>
+                    <span class="info-value">{{ orcamento.data_validade|date:"d/m/Y" }}</span>
+                </div>
+                <div class="info-item" style="grid-column: span 2;">
+                    <span class="info-label">Observações</span>
+                    <span class="info-value">{{ orcamento.observacoes|default:"Nenhuma observação registrada." }}</span>
+                </div>
+            </div>
+        </div>
+
+        {% if roebel %}
+        <div class="detail-section">
+            <div class="detail-section-title">Barra de Fundo</div>
+            <div class="info-grid-4">
+                <div class="info-item"><span class="info-label">A (Cab. Superior)</span><span class="info-value">{{ roebel.fundo_a|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">B (Cab. Inferior)</span><span class="info-value">{{ roebel.fundo_b|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">D (Ponta Sup.)</span><span class="info-value">{{ roebel.fundo_d|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">C (Ponta Inf.)</span><span class="info-value">{{ roebel.fundo_c|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">L (Parte Reta)</span><span class="info-value">{{ roebel.fundo_l|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">Nº Condutores</span><span class="info-value">{{ roebel.fundo_num_condutores|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Nº Espiras</span><span class="info-value">{{ roebel.fundo_num_espiras|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Cond. / Espira</span><span class="info-value">{{ roebel.fundo_condutores_por_espira|default:"—" }}</span></div>
+                <div class="info-item" style="grid-column: span 4;">
+                    <span class="info-label">Condutor Selecionado</span>
+                    <span class="info-value">
+                        {% if roebel.fundo_condutor %}
+                            {% if roebel.fundo_condutor.codigo_material %}{{ roebel.fundo_condutor.codigo_material }} - {% endif %}{{ roebel.fundo_condutor }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <div class="detail-section-title">Barra de Topo</div>
+            <div class="info-grid-4">
+                <div class="info-item"><span class="info-label">A (Cab. Superior)</span><span class="info-value">{{ roebel.topo_a|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">B (Cab. Inferior)</span><span class="info-value">{{ roebel.topo_b|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">D (Ponta Sup.)</span><span class="info-value">{{ roebel.topo_d|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">C (Ponta Inf.)</span><span class="info-value">{{ roebel.topo_c|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">L (Parte Reta)</span><span class="info-value">{{ roebel.topo_l|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">Nº Condutores</span><span class="info-value">{{ roebel.topo_num_condutores|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Nº Espiras</span><span class="info-value">{{ roebel.topo_num_espiras|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Cond. / Espira</span><span class="info-value">{{ roebel.topo_condutores_por_espira|default:"—" }}</span></div>
+                <div class="info-item" style="grid-column: span 4;">
+                    <span class="info-label">Condutor Selecionado</span>
+                    <span class="info-value">
+                        {% if roebel.topo_condutor %}
+                            {% if roebel.topo_condutor.codigo_material %}{{ roebel.topo_condutor.codigo_material }} - {% endif %}{{ roebel.topo_condutor }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <div class="detail-section-title">Dados da Ranhura</div>
+            <div class="info-grid-4">
+                <div class="info-item"><span class="info-label">A (Altura total)</span><span class="info-value">{{ roebel.ranhura_a|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">B (Largura)</span><span class="info-value">{{ roebel.ranhura_b|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">C (Altura útil)</span><span class="info-value">{{ roebel.ranhura_c|default:"—" }} mm</span></div>
+                <div class="info-item"><span class="info-label">D (Altura abertura)</span><span class="info-value">{{ roebel.ranhura_d|default:"—" }} mm</span></div>
+                <div class="info-item" style="grid-column: span 4;">
+                    {% if roebel.tipo_parametro_ranhura == "folga" %}
+                        <span class="info-label">Folga na Ranhura</span>
+                        <span class="info-value">{{ roebel.folga_ranhura|default:"—" }} mm</span>
+                    {% else %}
+                        <span class="info-label">Espessura da Isolação</span>
+                        <span class="info-value">{{ roebel.espessura_isolacao|default:"—" }} mm</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ==================== ABA 2: MATERIAIS SELECIONADOS ==================== -->
+    <div class="drawer-tab-panel" id="tab-materiais">
+        {% if materiais %}
+        <div class="detail-section">
+            <div class="detail-section-title">Isolamento</div>
+            <div class="info-grid-3">
+                <div class="info-item"><span class="info-label">Isolação Panqueca</span><span class="info-value">{{ materiais.isolacao_panqueca|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Isolação Condutores</span><span class="info-value">{{ materiais.isolacao_condutores|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Isolação Principal</span><span class="info-value">{{ materiais.isolacao_principal|default:"—" }}</span></div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <div class="detail-section-title">Consolidação e Sistemas Condutivo / Semicondutivo</div>
+            <div class="info-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="info-item"><span class="info-label">Consolidação Condutores</span><span class="info-value">{{ materiais.consolidacao_condutores|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Massa de Enchimento</span><span class="info-value">{{ materiais.massa_enchimento|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Verniz Condutivo</span><span class="info-value">{{ materiais.verniz_condutivo|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Fita Condutiva</span><span class="info-value">{{ materiais.fita_condutiva|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Verniz Semicondutivo</span><span class="info-value">{{ materiais.verniz_semicondutivo|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Fita Semicondutiva</span><span class="info-value">{{ materiais.fita_semicondutiva|default:"—" }}</span></div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <div class="detail-section-title">Acabamento, Amarração e Componentes</div>
+            <div class="info-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="info-item"><span class="info-label">Fita de Sacrifício</span><span class="info-value">{{ materiais.fita_sacrificio|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Cadarço Fibra de Vidro</span><span class="info-value">{{ materiais.cadarco_fibra_vidro|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Fita de Acabamento</span><span class="info-value">{{ materiais.fita_acabamento|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Pavio Central</span><span class="info-value">{{ materiais.pavio_central|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Aros de Amarração</span><span class="info-value">{{ materiais.aros_amarracao|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Calços Radiais</span><span class="info-value">{{ materiais.calcos_radiais|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Calços Tangenciais</span><span class="info-value">{{ materiais.calcos_tangenciais|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Conexões</span><span class="info-value">{{ materiais.conexoes|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Barramentos de Ligação</span><span class="info-value">{{ materiais.barramentos_ligacao|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Cunhagem</span><span class="info-value">{{ materiais.cunhagem|default:"—" }}</span></div>
+                <div class="info-item"><span class="info-label">Sensor</span><span class="info-value">{{ materiais.sensor|default:"—" }}</span></div>
+                <div class="info-item">
+                    <span class="info-label">Parâmetros</span>
+                    <span class="info-value">Sobressalente: {{ materiais.sobressalente_bobinas }} | Coef. Seg.: {{ materiais.coeficiente_seguranca_bobinas }}</span>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div style="padding: 36px; text-align: center; background: #f8fafc; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted);">
+            Nenhum material vinculado a este orçamento.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ==================== ABA 3: RESULTADOS DOS CÁLCULOS (SUB-ABAS) ==================== -->
+    <div class="drawer-tab-panel" id="tab-resultados">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+            <button type="button" class="btn btn-primary btn-sm subtab-btn" data-subtab="res-resumo" onclick="switchResultSubtab(this)">
+                Resumo Geral e Custos
+            </button>
+            <button type="button" class="btn btn-outline btn-sm subtab-btn" data-subtab="res-fundo" onclick="switchResultSubtab(this)">
+                Cálculos — Barra de Fundo
+            </button>
+            <button type="button" class="btn btn-outline btn-sm subtab-btn" data-subtab="res-topo" onclick="switchResultSubtab(this)">
+                Cálculos — Barra de Topo
+            </button>
+            <button type="button" class="btn btn-outline btn-sm subtab-btn" data-subtab="res-materiais" onclick="switchResultSubtab(this)">
+                Lista Consolidada de Materiais
+            </button>
+        </div>
+
+        <div class="result-subpanel" id="subtab-res-resumo">
+            <div style="padding: 32px; text-align: center; background: #f8fafc; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted);">
+                <p style="font-weight: 600; color: var(--text); margin-bottom: 4px;">Resumo Geral e Custos Totais</p>
+                <p style="font-size: 0.85rem;">Área reservada para totalizadores de peso de cobre, isolação e custo total.</p>
+            </div>
+        </div>
+
+        <div class="result-subpanel" id="subtab-res-fundo" style="display: none;">
+            <div style="padding: 32px; text-align: center; background: #f8fafc; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted);">
+                <p style="font-weight: 600; color: var(--text); margin-bottom: 4px;">Resultados Geométricos e Quantitativos — Barra de Fundo</p>
+                <p style="font-size: 0.85rem;">Área reservada para perímetro desenvolvido, área de seção e consumo unitário da barra de fundo.</p>
+            </div>
+        </div>
+
+        <div class="result-subpanel" id="subtab-res-topo" style="display: none;">
+            <div style="padding: 32px; text-align: center; background: #f8fafc; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted);">
+                <p style="font-weight: 600; color: var(--text); margin-bottom: 4px;">Resultados Geométricos e Quantitativos — Barra de Topo</p>
+                <p style="font-size: 0.85rem;">Área reservada para perímetro desenvolvido, área de seção e consumo unitário da barra de topo.</p>
+            </div>
+        </div>
+
+        <div class="result-subpanel" id="subtab-res-materiais" style="display: none;">
+            <div style="padding: 32px; text-align: center; background: #f8fafc; border: 1px dashed var(--border); border-radius: 12px; color: var(--muted);">
+                <p style="font-weight: 600; color: var(--text); margin-bottom: 4px;">Lista Consolidada de Materiais (BOM)</p>
+                <p style="font-size: 0.85rem;">Área reservada para tabela de quantidade, unidade, preço unitário e subtotal por material.</p>
+            </div>
+        </div>
+    </div>
+</div>

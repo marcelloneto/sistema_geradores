@@ -1,6 +1,27 @@
 from django.shortcuts import render
-from django.db import connection
+from django.utils import timezone
+from cadastros.models import Maquina, Usinas, Material, OrdemServico
+
+try:
+    from orcamento.models import Orcamento
+except Exception:
+    Orcamento = None
+
 
 def home(request):
-    print(connection.settings_dict)
-    return render(request, "portal/home.html")
+    stats = {
+        "maquinas": Maquina.objects.count(),
+        "usinas": Usinas.objects.count(),
+        "materiais": Material.objects.filter(ativo=True).count(),
+        "ordens_servico": OrdemServico.objects.count(),
+        "orcamentos_ativos": (
+            Orcamento.objects.filter(status="ativo").count()
+            if Orcamento is not None else 0
+        ),
+    }
+
+    context = {
+        "stats": stats,
+        "hoje": timezone.localdate(),
+    }
+    return render(request, "portal/home.html", context)

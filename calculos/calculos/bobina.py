@@ -8,6 +8,7 @@ class ResultadosBobinas:
         self.iso_cond = iso_cond
         self.iso_principal = iso_principal
         self.fitas = fitas
+        self.tipo = dados['dados_estator']['tipo_bobina']
         if self.fitas != {}:
 
             self.fita_condutiva = self.fitas["fita_condutiva"]["escolhida"]
@@ -121,7 +122,7 @@ class ResultadosBobinas:
             self.area_secao_cobre = self.calcular_area_secao_cobre(self.area_espira,self.n_espiras_bobina)
             self.volume_cobre = self.calcular_volume_cobre(self.calcular_comprimento_condutor(),self.area_secao_cobre)
             self.parede_iso = self.calcular_parede_iso(self.largura_espira,self.ranhura, self.folga_ranhura)
-            self.altura_bobina = self.calcular_altura_bobina(self.n_espiras_bobina,self.altura_espira,self.iso_sel_espessura)
+            self.altura_bobina = self.calcular_altura_bobina(self.n_espiras_bobina,self.altura_espira,self.iso_sel_espessura,self.condutor)
             self.altura_bobina_iso = self.calcular_altura_bobina_iso(self.altura_bobina,self.parede_iso)
             self.largura_bobina = self.largura_espira
             self.largura_bobina_iso = self.calcular_largura_bobina_iso(self.largura_bobina,self.parede_iso)
@@ -131,7 +132,7 @@ class ResultadosBobinas:
             self.perimetro_medio = self.calcular_perimetro_medio(self.perimetro_externo,self.perimetro_interno)
 
         if self.iso_principal != {}:
-            self.voltas_isolacao = self.calcular_voltas_fita(self.calcular_comprimento(),self.sobreposicao,self.iso_principal_largura)
+            self.voltas_isolacao = self.calcular_voltas_fita(self.calcular_comprimento(),self.ponta,self.sobreposicao,self.iso_principal_largura)
             self.n_camadas_isolacao = self.calcular_camadas(self.parede_iso, self.iso_principal_espessura,self.sobreposicao)
             self.comprimento_fita_isolante_bobina = self.calcular_comprimento_fita_bobina(self.voltas_isolacao, self.perimetro_medio,self.n_camadas_isolacao)
             self.comprimento_fita_isolante_total = self.calcular_comprimento_fita_total(self.comprimento_fita_isolante_bobina,self.numero_bobinas)
@@ -155,14 +156,14 @@ class ResultadosBobinas:
                     "fita_acabamento": self.fitas['fita_acabamento']['sobreposicao'],
                 }
                 self.camadas_fitas = {
-                    "fita_condutiva": Decimal(10),
+                    "fita_condutiva": Decimal(1),
                     "fita_semicondutiva": Decimal(1),
                     "fita_acabamento": Decimal(1),
                 }
 
                 self.comprimento_aplicacao_fitas = {
                     "fita_condutiva": self.calcular_comprimento_parte_reta(),
-                    "fita_semicondutiva": Decimal(100*4),
+                    "fita_semicondutiva": Decimal(200*4),
                     "fita_acabamento": self.calcular_comprimento_area_acabamento()
                 }
 
@@ -180,7 +181,7 @@ class ResultadosBobinas:
                         self.resultados_fitas[fita]['aplicacao_fita'] = comprimento_aplicacao_fita
                         self.resultados_fitas[fita]['camadas'] = camadas_fita
                         
-                        self.resultados_fitas[fita]['n_voltas'] = math.ceil(self.calcular_voltas_fita(comprimento_aplicacao_fita,sobreposicao_fita,largura_fita))
+                        self.resultados_fitas[fita]['n_voltas'] = math.ceil(self.calcular_voltas_fita(comprimento_aplicacao_fita,0,sobreposicao_fita,largura_fita))
                         self.resultados_fitas[fita]['comprimento_fita_bobina'] = math.ceil(self.calcular_comprimento_fita_bobina(
                                                                                     self.resultados_fitas[fita]['n_voltas'],
                                                                                     self.perimetro_externo,
@@ -201,7 +202,7 @@ class ResultadosBobinas:
         
 
     def calcular_comprimento(self):
-       return (self.G*2 + self.H*2 + self.I*2 + 2*self.ponta)
+       return (self.G*2 + self.H*2 + self.I*2 ) #+ 2*self.ponta
 
     def calcular_comprimento_parte_reta(self):
         return (2*self.H)
@@ -210,7 +211,7 @@ class ResultadosBobinas:
         return 2*(self.G + self.I + self.ponta)
 
     def calcular_comprimento_condutor(self):
-        return (self.G*2 + self.H*2 + self.I*2 + 2*self.ponta/3)
+        return (self.G*2 + self.H*2 + self.I*2 ) #+ 2*self.ponta/3
 
     def calcular_medidas_espira_iso (self, condutor, n_col, n_lin):
         
@@ -234,9 +235,14 @@ class ResultadosBobinas:
     def calcular_parede_iso(self,largura_espira,largura_ranhura,folga):
         return (largura_ranhura - largura_espira - Decimal(folga))/2
 
-    def calcular_altura_bobina(self, n_esp_b, h_esp,iso_esp=0):
-        print(f"espessura isolante espiras: {n_esp_b}")
-        return n_esp_b * h_esp + (n_esp_b - 1) * iso_esp
+    def calcular_altura_bobina(self, n_esp_b, h_esp,iso_esp=0,condutor={}):
+        
+        if self.tipo == "barra_roebel":
+            h_condutor = condutor['altura isolação']['valor']
+            return n_esp_b * h_esp + (n_esp_b - 1) * iso_esp + h_condutor
+        else:
+            print(f"espessura isolante espiras: {n_esp_b}")
+            return n_esp_b * h_esp + (n_esp_b - 1) * iso_esp
 
     def calcular_altura_bobina_iso(self, h_bobina,iso):
         return 2 * iso + h_bobina
@@ -249,6 +255,7 @@ class ResultadosBobinas:
         return (altura_ranhura - 2* h_bobina)
 
     def calcular_perimetro_int(self, altura,largura):
+        
         return (altura + largura)*2
 
     def calcular_perimetro_ext(self, altura_iso,largura_iso):
@@ -257,10 +264,10 @@ class ResultadosBobinas:
     def calcular_perimetro_medio(self, perimetro_ext, perimetro_int):
         return (perimetro_ext + perimetro_int)/2
 
-    def calcular_voltas_fita (self, comprimento, sobreposicao, largura_fita):
+    def calcular_voltas_fita (self, comprimento, ponta, sobreposicao, largura_fita):
         if largura_fita !=0:
-            
-            return (comprimento / ((1-Decimal(sobreposicao))*largura_fita))
+            print (f"comprimento: {comprimento-2*ponta}")
+            return ((comprimento - 4*ponta) / ((1-Decimal(sobreposicao))*largura_fita))
         else:
             print("Largura da fita igual a zero!")
             return 0

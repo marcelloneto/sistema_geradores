@@ -1,0 +1,1058 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Orçamento | Sistema de Geradores</title>
+    <style>
+        :root {
+            --bg: #f4f6f9;
+            --card: #ffffff;
+            --primary: #1d4ed8;
+            --primary-hover: #1e40af;
+            --primary-light: #eff6ff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --accent-bg: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 28px; }
+        .container { max-width: 1080px; margin: 0 auto; }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .top-bar h1 { font-size: 1.5rem; }
+        .back-link { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+        .back-link:hover { color: var(--text); }
+
+        /* Stepper */
+        .stepper { display: flex; justify-content: space-between; margin-bottom: 28px; position: relative; }
+        .stepper::before {
+            content: ""; position: absolute; top: 17px; left: 4%; right: 4%;
+            height: 2px; background: var(--border); z-index: 0;
+        }
+        .step-indicator {
+            position: relative; z-index: 1; background: var(--bg); padding: 0 8px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .step-circle {
+            width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--border);
+            background: #fff; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; color: var(--muted); transition: all 0.2s;
+        }
+        .step-indicator.active .step-circle { border-color: var(--primary); background: var(--primary); color: #fff; }
+        .step-indicator.done .step-circle { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+        .step-label { font-size: 0.76rem; font-weight: 600; color: var(--muted); text-align: center; }
+        .step-indicator.active .step-label { color: var(--primary); }
+
+        .card { background: var(--card); padding: 30px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .step-panel { display: none; }
+        .step-panel.active { display: block; animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        .step-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 16px; }
+        h2 { font-size: 1.25rem; margin-bottom: 4px; }
+        .subtitle { color: var(--muted); font-size: 0.9rem; }
+
+        /* Layout dividido: Desenho Técnico + Campos */
+        .split-layout { display: grid; grid-template-columns: 280px 1fr; gap: 28px; align-items: start; }
+        @media (max-width: 780px) { .split-layout { grid-template-columns: 1fr; } }
+
+        .drawings-column { display: flex; flex-direction: column; gap: 14px; }
+        .drawing-box {
+            background: var(--accent-bg); border: 1px solid var(--border); border-radius: 12px;
+            padding: 16px; text-align: center;
+        }
+        .drawing-box img {
+            max-width: 100%; max-height: 340px; object-fit: contain; border-radius: 6px;
+        }
+        .drawing-caption { font-size: 0.76rem; color: var(--muted); margin-top: 8px; font-weight: 500; }
+
+        .section-block { margin-bottom: 22px; }
+        .section-title {
+            font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em;
+            color: var(--primary); font-weight: 700; margin-bottom: 12px;
+            padding-bottom: 6px; border-bottom: 1px solid var(--border);
+        }
+
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        @media (max-width: 680px) { .form-grid, .form-grid-3 { grid-template-columns: 1fr; } }
+
+        .field label { display: block; font-size: 0.83rem; font-weight: 600; margin-bottom: 5px; color: var(--text); }
+        .input-group { position: relative; display: flex; align-items: center; }
+        .input-group input { padding-right: 42px; }
+        .unit-tag {
+            position: absolute; right: 10px; font-size: 0.78rem; font-weight: 600;
+            color: var(--muted); pointer-events: none;
+        }
+
+        .field select, .field input, .field textarea {
+            width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+            border-radius: 8px; font-size: 0.9rem; background: #fff; transition: border-color 0.2s;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            outline: none; border-color: var(--primary);
+        }
+
+        /* Cards de seleção */
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+        .option-card {
+            border: 2px solid var(--border); border-radius: 10px; padding: 18px;
+            cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 4px;
+        }
+        .option-card:hover { border-color: #93c5fd; }
+        .option-card.selected { border-color: var(--primary); background: var(--primary-light); }
+        .option-card input { display: none; }
+        .option-title { font-weight: 700; font-size: 1rem; }
+        .option-desc { font-size: 0.82rem; color: var(--muted); }
+
+        #subtipo-roebel { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); }
+
+        /* Seletor Folga vs Isolação na Ranhura */
+        .toggle-pills {
+            display: inline-flex; background: var(--accent-bg); border: 1px solid var(--border);
+            border-radius: 8px; padding: 4px; gap: 4px; margin-bottom: 14px;
+        }
+        .toggle-pill {
+            padding: 7px 14px; border-radius: 6px; font-size: 0.84rem; font-weight: 600;
+            cursor: pointer; color: var(--muted); transition: all 0.2s;
+        }
+        .toggle-pill input { display: none; }
+        .toggle-pill.active { background: var(--primary); color: #fff; }
+
+        /* Cards agrupados de Materiais */
+        .mat-group-card {
+            background: var(--accent-bg); border: 1px solid var(--border);
+            border-radius: 12px; padding: 18px; margin-bottom: 16px;
+        }
+
+        /* Resumo */
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        @media (max-width: 640px) { .summary-grid { grid-template-columns: 1fr; } }
+        .summary-box { background: var(--accent-bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 0.86rem; }
+        .summary-box h4 { font-size: 0.85rem; color: var(--primary); margin-bottom: 8px; }
+        .summary-box p { margin-bottom: 4px; color: var(--text); }
+
+        .actions { display: flex; justify-content: space-between; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .btn {
+            padding: 10px 20px; border-radius: 8px; border: none;
+            font-weight: 600; font-size: 0.92rem; cursor: pointer; transition: background 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: #f8fafc; }
+        .btn-sm { padding: 7px 14px; font-size: 0.82rem; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top-bar">
+        <h1>Novo Orçamento</h1>
+        <a href="{% url 'orcamento:lista' %}" class="back-link">← Voltar para listagem</a>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+        <div class="step-indicator active" data-step="1">
+            <div class="step-circle">1</div>
+            <span class="step-label">Cliente e Bobinado</span>
+        </div>
+        <div class="step-indicator roebel-step" data-step="2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Barra de Fundo</span>
+        </div>
+        <div class="step-indicator roebel-step" data-step="3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Barra de Topo</span>
+        </div>
+        <div class="step-indicator roebel-step" data-step="4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Dados da Ranhura</span>
+        </div>
+        <div class="step-indicator roebel-step" data-step="5">
+            <div class="step-circle">5</div>
+            <span class="step-label">Materiais</span>
+        </div>
+        <div class="step-indicator" data-step="6">
+            <div class="step-circle">6</div>
+            <span class="step-label">Revisão e Registro</span>
+        </div>
+    </div>
+
+    <form method="post" id="wizardForm" class="card">
+        {% csrf_token %}
+
+        <!-- ================= ETAPA 1 ================= -->
+        <div class="step-panel active" data-step="1">
+            <div class="step-header">
+                <div>
+                    <h2>Identificação, Quantidade e Tipo de Bobinado</h2>
+                    <p class="subtitle">Informe o cliente, a quantidade de barras/bobinas e o tipo construtivo.</p>
+                </div>
+            </div>
+
+            <div class="form-grid-3" style="margin-bottom: 20px;">
+                <div class="field">
+                    <label for="cliente">Cliente *</label>
+                    <select name="cliente" id="cliente" required>
+                        <option value="">Selecione um cliente...</option>
+                        {% for c in clientes %}
+                            <option value="{{ c.id }}">{{ c.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="quantidade_barras">Quantidade de barras / bobinas *</label>
+                    <input type="number" step="1" min="1" name="quantidade_barras" id="quantidade_barras" placeholder="Ex: 72" required>
+                </div>
+                <div class="field">
+                    <label for="data_validade">Validade do orçamento</label>
+                    <input type="date" name="data_validade" id="data_validade" value="{{ validade_padrao }}">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Tipo de Bobina *</label>
+                <div class="option-grid">
+                    <label class="option-card" data-group="tipo_bobina">
+                        <input type="radio" name="tipo_bobina" value="barra_roebel" required>
+                        <span class="option-title">Barra Roebel</span>
+                        <span class="option-desc">Barras transpostas (fundo e topo) para geradores.</span>
+                    </label>
+                    <label class="option-card" data-group="tipo_bobina">
+                        <input type="radio" name="tipo_bobina" value="multiespiras" required>
+                        <span class="option-title">Bobina Multiespira</span>
+                        <span class="option-desc">Bobinas formadas por múltiplas espiras de condutor.</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="subtipo-roebel">
+                <div class="field">
+                    <label>Tipo de Bobinado (Roebel) *</label>
+                    <div class="option-grid">
+                        <label class="option-card" data-group="tipo_bobinado">
+                            <input type="radio" name="tipo_bobinado" value="imbricado">
+                            <span class="option-title">Imbricado</span>
+                            <span class="option-desc">Configuração de enrolamento imbricado.</span>
+                        </label>
+                        <label class="option-card" data-group="tipo_bobinado">
+                            <input type="radio" name="tipo_bobinado" value="ondulado">
+                            <span class="option-title">Ondulado</span>
+                            <span class="option-desc">Configuração de enrolamento ondulado.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ETAPA 2: BARRA DE FUNDO ================= -->
+        <div class="step-panel" data-step="2">
+            <div class="step-header">
+                <div>
+                    <h2>Dimensões da Barra de Fundo e Condutor</h2>
+                    <p class="subtitle">Informe as cotas externas, composição e selecione o condutor cadastrado.</p>
+                </div>
+            </div>
+
+            <div class="split-layout">
+                <div class="drawings-column">
+                    <div class="drawing-box">
+                        <img src="{% static 'orcamento/img/barra_roebel_ondulada.png' %}" alt="Cotas da Barra Roebel">
+                        <p class="drawing-caption">Cotas externas: A, B, C, D e L</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-block">
+                        <div class="section-title">Medidas Externas — Fundo (mm)</div>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="fundo_a">A — Cabeceira superior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="fundo_a" id="fundo_a" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="fundo_b">B — Cabeceira inferior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="fundo_b" id="fundo_b" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="fundo_d">D — Ponta exposta superior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="fundo_d" id="fundo_d" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="fundo_c">C — Ponta exposta inferior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="fundo_c" id="fundo_c" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field" style="grid-column: span 2;">
+                                <label for="fundo_l">L — Comprimento parte reta *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="fundo_l" id="fundo_l" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-block">
+                        <div class="section-title">Composição — Fundo</div>
+                        <div class="form-grid-3">
+                            <div class="field">
+                                <label for="fundo_num_condutores">Nº de condutores *</label>
+                                <input type="number" step="1" min="1" name="fundo_num_condutores" id="fundo_num_condutores" class="roebel-req">
+                            </div>
+                            <div class="field">
+                                <label for="fundo_num_espiras">Nº de espiras *</label>
+                                <input type="number" step="1" min="1" name="fundo_num_espiras" id="fundo_num_espiras" class="roebel-req">
+                            </div>
+                            <div class="field">
+                                <label for="fundo_condutores_por_espira">Condutores / espira *</label>
+                                <input type="number" step="1" min="1" name="fundo_condutores_por_espira" id="fundo_condutores_por_espira" class="roebel-req">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-block" style="margin-bottom: 0;">
+                        <div class="section-title">Condutor — Barra de Fundo</div>
+                        <div class="field">
+                            <label for="fundo_condutor">Selecionar Condutor *</label>
+                            <select name="fundo_condutor" id="fundo_condutor" class="roebel-req">
+                                <option value="">Selecione um condutor cadastrado...</option>
+                                {% for c in condutores %}
+                                    <option value="{{ c.id }}">
+                                        {% if c.codigo_material %}{{ c.codigo_material }} - {% endif %}{{ c.nome }} ({{ c.fornecedor.nome|default:"S/ Forn." }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ETAPA 3: BARRA DE TOPO ================= -->
+        <div class="step-panel" data-step="3">
+            <div class="step-header">
+                <div>
+                    <h2>Dimensões da Barra de Topo e Condutor</h2>
+                    <p class="subtitle">Informe as cotas externas, composição e selecione o condutor cadastrado.</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" id="btnCopiarFundo">Copiar dados da Barra de Fundo</button>
+            </div>
+
+            <div class="split-layout">
+                <div class="drawings-column">
+                    <div class="drawing-box">
+                        <img src="{% static 'orcamento/img/barra_roebel_ondulada.png' %}" alt="Cotas da Barra Roebel">
+                        <p class="drawing-caption">Cotas externas: A, B, C, D e L</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-block">
+                        <div class="section-title">Medidas Externas — Topo (mm)</div>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="topo_a">A — Cabeceira superior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="topo_a" id="topo_a" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="topo_b">B — Cabeceira inferior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="topo_b" id="topo_b" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="topo_d">D — Ponta exposta superior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="topo_d" id="topo_d" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="topo_c">C — Ponta exposta inferior *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="topo_c" id="topo_c" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field" style="grid-column: span 2;">
+                                <label for="topo_l">L — Comprimento parte reta *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="topo_l" id="topo_l" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-block">
+                        <div class="section-title">Composição — Topo</div>
+                        <div class="form-grid-3">
+                            <div class="field">
+                                <label for="topo_num_condutores">Nº de condutores *</label>
+                                <input type="number" step="1" min="1" name="topo_num_condutores" id="topo_num_condutores" class="roebel-req">
+                            </div>
+                            <div class="field">
+                                <label for="topo_num_espiras">Nº de espiras *</label>
+                                <input type="number" step="1" min="1" name="topo_num_espiras" id="topo_num_espiras" class="roebel-req">
+                            </div>
+                            <div class="field">
+                                <label for="topo_condutores_por_espira">Condutores / espira *</label>
+                                <input type="number" step="1" min="1" name="topo_condutores_por_espira" id="topo_condutores_por_espira" class="roebel-req">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-block" style="margin-bottom: 0;">
+                        <div class="section-title">Condutor — Barra de Topo</div>
+                        <div class="field">
+                            <label for="topo_condutor">Selecionar Condutor *</label>
+                            <select name="topo_condutor" id="topo_condutor" class="roebel-req">
+                                <option value="">Selecione um condutor cadastrado...</option>
+                                {% for c in condutores %}
+                                    <option value="{{ c.id }}">
+                                        {% if c.codigo_material %}{{ c.codigo_material }} - {% endif %}{{ c.nome }} ({{ c.fornecedor.nome|default:"S/ Forn." }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ETAPA 4: DADOS DA RANHURA ================= -->
+        <div class="step-panel" data-step="4">
+            <div class="step-header">
+                <div>
+                    <h2>Medidas da Ranhura e Isolação</h2>
+                    <p class="subtitle">Informe as cotas da ranhura e escolha entre informar a folga ou a espessura da isolação.</p>
+                </div>
+            </div>
+
+            <div class="split-layout">
+                <div class="drawings-column">
+                    <div class="drawing-box">
+                        <img src="{% static 'orcamento/img/ranhura_medidas.png' %}" alt="Medidas da Ranhura">
+                        <p class="drawing-caption">Cotas da ranhura: A, B, C e D</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-block">
+                        <div class="section-title">Cotas da Ranhura (mm)</div>
+                        <div class="form-grid">
+                            <div class="field">
+                                <label for="ranhura_a">A — Altura total *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="ranhura_a" id="ranhura_a" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="ranhura_b">B — Largura *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="ranhura_b" id="ranhura_b" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="ranhura_c">C — Altura útil *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="ranhura_c" id="ranhura_c" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="ranhura_d">D — Altura abertura *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="ranhura_d" id="ranhura_d" class="roebel-req" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-block">
+                        <div class="section-title">Parâmetro Adicional da Ranhura</div>
+                        <div class="toggle-pills" id="ranhura-toggle">
+                            <label class="toggle-pill active">
+                                <input type="radio" name="tipo_parametro_ranhura" value="folga" checked>
+                                Folga na ranhura
+                            </label>
+                            <label class="toggle-pill">
+                                <input type="radio" name="tipo_parametro_ranhura" value="isolacao">
+                                Espessura da isolação
+                            </label>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="field" id="wrapper_folga_ranhura">
+                                <label for="folga_ranhura">Folga na ranhura *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="folga_ranhura" id="folga_ranhura" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+
+                            <div class="field" id="wrapper_espessura_isolacao" style="display: none;">
+                                <label for="espessura_isolacao">Espessura da isolação *</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.01" name="espessura_isolacao" id="espessura_isolacao" placeholder="0.00">
+                                    <span class="unit-tag">mm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ETAPA 5: MATERIAIS DE BOBINAGEM ROEBEL ================= -->
+        <div class="step-panel" data-step="5">
+            <div class="step-header">
+                <div>
+                    <h2>Seleção de Materiais (Barra Roebel)</h2>
+                    <p class="subtitle">Escolha os materiais cadastrados para cada etapa construtiva e os parâmetros de cálculo.</p>
+                </div>
+            </div>
+
+            <!-- Isolamento -->
+            <div class="mat-group-card">
+                <div class="section-title">Isolamento</div>
+                <div class="form-grid-3">
+                    <div class="field">
+                        <label for="mat_isolacao_panqueca">Isolação panqueca</label>
+                        <select name="mat_isolacao_panqueca" id="mat_isolacao_panqueca" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_isolacao %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_isolacao_condutores">Isolação condutores</label>
+                        <select name="mat_isolacao_condutores" id="mat_isolacao_condutores" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_isolacao %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_isolacao_principal">Isolação principal</label>
+                        <select name="mat_isolacao_principal" id="mat_isolacao_principal" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_isolacao %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consolidação e Enchimento -->
+            <div class="mat-group-card">
+                <div class="section-title">Consolidação e Enchimento</div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="mat_consolidacao_condutores">Consolidação condutores</label>
+                        <select name="mat_consolidacao_condutores" id="mat_consolidacao_condutores" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_resina %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_massa_enchimento">Massa de enchimento</label>
+                        <select name="mat_massa_enchimento" id="mat_massa_enchimento" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_massa %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistema Condutivo e Semicondutivo -->
+            <div class="mat-group-card">
+                <div class="section-title">Sistemas Condutivo e Semicondutivo</div>
+                <div class="form-grid">
+                    <!-- Sistema Condutivo -->
+                    <div>
+                        <label style="display: block; font-size: 0.83rem; font-weight: 600; margin-bottom: 6px;">
+                            Sistema Condutivo — Qual será utilizado?
+                        </label>
+                        <div class="toggle-pills" data-system-toggle="condutivo">
+                            <label class="toggle-pill active">
+                                <input type="radio" name="tipo_condutivo" value="verniz" checked>
+                                Verniz
+                            </label>
+                            <label class="toggle-pill">
+                                <input type="radio" name="tipo_condutivo" value="fita">
+                                Fita
+                            </label>
+                        </div>
+
+                        <div class="field" id="wrapper_condutivo_verniz">
+                            <label for="mat_verniz_condutivo">Verniz condutivo</label>
+                            <select name="mat_verniz_condutivo" id="mat_verniz_condutivo" class="mat-select">
+                                <option value="">Selecione o verniz...</option>
+                                {% for m in mat_verniz %}
+                                    <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="field" id="wrapper_condutivo_fita" style="display: none;">
+                            <label for="mat_fita_condutiva">Fita condutiva</label>
+                            <select name="mat_fita_condutiva" id="mat_fita_condutiva" class="mat-select">
+                                <option value="">Selecione a fita...</option>
+                                {% for m in mat_fita %}
+                                    <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Sistema Semicondutivo -->
+                    <div>
+                        <label style="display: block; font-size: 0.83rem; font-weight: 600; margin-bottom: 6px;">
+                            Sistema Semicondutivo — Qual será utilizado?
+                        </label>
+                        <div class="toggle-pills" data-system-toggle="semicondutivo">
+                            <label class="toggle-pill active">
+                                <input type="radio" name="tipo_semicondutivo" value="verniz" checked>
+                                Verniz
+                            </label>
+                            <label class="toggle-pill">
+                                <input type="radio" name="tipo_semicondutivo" value="fita">
+                                Fita
+                            </label>
+                        </div>
+
+                        <div class="field" id="wrapper_semicondutivo_verniz">
+                            <label for="mat_verniz_semicondutivo">Verniz semicondutivo</label>
+                            <select name="mat_verniz_semicondutivo" id="mat_verniz_semicondutivo" class="mat-select">
+                                <option value="">Selecione o verniz...</option>
+                                {% for m in mat_verniz %}
+                                    <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="field" id="wrapper_semicondutivo_fita" style="display: none;">
+                            <label for="mat_fita_semicondutiva">Fita semicondutiva</label>
+                            <select name="mat_fita_semicondutiva" id="mat_fita_semicondutiva" class="mat-select">
+                                <option value="">Selecione a fita...</option>
+                                {% for m in mat_fita %}
+                                    <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acabamento e Amarração -->
+            <div class="mat-group-card">
+                <div class="section-title">Acabamento e Amarração</div>
+                <div class="form-grid-3">
+                    <div class="field">
+                        <label for="mat_fita_sacrificio">Fita de sacrifício</label>
+                        <select name="mat_fita_sacrificio" id="mat_fita_sacrificio" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_fita %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_cadarco_fibra_vidro">Cadarço fibra de vidro</label>
+                        <select name="mat_cadarco_fibra_vidro" id="mat_cadarco_fibra_vidro" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_cadarco %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_fita_acabamento">Fita de acabamento</label>
+                        <select name="mat_fita_acabamento" id="mat_fita_acabamento" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_fita %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_pavio_central">Pavio central</label>
+                        <select name="mat_pavio_central" id="mat_pavio_central" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_pavio %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_aros_amarracao">Aros de amarração</label>
+                        <select name="mat_aros_amarracao" id="mat_aros_amarracao" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_aro %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Componentes Mecânicos / Elétricos -->
+            <div class="mat-group-card">
+                <div class="section-title">Componentes Mecânicos e Elétricos</div>
+                <div class="form-grid-3">
+                    <div class="field">
+                        <label for="mat_calcos_radiais">Calços radiais</label>
+                        <select name="mat_calcos_radiais" id="mat_calcos_radiais" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_calco %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_calcos_tangenciais">Calços tangenciais</label>
+                        <select name="mat_calcos_tangenciais" id="mat_calcos_tangenciais" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_calco %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_conexoes">Conexões</label>
+                        <select name="mat_conexoes" id="mat_conexoes" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_conexao %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_barramentos_ligacao">Barramentos de ligação</label>
+                        <select name="mat_barramentos_ligacao" id="mat_barramentos_ligacao" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_barramento %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_cunhagem">Cunhagem</label>
+                        <select name="mat_cunhagem" id="mat_cunhagem" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_cunha %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="mat_sensor">Sensor</label>
+                        <select name="mat_sensor" id="mat_sensor" class="mat-select">
+                            <option value="">Selecione...</option>
+                            {% for m in mat_sensor %}
+                                <option value="{{ m.id }}">{% if m.codigo_material %}{{ m.codigo_material }} - {% endif %}{{ m.nome }} ({{ m.fornecedor.nome|default:"S/ Forn." }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parâmetros de Cálculo -->
+            <div class="mat-group-card" style="margin-bottom: 0;">
+                <div class="section-title">Parâmetros de Cálculo</div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="sobressalente_bobinas">Sobressalente de bobinas</label>
+                        <input type="number" step="0.01" name="sobressalente_bobinas" id="sobressalente_bobinas" value="0">
+                    </div>
+                    <div class="field">
+                        <label for="coeficiente_seguranca_bobinas">Coeficiente de segurança</label>
+                        <input type="number" step="0.01" name="coeficiente_seguranca_bobinas" id="coeficiente_seguranca_bobinas" value="1">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ETAPA 6: REVISÃO ================= -->
+        <div class="step-panel" data-step="6">
+            <div class="step-header">
+                <div>
+                    <h2>Revisão e Registro</h2>
+                    <p class="subtitle">Confira os dados preenchidos e clique em Registrar Orçamento para salvar e calcular.</p>
+                </div>
+            </div>
+
+            <div id="resumo-container" class="summary-grid"></div>
+
+            <div class="field">
+                <label for="observacoes">Observações</label>
+                <textarea name="observacoes" id="observacoes" rows="3" placeholder="Detalhes comerciais ou técnicos..."></textarea>
+            </div>
+        </div>
+
+        <!-- Botões de navegação -->
+        <div class="actions">
+            <button type="button" class="btn btn-outline" id="btnPrev" disabled>← Anterior</button>
+            <div>
+                <button type="button" class="btn btn-primary" id="btnNext">Próximo →</button>
+                <button type="submit" class="btn btn-primary" id="btnSubmit" style="display: none;">Registrar Orçamento</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    let currentStep = 1;
+    let activeSteps = [1, 2, 3, 4, 5, 6];
+
+    const panels = document.querySelectorAll(".step-panel");
+    const indicators = document.querySelectorAll(".step-indicator");
+    const btnPrev = document.getElementById("btnPrev");
+    const btnNext = document.getElementById("btnNext");
+    const btnSubmit = document.getElementById("btnSubmit");
+    const subtipoRoebel = document.getElementById("subtipo-roebel");
+
+    // 1. Alternância Folga vs Espessura da Isolação na Ranhura
+    function syncRanhuraParamRequirement() {
+        const isRoebel = document.querySelector('input[name="tipo_bobina"]:checked')?.value === "barra_roebel";
+        const tipoParam = document.querySelector('input[name="tipo_parametro_ranhura"]:checked')?.value || "folga";
+
+        const wrapFolga = document.getElementById("wrapper_folga_ranhura");
+        const wrapIso = document.getElementById("wrapper_espessura_isolacao");
+        const inputFolga = document.getElementById("folga_ranhura");
+        const inputIso = document.getElementById("espessura_isolacao");
+
+        if (tipoParam === "folga") {
+            wrapFolga.style.display = "block";
+            wrapIso.style.display = "none";
+            inputFolga.required = isRoebel;
+            inputIso.required = false;
+            inputIso.value = "";
+        } else {
+            wrapFolga.style.display = "none";
+            wrapIso.style.display = "block";
+            inputIso.required = isRoebel;
+            inputFolga.required = false;
+            inputFolga.value = "";
+        }
+    }
+
+    document.querySelectorAll('input[name="tipo_parametro_ranhura"]').forEach(radio => {
+        radio.addEventListener("change", () => {
+            document.querySelectorAll("#ranhura-toggle .toggle-pill").forEach(p => p.classList.remove("active"));
+            radio.closest(".toggle-pill").classList.add("active");
+            syncRanhuraParamRequirement();
+        });
+    });
+
+    // 2. Seleção visual dos cards (Tipo de Bobina e Bobinado)
+    document.querySelectorAll(".option-card input").forEach(input => {
+        input.addEventListener("change", () => {
+            const group = input.closest(".option-card").dataset.group;
+            document.querySelectorAll(`.option-card[data-group="${group}"]`).forEach(c => c.classList.remove("selected"));
+            input.closest(".option-card").classList.add("selected");
+
+            if (group === "tipo_bobina") {
+                const isRoebel = input.value === "barra_roebel";
+                subtipoRoebel.style.display = isRoebel ? "block" : "none";
+
+                document.querySelectorAll('input[name="tipo_bobinado"]').forEach(r => {
+                    r.required = isRoebel;
+                    if (!isRoebel) {
+                        r.checked = false;
+                        r.closest(".option-card").classList.remove("selected");
+                    }
+                });
+
+                document.querySelectorAll(".roebel-req").forEach(el => el.required = isRoebel);
+                document.querySelectorAll(".roebel-step").forEach(el => {
+                    el.style.display = isRoebel ? "flex" : "none";
+                });
+                activeSteps = isRoebel ? [1, 2, 3, 4, 5, 6] : [1, 6];
+                syncRanhuraParamRequirement();
+            }
+        });
+    });
+
+    // 3. Alternância Verniz vs Fita (Sistemas Condutivo e Semicondutivo)
+    document.querySelectorAll("[data-system-toggle] input[type='radio']").forEach(radio => {
+        radio.addEventListener("change", () => {
+            const container = radio.closest("[data-system-toggle]");
+            const sistema = container.dataset.systemToggle;
+
+            container.querySelectorAll(".toggle-pill").forEach(p => p.classList.remove("active"));
+            radio.closest(".toggle-pill").classList.add("active");
+
+            const isVerniz = radio.value === "verniz";
+            const wrapVerniz = document.getElementById(`wrapper_${sistema}_verniz`);
+            const wrapFita = document.getElementById(`wrapper_${sistema}_fita`);
+
+            wrapVerniz.style.display = isVerniz ? "block" : "none";
+            wrapFita.style.display = isVerniz ? "none" : "block";
+
+            if (isVerniz) {
+                wrapFita.querySelector("select").value = "";
+            } else {
+                wrapVerniz.querySelector("select").value = "";
+            }
+        });
+    });
+
+    // 4. Copiar dados da Barra de Fundo para Barra de Topo
+    document.getElementById("btnCopiarFundo").addEventListener("click", () => {
+        const campos = [
+            "a", "b", "c", "d", "l",
+            "num_condutores", "num_espiras", "condutores_por_espira",
+            "condutor"
+        ];
+        campos.forEach(campo => {
+            const origem = document.getElementById(`fundo_${campo}`);
+            const destino = document.getElementById(`topo_${campo}`);
+            if (origem && destino) destino.value = origem.value;
+        });
+    });
+
+    // 5. Montagem do resumo na Etapa 6
+    function buildSummary() {
+        const container = document.getElementById("resumo-container");
+        const val = id => document.getElementById(id)?.value || "—";
+        const selText = id => {
+            const el = document.getElementById(id);
+            return el && el.value ? el.options[el.selectedIndex].text : "—";
+        };
+        const clienteNome = selText("cliente");
+        const tipoBobina = document.querySelector('input[name="tipo_bobina"]:checked')?.value;
+        const tipoBobinado = document.querySelector('input[name="tipo_bobinado"]:checked')?.value || "—";
+
+        let html = `
+            <div class="summary-box" style="grid-column: span 2;">
+                <h4>Dados Gerais</h4>
+                <p><strong>Cliente:</strong> ${clienteNome} | <strong>Quantidade:</strong> ${val("quantidade_barras")} barras/bobinas | <strong>Tipo:</strong> ${tipoBobina === "barra_roebel" ? "Barra Roebel (" + tipoBobinado + ")" : "Bobina Multiespira"}</p>
+            </div>
+        `;
+
+        if (tipoBobina === "barra_roebel") {
+            const tipoParam = document.querySelector('input[name="tipo_parametro_ranhura"]:checked')?.value;
+            const paramTexto = tipoParam === "folga"
+                ? `<strong>Folga na ranhura:</strong> ${val("folga_ranhura")} mm`
+                : `<strong>Espessura da isolação:</strong> ${val("espessura_isolacao")} mm`;
+
+            const matsSelecionados = [];
+            document.querySelectorAll(".mat-select").forEach(sel => {
+                if (sel.value) {
+                    const label = sel.closest(".field").querySelector("label").textContent;
+                    const optText = sel.options[sel.selectedIndex].text;
+                    matsSelecionados.push(`<strong>${label}:</strong> ${optText}`);
+                }
+            });
+
+            html += `
+                <div class="summary-box">
+                    <h4>Barra de Fundo</h4>
+                    <p><strong>Cotas (mm):</strong> A=${val("fundo_a")} | B=${val("fundo_b")} | C=${val("fundo_c")} | D=${val("fundo_d")} | L=${val("fundo_l")}</p>
+                    <p><strong>Composição:</strong> ${val("fundo_num_condutores")} cond. | ${val("fundo_num_espiras")} esp. | ${val("fundo_condutores_por_espira")} cond./esp.</p>
+                    <p><strong>Condutor:</strong> ${selText("fundo_condutor")}</p>
+                </div>
+                <div class="summary-box">
+                    <h4>Barra de Topo</h4>
+                    <p><strong>Cotas (mm):</strong> A=${val("topo_a")} | B=${val("topo_b")} | C=${val("topo_c")} | D=${val("topo_d")} | L=${val("topo_l")}</p>
+                    <p><strong>Composição:</strong> ${val("topo_num_condutores")} cond. | ${val("topo_num_espiras")} esp. | ${val("topo_condutores_por_espira")} cond./esp.</p>
+                    <p><strong>Condutor:</strong> ${selText("topo_condutor")}</p>
+                </div>
+                <div class="summary-box" style="grid-column: span 2;">
+                    <h4>Ranhura (mm)</h4>
+                    <p><strong>Cotas:</strong> A=${val("ranhura_a")} | B=${val("ranhura_b")} | C=${val("ranhura_c")} | D=${val("ranhura_d")} | ${paramTexto}</p>
+                </div>
+                <div class="summary-box" style="grid-column: span 2;">
+                    <h4>Materiais Selecionados (${matsSelecionados.length} itens)</h4>
+                    <p>${matsSelecionados.length ? matsSelecionados.join(" • ") : "Nenhum material selecionado."}</p>
+                    <p style="margin-top: 6px;"><strong>Sobressalente:</strong> ${val("sobressalente_bobinas")} | <strong>Coef. Segurança:</strong> ${val("coeficiente_seguranca_bobinas")}</p>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // 6. Navegação do Wizard
+    function updateStepUI() {
+        const currentIndex = activeSteps.indexOf(currentStep);
+
+        panels.forEach(p => p.classList.toggle("active", Number(p.dataset.step) === currentStep));
+        indicators.forEach(ind => {
+            const stepNum = Number(ind.dataset.step);
+            const idx = activeSteps.indexOf(stepNum);
+            ind.classList.toggle("active", stepNum === currentStep);
+            ind.classList.toggle("done", idx !== -1 && idx < currentIndex);
+        });
+
+        btnPrev.disabled = currentIndex === 0;
+        const isLast = currentIndex === activeSteps.length - 1;
+        btnNext.style.display = isLast ? "none" : "inline-block";
+        btnSubmit.style.display = isLast ? "inline-block" : "none";
+
+        if (isLast) buildSummary();
+    }
+
+    function validateCurrentStep() {
+        const activePanel = document.querySelector(`.step-panel[data-step="${currentStep}"]`);
+        const requiredFields = activePanel.querySelectorAll("[required]");
+        for (const field of requiredFields) {
+            if (!field.checkValidity()) {
+                field.reportValidity();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    btnNext.addEventListener("click", () => {
+        if (!validateCurrentStep()) return;
+        const currentIndex = activeSteps.indexOf(currentStep);
+        if (currentIndex < activeSteps.length - 1) {
+            currentStep = activeSteps[currentIndex + 1];
+            updateStepUI();
+        }
+    });
+
+    btnPrev.addEventListener("click", () => {
+        const currentIndex = activeSteps.indexOf(currentStep);
+        if (currentIndex > 0) {
+            currentStep = activeSteps[currentIndex - 1];
+            updateStepUI();
+        }
+    });
+</script>
+</body>
+</html>

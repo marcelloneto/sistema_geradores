@@ -205,6 +205,94 @@ class UnidadeMedida(models.Model):
     def __str__(self):
         return self.simbolo
 
+class Usinas(models.Model):
+    class TipoUsina(models.TextChoices):
+        UHE = "UHE", "UHE - Usina Hidrelétrica"
+        PCH = "PCH", "PCH - Pequena Central Hidrelétrica"
+        CGH = "CGH", "CGH - Central Geradora Hidrelétrica"
+        UTE = "UTE", "UTE - Usina Termelétrica"
+        OUTRO = "OUTRO", "Outro"
+
+    nome = models.CharField("Nome", max_length=150, unique=True)
+    codigo_ceg = models.CharField("Código CEG (ANEEL)", max_length=30, blank=True)
+    tipo = models.CharField(
+        "Tipo de Usina",
+        max_length=10,
+        choices=TipoUsina.choices,
+        default=TipoUsina.UHE,
+        blank=True
+    )
+    localizacao = models.CharField("Localização / Município", max_length=200, blank=True)
+    estado = models.CharField("UF", max_length=2, blank=True)
+    n_maquinas = models.PositiveIntegerField("Nº de unidades geradoras", null=True, blank=True)
+    operadora = models.ForeignKey("Cliente", on_delete=models.PROTECT, null=True, blank=True)
+    potencia_total = models.DecimalField("Potência total (kVA)", max_digits=12, decimal_places=2, null=True, blank=True)
+    capacidade_ponte_rolante_t = models.DecimalField(
+        "Capacidade ponte rolante (t)",
+        max_digits=8,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+    observacoes = models.TextField("Observações", blank=True)
+    data_registro = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Usina"
+        verbose_name_plural = "Usinas"
+
+class UnidadeGeradora(models.Model):
+    class TipoTurbina(models.TextChoices):
+        FRANCIS = "francis", "Francis"
+        KAPLAN = "kaplan", "Kaplan"
+        PELTON = "pelton", "Pelton"
+        BULBO = "bulbo", "Bulbo"
+        VAPOR = "vapor", "Turbina a Vapor"
+        GAS = "gas", "Turbina a Gás"
+        OUTRO = "outro", "Outro"
+
+    class StatusOperacional(models.TextChoices):
+        OPERACAO = "operacao", "Em operação"
+        MANUTENCAO = "manutencao", "Em manutenção"
+        PARADA = "parada", "Parada"
+        DESATIVADA = "desativada", "Desativada"
+
+    usina = models.ForeignKey(
+        Usinas,
+        on_delete=models.CASCADE,
+        related_name="unidades_geradoras"
+    )
+    nome = models.CharField("Identificação (ex: UG-01)", max_length=50)
+    potencia_kva = models.DecimalField("Potência (kVA)", max_digits=12, decimal_places=2, null=True, blank=True)
+    tensao_kv = models.DecimalField("Tensão nominal (kV)", max_digits=8, decimal_places=2, null=True, blank=True)
+    fabricante = models.CharField("Fabricante do gerador", max_length=100, blank=True)
+    tipo_turbina = models.CharField(
+        "Tipo de turbina",
+        max_length=20,
+        choices=TipoTurbina.choices,
+        blank=True
+    )
+    ano_operacao = models.PositiveIntegerField("Ano de entrada em operação", null=True, blank=True)
+    status = models.CharField(
+        "Status",
+        max_length=20,
+        choices=StatusOperacional.choices,
+        default=StatusOperacional.OPERACAO
+    )
+    observacoes = models.TextField("Observações", blank=True)
+
+    class Meta:
+        verbose_name = "Unidade Geradora"
+        verbose_name_plural = "Unidades Geradoras"
+        unique_together = ("usina", "nome")
+        ordering = ("usina", "nome")
+
+    def __str__(self):
+        return self.nome
+
 class Maquina(models.Model):
     class Tipo(models.TextChoices):
         HORIZONTAL = "horizontal", "Horizontal"
@@ -229,6 +317,16 @@ class Maquina(models.Model):
         max_length=20,
         choices=Tipo.choices,
         default=Tipo.VERTICAL
+    )
+
+    usina = models.ForeignKey("Usinas", on_delete=models.PROTECT, null=True, blank=True, related_name="maquinas")
+    unidade_geradora = models.OneToOneField(
+        UnidadeGeradora,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="maquina",
+        verbose_name="Unidade Geradora"
     )
 
     potencia_kva = models.DecimalField("Potência (kVA)", max_digits=12, decimal_places=2, null=True, blank=True)

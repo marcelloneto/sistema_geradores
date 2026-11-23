@@ -4,6 +4,8 @@ from django.contrib import admin
 from .models import (
     Fornecedor,
     Cliente,
+    Usinas,
+    UnidadeGeradora,
     OrdemServico,
     CategoriaMaterial,
     Material,
@@ -19,6 +21,7 @@ from .models import (
     CategoriaMaterialParametroOpcao,
     Grandeza,
     MaterialParametroValor,
+    
 )
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources, fields
@@ -213,6 +216,77 @@ class ClienteAdmin(admin.ModelAdmin):
     list_display = ("nome", "localizacao", "contato_1", "data_registro")
     search_fields = ("nome", "localizacao")
 
+class UnidadeGeradoraInline(admin.TabularInline):
+    model = UnidadeGeradora
+    extra = 1
+    fields = (
+        "nome",
+        "potencia_kva",
+        "tensao_kv",
+        "fabricante",
+        "tipo_turbina",
+        "ano_operacao",
+        "status",
+    )
+
+
+@admin.register(Usinas)
+class UsinasAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "nome",
+        "tipo",
+        "estado",
+        "localizacao",
+        "operadora",
+        "n_maquinas",
+        "potencia_total",
+        "data_registro",
+    )
+    list_filter = ("tipo", "estado", "operadora")
+    search_fields = ("nome", "codigo_ceg", "localizacao", "estado", "operadora__nome")
+    readonly_fields = ("data_registro",)
+    inlines = [UnidadeGeradoraInline]
+
+    fieldsets = (
+        ("Identificação", {
+            "fields": (
+                ("nome", "tipo"),
+                ("codigo_ceg", "operadora"),
+                ("localizacao", "estado"),
+            )
+        }),
+        ("Dados Técnicos Gerais", {
+            "fields": (
+                ("n_maquinas",  "potencia_total"),
+                "capacidade_ponte_rolante_t",
+            )
+        }),
+        ("Observações e Controle", {
+            "fields": (
+                "observacoes",
+                "data_registro",
+            )
+        }),
+    )
+
+
+@admin.register(UnidadeGeradora)
+class UnidadeGeradoraAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "usina",
+        "nome",
+        "potencia_kva",
+        "tensao_kv",
+        "fabricante",
+        "tipo_turbina",
+        "ano_operacao",
+        "status",
+    )
+    list_filter = ("status", "tipo_turbina", "fabricante", "usina")
+    search_fields = ("nome", "usina__nome", "fabricante")
+    ordering = ("usina__nome", "nome")
 
 @admin.register(OrdemServico)
 class OrdemServicoAdmin(admin.ModelAdmin):
@@ -289,6 +363,8 @@ class MaquinaAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "numero_serie",
+        "usina",
+        "unidade_geradora",
         "cliente",
         "tipo",
         "potencia_kva",
@@ -300,6 +376,7 @@ class MaquinaAdmin(admin.ModelAdmin):
 
     list_filter = (
         "tipo",
+        "usina",
         "cliente",
         "frequencia_hz",
         "numero_polos",
@@ -307,7 +384,9 @@ class MaquinaAdmin(admin.ModelAdmin):
 
     search_fields = (
         "numero_serie",
-        "cliente",
+        "unidade_geradora__nome",
+        "usina__nome",
+        "cliente__nome",
         "excitatriz",
     )
 
@@ -315,6 +394,8 @@ class MaquinaAdmin(admin.ModelAdmin):
         ("Identificação", {
             "fields": (
                 "numero_serie",
+                "usina",
+                "unidade_geradora",
                 "cliente",
                 "tipo",
             )
