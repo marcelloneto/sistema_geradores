@@ -1,9 +1,7 @@
-# Create your models here.
 from django.db import models
-from django.core.exceptions import ValidationError
+
 
 class Fornecedor(models.Model):
-    
     nome = models.CharField("Nome", max_length=150, unique=True)
 
     razao_social = models.CharField(
@@ -69,6 +67,7 @@ class Fornecedor(models.Model):
     def __str__(self):
         return self.nome
 
+
 class Cliente(models.Model):
     nome = models.CharField(max_length=150, unique=True)
     localizacao = models.CharField(max_length=200, blank=True)
@@ -83,102 +82,11 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nome
-    
+
     class Meta:
         verbose_name = "Cliente"
         verbose_name_plural = "Clientes"
 
-class OrdemServico(models.Model):
-    numero = models.CharField(max_length=50, unique=True)
-
-    cliente = models.ForeignKey(
-        Cliente,
-        on_delete=models.PROTECT,
-        related_name="ordens_servico"
-    )
-
-    maquina = models.ForeignKey(
-        "Maquina",
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        related_name="ordens_servico"
-    )
-
-    localizacao = models.CharField(max_length=200, blank=True)
-    tipo_servico = models.CharField(max_length=100, blank=True)
-    data_registro = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.numero
-    
-    class Meta:
-        verbose_name = "Ordem de Serviço"
-        verbose_name_plural = "Ordens de Serviço"
-
-class CategoriaMaterial(models.Model):
-    nome = models.CharField(max_length=100, unique=True)
-    identificador = models.CharField(max_length=100, unique=True,blank=True, null=True)
-
-    def __str__(self):
-        return self.nome
-    class Meta:
-        verbose_name = "Categoria de Material"
-        verbose_name_plural = "Categorias de Material"
-
-class MaterialParametroValor(models.Model):
-    material = models.ForeignKey(
-        "Material",
-        on_delete=models.CASCADE,
-        related_name="parametros_tecnicos"
-    )
-
-    parametro = models.ForeignKey(
-        "CategoriaMaterialParametro",
-        on_delete=models.PROTECT,
-        related_name="valores_materiais"
-    )
-
-    valor_texto = models.CharField(
-        "Valor texto",
-        max_length=255,
-        blank=True
-    )
-
-    valor_numero = models.DecimalField(
-        "Valor numérico",
-        max_digits=20,
-        decimal_places=6,
-        null=True,
-        blank=True
-    )
-
-    valor_booleano = models.BooleanField(
-        "Valor booleano",
-        null=True,
-        blank=True
-    )
-
-    unidade = models.ForeignKey(
-        "UnidadeMedida",
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        related_name="valores_parametros"
-    )
-
-    observacoes = models.CharField(
-        "Observações",
-        blank=True
-    )
-
-    class Meta:
-        verbose_name = "Valor Técnico do Material"
-        verbose_name_plural = "Valores Técnicos dos Materiais"
-        unique_together = ("material", "parametro")
-
-    def __str__(self):
-        return f"{self.material} - {self.parametro}"
 
 class UnidadeMedida(models.Model):
     nome = models.CharField("Nome", max_length=50)
@@ -204,6 +112,7 @@ class UnidadeMedida(models.Model):
 
     def __str__(self):
         return self.simbolo
+
 
 class Usinas(models.Model):
     class TipoUsina(models.TextChoices):
@@ -243,6 +152,7 @@ class Usinas(models.Model):
     class Meta:
         verbose_name = "Usina"
         verbose_name_plural = "Usinas"
+
 
 class UnidadeGeradora(models.Model):
     class TipoTurbina(models.TextChoices):
@@ -292,6 +202,7 @@ class UnidadeGeradora(models.Model):
 
     def __str__(self):
         return self.nome
+
 
 class Maquina(models.Model):
     class Tipo(models.TextChoices):
@@ -353,46 +264,34 @@ class Maquina(models.Model):
     def __str__(self):
         return self.numero_serie
 
-class Material(models.Model):
-    codigo_material = models.CharField(max_length=150,null=True)
-    
-    nome = models.CharField(max_length=150)
 
-    categoria = models.ForeignKey(
-        CategoriaMaterial,
+class OrdemServico(models.Model):
+    numero = models.CharField(max_length=50, unique=True)
+
+    cliente = models.ForeignKey(
+        Cliente,
         on_delete=models.PROTECT,
-        related_name="materiais"
+        related_name="ordens_servico"
     )
 
-    descricao = models.CharField(max_length=150,blank=True,null=True)
-
-    fornecedor = models.ForeignKey(
-        Fornecedor,
-        on_delete=models.SET_NULL,
+    maquina = models.ForeignKey(
+        "Maquina",
+        on_delete=models.PROTECT,
         null=True,
         blank=True,
-        related_name="materiais"
+        related_name="ordens_servico"
     )
 
-    prioridade = models.PositiveIntegerField(null=True,blank=True)
-
-    preco = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
-    unidade_preco = models.ForeignKey(
-        UnidadeMedida,
-        null=True,
-        blank=True,
-        on_delete=models.PROTECT
-    )
-
-    ativo = models.BooleanField(default=True)
+    localizacao = models.CharField(max_length=200, blank=True)
+    tipo_servico = models.CharField(max_length=100, blank=True)
     data_registro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.nome} - {self.fornecedor}"
-    
+        return self.numero
+
     class Meta:
-        verbose_name = "Matéria Prima"
-        verbose_name_plural = "Matérias Primas"
+        verbose_name = "Ordem de Serviço"
+        verbose_name_plural = "Ordens de Serviço"
 
 
 class DadosEstator(models.Model):
@@ -402,10 +301,9 @@ class DadosEstator(models.Model):
     ]
 
     TIPOS_BOBINADO = [
-            ("ondulado", "Ondulado"),
-            ("imbricado", "Imbricado")
-        ]
-
+        ("ondulado", "Ondulado"),
+        ("imbricado", "Imbricado")
+    ]
 
     maquina = models.OneToOneField(
         Maquina,
@@ -454,6 +352,7 @@ class DadosEstator(models.Model):
         verbose_name = "Dados do Estator"
         verbose_name_plural = "Dados do Estator"
 
+
 class DadosPerifericos(models.Model):
     maquina = models.OneToOneField(
         Maquina,
@@ -498,9 +397,9 @@ class DadosPerifericos(models.Model):
 
     def __str__(self):
         return f"Periféricos - {self.maquina}"
-    
-class DadosGeometricosMaquina(models.Model):
 
+
+class DadosGeometricosMaquina(models.Model):
     tipo_ranhura = [
         ("ranhura1", "Tipo 1"),
         ("ranhura2", "Tipo 2"),
@@ -508,11 +407,11 @@ class DadosGeometricosMaquina(models.Model):
     ]
 
     tipo_calco = [
-            ("calco1", "Tipo 1"),
-            ("calco2", "Tipo 2"),
-            ("calco3", "Tipo 3"),
-            ("calco4", "Tipo 4")
-        ]
+        ("calco1", "Tipo 1"),
+        ("calco2", "Tipo 2"),
+        ("calco3", "Tipo 3"),
+        ("calco4", "Tipo 4")
+    ]
 
     maquina = models.OneToOneField(
         Maquina,
@@ -523,37 +422,38 @@ class DadosGeometricosMaquina(models.Model):
     # Ranhura
     tipo_ranhura = models.CharField(max_length=50, blank=True, choices=tipo_ranhura)
 
-    ranhura_a = models.DecimalField('a',max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_b = models.DecimalField('b',max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_c = models.DecimalField('c',max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_d = models.DecimalField('d',max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
-    ranhura_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
-    folga_ranhura = models.DecimalField('Folga na ranhura',max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_a = models.DecimalField('a', max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_b = models.DecimalField('b', max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_c = models.DecimalField('c', max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_d = models.DecimalField('d', max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_e = models.DecimalField('e', max_digits=10, decimal_places=2, null=True, blank=True)
+    ranhura_f = models.DecimalField('f', max_digits=10, decimal_places=2, null=True, blank=True)
+    folga_ranhura = models.DecimalField('Folga na ranhura', max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Seção da Bobina
-    bobina_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
-    bobina_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
-    bobina_g = models.DecimalField('g',max_digits=10, decimal_places=2, null=True, blank=True)
-    bobina_h = models.DecimalField('h',max_digits=10, decimal_places=2, null=True, blank=True)
-    sobreposicao_isolante = models.DecimalField('Sobreposição da fita Isolante',max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_e = models.DecimalField('e', max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_f = models.DecimalField('f', max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_g = models.DecimalField('g', max_digits=10, decimal_places=2, null=True, blank=True)
+    bobina_h = models.DecimalField('h', max_digits=10, decimal_places=2, null=True, blank=True)
+    sobreposicao_isolante = models.DecimalField('Sobreposição da fita Isolante', max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Seção do Condutor
-    condutor_e = models.DecimalField('e',max_digits=10, decimal_places=2, null=True, blank=True)
-    condutor_f = models.DecimalField('f',max_digits=10, decimal_places=2, null=True, blank=True)
-    condutor_E_iso = models.DecimalField('E',max_digits=10, decimal_places=2, null=True, blank=True)
-    condutor_F_iso = models.DecimalField('F',max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_e = models.DecimalField('e', max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_f = models.DecimalField('f', max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_E_iso = models.DecimalField('E', max_digits=10, decimal_places=2, null=True, blank=True)
+    condutor_F_iso = models.DecimalField('F', max_digits=10, decimal_places=2, null=True, blank=True)
 
     # Calço
     tipo_calco = models.CharField(max_length=50, blank=True, choices=tipo_calco)
 
-    calco_a = models.DecimalField('a',max_digits=10, decimal_places=2, null=True, blank=True)
-    calco_b = models.DecimalField('b',max_digits=10, decimal_places=2, null=True, blank=True)
-    calco_c = models.DecimalField('c',max_digits=10, decimal_places=2, null=True, blank=True)
-    calco_d = models.DecimalField('d',max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_a = models.DecimalField('a', max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_b = models.DecimalField('b', max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_c = models.DecimalField('c', max_digits=10, decimal_places=2, null=True, blank=True)
+    calco_d = models.DecimalField('d', max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return f"Dados do Geometricos da máquina {self.maquina}"
+
 
 class DadosConstrutivosBobina(models.Model):
     maquina = models.OneToOneField(
@@ -609,6 +509,7 @@ class DadosConstrutivosBobina(models.Model):
     montada_f = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     montada_f_sem_isolacao = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
+
 class MateriaisBobinagemRoebel(models.Model):
     maquina = models.OneToOneField(
         Maquina,
@@ -616,27 +517,69 @@ class MateriaisBobinagemRoebel(models.Model):
         related_name="dados_bobinagem_roebel"
     )
 
-    condutor = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    isolacao_panqueca = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    consolidacao_condutores = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    massa_enchimento = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    isolacao_condutores = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    isolacao_principal = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_sacrificio = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    verniz_condutivo = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_condutiva = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    verniz_semicondutivo = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_semicondutiva = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    cadarco_fibra_vidro = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_acabamento = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    calcos_radiais = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    calcos_tangenciais = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    conexoes = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    barramentos_ligacao = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    pavio_central = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    cunhagem = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    sensor = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    aros_amarracao = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    condutor = models.ForeignKey(
+        "materiais.Condutor", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    isolacao_panqueca = models.ForeignKey(
+        "materiais.Isolacao", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    consolidacao_condutores = models.ForeignKey(
+        "materiais.ResinaVerniz", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    massa_enchimento = models.ForeignKey(
+        "materiais.ResinaVerniz", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    isolacao_condutores = models.ForeignKey(
+        "materiais.Isolacao", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    isolacao_principal = models.ForeignKey(
+        "materiais.Isolacao", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    fita_sacrificio = models.ForeignKey(
+        "materiais.Fita", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    verniz_condutivo = models.ForeignKey(
+        "materiais.ResinaVerniz", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    fita_condutiva = models.ForeignKey(
+        "materiais.Fita", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    verniz_semicondutivo = models.ForeignKey(
+        "materiais.ResinaVerniz", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    fita_semicondutiva = models.ForeignKey(
+        "materiais.Fita", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    cadarco_fibra_vidro = models.ForeignKey(
+        "materiais.Fita", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    fita_acabamento = models.ForeignKey(
+        "materiais.Fita", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    calcos_radiais = models.ForeignKey(
+        "materiais.Material", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    calcos_tangenciais = models.ForeignKey(
+        "materiais.Material", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    conexoes = models.ForeignKey(
+        "materiais.Material", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    barramentos_ligacao = models.ForeignKey(
+        "materiais.Material", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    pavio_central = models.ForeignKey(
+        "materiais.Material", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    cunhagem = models.ForeignKey(
+        "materiais.Material", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    sensor = models.ForeignKey(
+        "materiais.SensorTemperatura", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    aros_amarracao = models.ForeignKey(
+        "materiais.Material", on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
 
     sobressalente_bobinas = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     coeficiente_seguranca_bobinas = models.DecimalField(max_digits=6, decimal_places=2, default=1)
@@ -647,14 +590,14 @@ class MateriaisBobinagemRoebel(models.Model):
 
     def __str__(self):
         return f"Materiais Roebel - {self.maquina}"
-    
-class ResIsolamento(models.Model):
 
+
+class ResIsolamento(models.Model):
     maquina = models.OneToOneField(
-            Maquina,
-            on_delete=models.CASCADE,
-            related_name="dados_ensaios"
-        )
+        Maquina,
+        on_delete=models.CASCADE,
+        related_name="dados_ensaios"
+    )
 
     tensao = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     temperatura = models.DecimalField(max_digits=6, decimal_places=2, default=0)
@@ -670,152 +613,8 @@ class ResIsolamento(models.Model):
     Ø03 = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
     class Meta:
-            verbose_name = "Resistência de isolamento"
-            verbose_name_plural = "Resistências de isolamento"
-    
+        verbose_name = "Resistência de isolamento"
+        verbose_name_plural = "Resistências de isolamento"
+
     def __str__(self):
         return f"Resistência de Isolamento - {self.maquina}"
-
-class CategoriaMaterialParametro(models.Model):
-    class TipoParametro(models.TextChoices):
-        TEXTO = "texto", "Texto"
-        NUMERO = "numero", "Número"
-        LISTA = "lista", "Lista"
-        CHECKBOX = "checkbox", "Checkbox"
-
-    categoria = models.ForeignKey(
-        CategoriaMaterial,
-        on_delete=models.CASCADE,
-        related_name="parametros"
-    )
-
-    nome = models.CharField("Descrição / Nome", max_length=100)
-    tipo = models.CharField(
-        "Tipo",
-        max_length=20,
-        choices=TipoParametro.choices
-    )
-
-    grandeza = models.ForeignKey(
-        "Grandeza",
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        related_name="parametros_material"
-    )
-
-    unidade = models.ForeignKey(
-        UnidadeMedida,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
-    )
-
-    inteiro = models.BooleanField("Valor inteiro", default=False)
-
-    usar_limites = models.BooleanField("Usar valor mín. e máx.", default=False)
-    valor_minimo = models.DecimalField(
-        "Valor mínimo",
-        max_digits=12,
-        decimal_places=4,
-        null=True,
-        blank=True
-    )
-    valor_maximo = models.DecimalField(
-        "Valor máximo",
-        max_digits=12,
-        decimal_places=4,
-        null=True,
-        blank=True
-    )
-
-    obrigatorio = models.BooleanField("Obrigatório", default=False)
-    ordem = models.PositiveIntegerField("Ordem", default=0)
-    ativo = models.BooleanField("Ativo", default=True)
-
-    class Meta:
-        verbose_name = "Parâmetro da Categoria"
-        verbose_name_plural = "Parâmetros das Categorias"
-        ordering = ("categoria", "ordem", "nome")
-
-    def __str__(self):
-        return f"{self.categoria} - {self.nome}"
-
-    def clean(self):
-        if self.tipo != self.TipoParametro.NUMERO:
-            if self.grandeza:
-                raise ValidationError({
-                    "grandeza": "Grandeza só deve ser preenchida para parâmetros numéricos."
-                })
-
-            if self.unidade:
-                raise ValidationError({
-                    "unidade": "Unidade só deve ser preenchida para parâmetros numéricos."
-                })
-
-            if self.inteiro:
-                raise ValidationError({
-                    "inteiro": "A opção inteiro só se aplica a parâmetros numéricos."
-                })
-
-            if self.usar_limites:
-                raise ValidationError({
-                    "usar_limites": "Valor mínimo e máximo só se aplicam a parâmetros numéricos."
-                })
-
-        if self.tipo == self.TipoParametro.NUMERO:
-            if self.usar_limites:
-                if self.valor_minimo is None or self.valor_maximo is None:
-                    raise ValidationError(
-                        "Informe valor mínimo e máximo."
-                    )
-
-                if self.valor_minimo > self.valor_maximo:
-                    raise ValidationError({
-                        "valor_minimo": "O valor mínimo não pode ser maior que o valor máximo."
-                    })
-
-
-class CategoriaMaterialParametroOpcao(models.Model):
-    parametro = models.ForeignKey(
-        CategoriaMaterialParametro,
-        on_delete=models.CASCADE,
-        related_name="opcoes"
-    )
-
-    nome = models.CharField("Opção", max_length=100)
-    ordem = models.PositiveIntegerField("Ordem", default=0)
-    ativo = models.BooleanField("Ativo", default=True)
-
-    class Meta:
-        verbose_name = "Opção do Parâmetro"
-        verbose_name_plural = "Opções dos Parâmetros"
-        ordering = ("parametro", "ordem", "nome")
-
-    def __str__(self):
-        return self.nome
-
-class Grandeza(models.Model):
-    nome = models.CharField(
-        "Nome",
-        max_length=100,
-        unique=True
-    )
-
-    unidade_padrao = models.ForeignKey(
-        "UnidadeMedida",
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        related_name="+"
-    )
-
-    class Meta:
-        verbose_name = "Grandeza"
-        verbose_name_plural = "Grandezas"
-        ordering = ("nome",)
-
-    def __str__(self):
-        return self.nome
-
-    

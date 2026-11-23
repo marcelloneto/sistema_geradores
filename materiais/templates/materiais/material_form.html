@@ -2,117 +2,164 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if object %}Editar{% else %}Novo{% endif %} Material</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f3f5f8; }
+        .card-clean { border: 1px solid #e2e8f0; border-radius: 0.85rem; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04); }
+        .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; font-weight: 700; }
+    </style>
 </head>
-<body class="bg-light p-4">
+<body class="py-4">
 
-<div class="container">
-    <div class="card shadow-sm p-4 rounded-4">
-        <h2>{% if object %}Editar Material: {{ object.nome }}{% else %}Cadastrar Novo Material{% endif %}</h2>
-        <hr>
+<div class="container" style="max-width: 1020px;">
 
-        <form method="post" id="material-form">
-            {% csrf_token %}
-            
-            <!-- Campos básicos do formulário do Django -->
-            <div class="row">
-                {% for field in form %}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">{{ field.label }}</label>
+    {% if messages %}
+        <div class="mb-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Cabeçalho -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h3 class="mb-0 fw-bold">
+                {% if object %}Editar Material{% else %}Cadastrar Novo Material{% endif %}
+            </h3>
+            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle mt-1">
+                Família: {{ tipo_label }}
+            </span>
+        </div>
+        <a href="{% url 'materiais:lista_materiais' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Voltar para Lista
+        </a>
+    </div>
+
+    <!-- Seletor de Família (apenas na criação de novo material) -->
+    {% if not object and tipos_disponiveis %}
+    <div class="card card-clean bg-white p-3 mb-4">
+        <label for="select-tipo-material-page" class="section-title mb-2">1. Selecione a família do material</label>
+        <select id="select-tipo-material-page"
+                class="form-select"
+                onchange="window.location.href='{% url 'materiais:material_novo' %}?tipo=' + encodeURIComponent(this.value)">
+            {% for t in tipos_disponiveis %}
+                <option value="{{ t.codigo }}" {% if tipo_selecionado == t.codigo %}selected{% endif %}>
+                    {{ t.label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="tipo_material_escolhido" value="{{ tipo_selecionado }}">
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <!-- Bloco 1: Identificação -->
+        <div class="card card-clean bg-white p-4 mb-4">
+            <div class="section-title mb-3">Identificação do Material</div>
+            <div class="row g-3">
+                {% for field in form.campos_identificacao %}
+                    <div class="{% if field.name == 'descricao' %}col-12{% elif field.name == 'codigo_material' %}col-md-4{% else %}col-md-8{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="form-label fw-medium">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                        </label>
                         {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
+        </div>
 
-            <!-- Parâmetros Técnicos Dinâmicos -->
-            <div id="container-parametros">
-                {% if lista_parametros_render %}
-                    <h4 class="mt-4 mb-3">Parâmetros Técnicos</h4>
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Parâmetro</th>
-                                <th>Valor</th>
-                                <th style="width: 100px;">Unidade</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in lista_parametros_render %}
-                                <tr>
-                                    
-                                    <td class="fw-bold">{{ item.parametro.nome }}</td>
-                                    <td>
-                                        
-                                        {% if item.parametro.tipo == 'numero' %}
-                                            <input type="number" step="any" name="param_dinamico_{{ item.parametro.id }}" 
-                                                value="{{ item.num_str }}" 
-                                                class="form-control">
+        <!-- Bloco 2: Especificações Técnicas da Família -->
+        <div class="card card-clean bg-white p-4 mb-4">
+            <div class="section-title mb-3">Especificações Técnicas — {{ tipo_label }}</div>
+            <div class="row g-3">
+                {% for field in form.campos_tecnicos %}
+                    <div class="col-md-4">
+                        <label for="{{ field.id_for_label }}" class="form-label fw-medium">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                        </label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
 
-                                        {% elif item.parametro.tipo == 'checkbox' %}
-                                            <div class="form-check form-switch">
-                                                <!-- O 'checked' deve ser verificado diretamente no booleano -->
-                                                <input class="form-check-input" type="checkbox" name="param_dinamico_{{ item.parametro.id }}" 
-                                                    {% if item.valor_obj.valor_booleano == True %}checked{% endif %}>
-                                            </div>
+        <!-- Bloco 3: Dados Comerciais e Fornecedor -->
+        <div class="card card-clean bg-white p-4 mb-4">
+            <div class="section-title mb-3">Dados Comerciais e Controle</div>
+            <div class="row g-3 align-items-center">
+                {% for field in form.campos_comerciais %}
+                    {% if field.name == 'ativo' %}
+                        <div class="col-md-4 pt-3">
+                            <div class="form-check form-switch">
+                                {{ field }}
+                                <label class="form-check-label fw-medium" for="{{ field.id_for_label }}">
+                                    Material ativo no catálogo
+                                </label>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-md-4">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-medium">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
-                                        {% else %}
-                                            <!-- Caso seja texto -->
-                                            <input type="text" name="param_dinamico_{{ item.parametro.id }}" 
-                                                value="{{ item.valor_obj.valor_texto|default:'' }}" 
-                                                class="form-control">
-                                        {% endif %}
-                                    </td>
-                                    
-                                    <td>
-                                        {% if item.valor_obj and item.valor_obj.unidade %}
-                                            {{ item.valor_obj.unidade.simbolo|default:"" }}
-                                        {% else %}
-                                            {{ item.parametro.unidade.simbolo|default:"" }}
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endif %}
+        <!-- Ações -->
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-check-lg me-1"></i>
+                    {% if object %}Salvar Alterações{% else %}Cadastrar Material{% endif %}
+                </button>
+                <a href="{% url 'materiais:lista_materiais' %}" class="btn btn-outline-secondary px-4">
+                    Cancelar
+                </a>
             </div>
 
-            <!-- Botões de Ação -->
-            <div class="mt-4 d-flex justify-content-between">
-                <div>
-                    <button type="submit" class="btn btn-primary px-4">Salvar Alterações</button>
-                    <a href="{% url 'materiais:lista_materiais' %}" class="btn btn-secondary px-4">Voltar</a>
-                </div>
-                {% if object %}
-                    <a href="{% url 'materiais:material_remover' object.pk %}" class="btn btn-danger px-4">Excluir Material</a>
-                {% endif %}
-            </div>
-        </form>
-    </div>
+            {% if object %}
+                <a href="{% url 'materiais:material_remover' object.pk %}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash me-1"></i> Excluir Material
+                </a>
+            {% endif %}
+        </div>
+    </form>
 </div>
 
-<!-- Script para manter dados ao trocar categoria -->
-<script>
-    const selectCategoria = document.getElementById('id_categoria');
-    
-    // Só ativa o script se for uma criação de novo material (não na edição)
-    {% if not object %}
-    if (selectCategoria) {
-        selectCategoria.addEventListener('change', function() {
-            const categoriaId = this.value;
-            if (categoriaId) {
-                const form = document.querySelector('form');
-                const formData = new FormData(form);
-                const params = new URLSearchParams(formData);
-                params.set('categoria', categoriaId);
-                window.location.href = "{% url 'materiais:material_novo' %}?" + params.toString();
-            }
-        });
-    }
-    {% endif %}
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

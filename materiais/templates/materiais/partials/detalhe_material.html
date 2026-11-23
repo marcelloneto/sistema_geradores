@@ -1,0 +1,271 @@
+<!-- Cabeçalho da Aba Lateral -->
+<div class="offcanvas-header border-bottom bg-light py-3 px-4">
+    <div class="pe-3">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+            {% if material and material.codigo_material %}
+                <span class="badge bg-dark code-pill">{{ material.codigo_material }}</span>
+            {% endif %}
+            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle">
+                {{ tipo_label }}
+            </span>
+            {% if material %}
+                {% if material.ativo %}
+                    <span class="badge bg-success-subtle text-success-emphasis">Ativo</span>
+                {% else %}
+                    <span class="badge bg-secondary-subtle text-secondary-emphasis">Inativo</span>
+                {% endif %}
+            {% endif %}
+        </div>
+        <h5 class="offcanvas-title fw-bold text-dark mb-0" id="offcanvasMaterialLabel">
+            {% if modo == "criar" %}
+                Novo Material
+            {% else %}
+                {{ material.nome }}
+            {% endif %}
+        </h5>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+</div>
+
+<!-- Corpo da Aba Lateral -->
+<div class="offcanvas-body p-4">
+
+    {% if salvo_sucesso %}
+        <div class="alert alert-success alert-dismissible fade show py-2 px-3 small" role="alert">
+            <i class="bi bi-check-circle-fill me-1"></i> {{ salvo_sucesso }}
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+
+    {% if modo == "visualizar" %}
+        <!-- Barra de Ações Rápidas -->
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-4 pb-3 border-bottom">
+            <button type="button"
+                    class="btn btn-primary btn-sm px-3"
+                    data-painel-url="{% url 'materiais:material_painel' material.pk %}?modo=editar">
+                <i class="bi bi-pencil-square me-1"></i> Editar Material
+            </button>
+
+            <a href="{% url 'materiais:material_remover' material.pk %}"
+               class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash me-1"></i> Excluir
+            </a>
+        </div>
+
+        <!-- Descrição -->
+        {% if material.descricao %}
+            <div class="mb-4">
+                <div class="text-uppercase text-muted fw-bold small mb-1" style="letter-spacing: 0.04em;">
+                    Descrição Técnica
+                </div>
+                <p class="text-secondary bg-light border rounded-3 p-3 mb-0 small">
+                    {{ material.descricao }}
+                </p>
+            </div>
+        {% endif %}
+
+        <!-- Bloco Técnico da Família -->
+        <div class="mb-4">
+            <div class="text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                Especificações Técnicas ({{ tipo_label }})
+            </div>
+            <div class="row g-2">
+                {% for item in especificacoes %}
+                    <div class="col-6">
+                        <div class="border rounded-3 p-2 bg-white h-100">
+                            <small class="text-muted d-block" style="font-size: 0.78rem;">
+                                {{ item.label }}
+                            </small>
+                            <strong class="text-dark small">{{ item.valor }}</strong>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <div class="text-muted small">Sem parâmetros específicos cadastrados.</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Bloco Comercial -->
+        <div class="mb-3">
+            <div class="text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                Dados Comerciais e Controle
+            </div>
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Fornecedor</small>
+                        <strong class="text-dark small">{{ material.fornecedor.nome|default:"—" }}</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Ref. Fornecedor</small>
+                        <strong class="text-dark small">{{ material.codigo_fornecedor|default:"—" }}</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Preço Unitário</small>
+                        <strong class="text-dark small">
+                            {% if material.preco %}
+                                R$ {{ material.preco|floatformat:2 }}
+                                {% if material.unidade_preco %}/ {{ material.unidade_preco.simbolo }}{% endif %}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Data da Cotação</small>
+                        <strong class="text-dark small">
+                            {{ material.data_atualizacao_preco|date:"d/m/Y"|default:"—" }}
+                        </strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Prioridade</small>
+                        <strong class="text-dark small">{{ material.prioridade }}</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Última Atualização</small>
+                        <strong class="text-dark small">{{ material.data_atualizacao|date:"d/m/Y H:i" }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <!-- MODO EDIÇÃO OU CRIAÇÃO -->
+
+        {% if modo == "criar" and tipos_disponiveis %}
+            <div class="mb-4 pb-3 border-bottom">
+                <label for="select-tipo-material" class="form-label text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                    Família do Material
+                </label>
+                <select id="select-tipo-material"
+                        class="form-select form-select-sm"
+                        data-base-url="{% url 'materiais:material_novo_painel' %}">
+                    {% for t in tipos_disponiveis %}
+                        <option value="{{ t.codigo }}" {% if tipo_selecionado == t.codigo %}selected{% endif %}>
+                            {{ t.label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+
+        <form method="post"
+              data-painel-form
+              action="{% if modo == 'criar' %}{% url 'materiais:material_novo_painel' %}{% else %}{% url 'materiais:material_painel' material.pk %}{% endif %}"
+              novalidate>
+            {% csrf_token %}
+            {% if tipo_selecionado %}
+                <input type="hidden" name="tipo_material_escolhido" value="{{ tipo_selecionado }}">
+            {% endif %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger small">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <!-- Identificação -->
+            <div class="mb-4">
+                <div class="text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                    Identificação
+                </div>
+                <div class="row g-2">
+                    {% for field in form.campos_identificacao %}
+                        <div class="{% if field.name == 'codigo_material' %}col-5{% elif field.name == 'nome' %}col-7{% else %}col-12{% endif %}">
+                            <label for="{{ field.id_for_label }}" class="form-label small fw-medium mb-1">
+                                {{ field.label }}
+                                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Especificações Técnicas -->
+            <div class="mb-4">
+                <div class="text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                    Especificações Técnicas — {{ tipo_label }}
+                </div>
+                <div class="row g-2">
+                    {% for field in form.campos_tecnicos %}
+                        <div class="col-6" data-field-name="{{ field.name }}">
+                            <label for="{{ field.id_for_label }}" class="form-label small fw-medium mb-1">
+                                {{ field.label }}
+                                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Dados Comerciais -->
+            <div class="mb-4">
+                <div class="text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                    Dados Comerciais e Controle
+                </div>
+                <div class="row g-2 align-items-center">
+                    {% for field in form.campos_comerciais %}
+                        {% if field.name == "ativo" %}
+                            <div class="col-6 pt-3">
+                                <div class="form-check form-switch">
+                                    {{ field }}
+                                    <label class="form-check-label small fw-medium" for="{{ field.id_for_label }}">
+                                        Material ativo
+                                    </label>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="col-6">
+                                <label for="{{ field.id_for_label }}" class="form-label small fw-medium mb-1">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Rodapé de Ações do Formulário -->
+            <div class="d-flex gap-2 pt-3 border-top">
+                <button type="submit" class="btn btn-primary btn-sm px-4">
+                    <i class="bi bi-check-lg me-1"></i>
+                    {% if modo == "criar" %}Cadastrar Material{% else %}Salvar Alterações{% endif %}
+                </button>
+
+                {% if modo == "editar" %}
+                    <button type="button"
+                            class="btn btn-outline-secondary btn-sm px-3"
+                            data-painel-url="{% url 'materiais:material_painel' material.pk %}?modo=visualizar">
+                        Cancelar
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="offcanvas">
+                        Cancelar
+                    </button>
+                {% endif %}
+            </div>
+        </form>
+    {% endif %}
+</div>

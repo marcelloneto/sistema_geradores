@@ -1,10 +1,23 @@
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
 from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from cadastros.models import Cliente, Material
-from .models import Orcamento, DadosGeometricosRoebel, MateriaisOrcamentoRoebel
+
+from cadastros.models import Cliente
+from materiais.models import (
+    Calco,
+    Condutor,
+    CordaoPavio,
+    Cunha,
+    Fita,
+    Isolacao,
+    Material,
+    MaterialAuxiliar,
+    ResinaVerniz,
+    SensorTemperatura,
+)
+from .models import DadosGeometricosRoebel, MateriaisOrcamentoRoebel, Orcamento
 
 
 CAMPOS_MATERIAIS_ROEBEL = [
@@ -37,31 +50,71 @@ def _to_int(value):
 
 
 def get_materiais_agrupados():
-    materiais_ativos = (
-        Material.objects.filter(ativo=True)
-        .select_related("categoria", "fornecedor", "unidade_preco")
-        .order_by("prioridade", "codigo_material", "nome")
-    )
-    por_categoria = {}
-    for mat in materiais_ativos:
-        cat_nome = (mat.categoria.nome or "").strip().lower()
-        por_categoria.setdefault(cat_nome, []).append(mat)
+    ordem_padrao = ("prioridade", "codigo_material", "nome")
+
+    resinas_vernizes = ResinaVerniz.objects.filter(ativo=True).select_related(
+        "fornecedor", "unidade_preco"
+    ).order_by(*ordem_padrao)
+
+    fitas = Fita.objects.filter(ativo=True).select_related(
+        "fornecedor", "unidade_preco"
+    ).order_by(*ordem_padrao)
+
+    cordoes = CordaoPavio.objects.filter(ativo=True).select_related(
+        "fornecedor", "unidade_preco"
+    ).order_by(*ordem_padrao)
 
     return {
-        "condutores": por_categoria.get("condutor", []),
-        "mat_isolacao": por_categoria.get("isolação", []),
-        "mat_resina": por_categoria.get("resina", []),
-        "mat_massa": por_categoria.get("massa", []),
-        "mat_verniz": por_categoria.get("verniz", []),
-        "mat_fita": por_categoria.get("fita", []),
-        "mat_cadarco": por_categoria.get("cadarço", []),
-        "mat_pavio": por_categoria.get("pavio", []),
-        "mat_aro": por_categoria.get("aro", []),
-        "mat_calco": por_categoria.get("calço", []),
-        "mat_conexao": por_categoria.get("conexão", []),
-        "mat_barramento": por_categoria.get("barramento", []),
-        "mat_cunha": por_categoria.get("cunha", []),
-        "mat_sensor": por_categoria.get("sensor", []),
+        "condutores": Condutor.objects.filter(ativo=True)
+        .select_related("fornecedor", "unidade_preco")
+        .order_by(*ordem_padrao),
+
+        "mat_isolacao": Isolacao.objects.filter(ativo=True)
+        .select_related("fornecedor", "unidade_preco")
+        .order_by(*ordem_padrao),
+
+        "mat_resina": resinas_vernizes.filter(
+            categoria_quimica=ResinaVerniz.CategoriaQuimica.RESINA
+        ),
+        "mat_massa": resinas_vernizes.filter(
+            categoria_quimica=ResinaVerniz.CategoriaQuimica.MASSA
+        ),
+        "mat_verniz": resinas_vernizes.filter(
+            categoria_quimica=ResinaVerniz.CategoriaQuimica.VERNIZ
+        ),
+
+        "mat_fita": fitas.exclude(finalidade=Fita.Finalidade.CADARCO),
+        "mat_cadarco": fitas.filter(finalidade=Fita.Finalidade.CADARCO),
+
+        "mat_pavio": cordoes.exclude(tipo=CordaoPavio.TipoCordao.ARO),
+        "mat_aro": cordoes.filter(tipo=CordaoPavio.TipoCordao.ARO),
+
+        "mat_calco": Calco.objects.filter(ativo=True)
+        .select_related("fornecedor", "unidade_preco")
+        .order_by(*ordem_padrao),
+
+        "mat_conexao": MaterialAuxiliar.objects.filter(ativo=True)
+        .select_related("fornecedor", "unidade_preco")
+        .order_by(*ordem_padrao),
+
+        "mat_barramento": Material.objects.filter(
+            Q(
+                tipo_material=Material.TipoMaterial.AUXILIAR,
+                materialauxiliar__subtipo=MaterialAuxiliar.Subtipo.BARRAMENTO_COBRE,
+            )
+            | Q(codigo_material__startswith="BAR-"),
+            ativo=True,
+        )
+        .select_related("fornecedor", "unidade_preco")
+        .order_by(*ordem_padrao),
+
+        "mat_cunha": Cunha.objects.filter(ativo=True)
+        .select_related("fornecedor", "unidade_preco")
+        .order_by(*ordem_padrao),
+
+        "mat_sensor": SensorTemperatura.objects.filter(ativo=True)
+        .select_related("fornecedor", "unidade_preco")
+        .order_by(*ordem_padrao),
     }
 
 

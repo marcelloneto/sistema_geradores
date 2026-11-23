@@ -1,7 +1,15 @@
 from datetime import timedelta
 from django.db import models
 from django.utils import timezone
-from cadastros.models import Cliente, Material
+from cadastros.models import Cliente
+from materiais.models import (
+    Condutor,
+    Fita,
+    Isolacao,
+    Material,
+    ResinaVerniz,
+    SensorTemperatura,
+)
 
 
 def validade_padrao():
@@ -99,7 +107,7 @@ class DadosGeometricosRoebel(models.Model):
     fundo_condutores_por_espira = models.PositiveIntegerField("Fundo - Nº de condutores por espira", null=True, blank=True)
 
     fundo_condutor = models.ForeignKey(
-        Material,
+        Condutor,
         on_delete=models.PROTECT,
         null=True,
         blank=True,
@@ -119,7 +127,7 @@ class DadosGeometricosRoebel(models.Model):
     topo_condutores_por_espira = models.PositiveIntegerField("Topo - Nº de condutores por espira", null=True, blank=True)
 
     topo_condutor = models.ForeignKey(
-        Material,
+        Condutor,
         on_delete=models.PROTECT,
         null=True,
         blank=True,
@@ -149,6 +157,7 @@ class DadosGeometricosRoebel(models.Model):
     def __str__(self):
         return f"Geometria Roebel - {self.orcamento}"
 
+
 class MateriaisOrcamentoRoebel(models.Model):
     orcamento = models.OneToOneField(
         Orcamento,
@@ -156,25 +165,27 @@ class MateriaisOrcamentoRoebel(models.Model):
         related_name="materiais_roebel"
     )
 
-    isolacao_panqueca = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    consolidacao_condutores = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    massa_enchimento = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    isolacao_condutores = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    isolacao_principal = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_sacrificio = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    verniz_condutivo = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_condutiva = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    verniz_semicondutivo = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_semicondutiva = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    cadarco_fibra_vidro = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    fita_acabamento = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    isolacao_panqueca = models.ForeignKey(Isolacao, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    consolidacao_condutores = models.ForeignKey(ResinaVerniz, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    massa_enchimento = models.ForeignKey(ResinaVerniz, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    isolacao_condutores = models.ForeignKey(Isolacao, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    isolacao_principal = models.ForeignKey(Isolacao, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    fita_sacrificio = models.ForeignKey(Fita, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    verniz_condutivo = models.ForeignKey(ResinaVerniz, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    fita_condutiva = models.ForeignKey(Fita, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    verniz_semicondutivo = models.ForeignKey(ResinaVerniz, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    fita_semicondutiva = models.ForeignKey(Fita, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    cadarco_fibra_vidro = models.ForeignKey(Fita, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    fita_acabamento = models.ForeignKey(Fita, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+
+    # Itens de montagem que combinam peças, cordões e resinas
     calcos_radiais = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
     calcos_tangenciais = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
     conexoes = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
     barramentos_ligacao = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
     pavio_central = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
     cunhagem = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
-    sensor = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
+    sensor = models.ForeignKey(SensorTemperatura, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
     aros_amarracao = models.ForeignKey(Material, on_delete=models.PROTECT, null=True, blank=True, related_name="+")
 
     sobressalente_bobinas = models.DecimalField("Sobressalente de bobinas", max_digits=6, decimal_places=2, default=0)

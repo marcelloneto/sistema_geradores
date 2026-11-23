@@ -1,133 +1,31 @@
-# Register your models here.
 from django.contrib import admin
-
-from .models import (
-    Fornecedor,
-    Cliente,
-    Usinas,
-    UnidadeGeradora,
-    OrdemServico,
-    CategoriaMaterial,
-    Material,
-    UnidadeMedida,
-    Maquina,
-    DadosEstator,
-    DadosPerifericos,
-    DadosConstrutivosBobina,
-    DadosGeometricosMaquina,
-    MateriaisBobinagemRoebel,
-    ResIsolamento,
-    CategoriaMaterialParametro,
-    CategoriaMaterialParametroOpcao,
-    Grandeza,
-    MaterialParametroValor,
-    
-)
+from import_export import fields, resources
 from import_export.admin import ImportExportModelAdmin
-from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
 
-class MaterialParametroValorInline(admin.TabularInline):
-    model = MaterialParametroValor
-    extra = 0
-    can_delete = False
-
-    fields = (
-        "parametro",
-        "valor_texto",
-        "valor_numero",
-        "valor_booleano",
-        "unidade",
-        "observacoes",
-    )
-
-    readonly_fields = ("parametro",)
-
-    def has_add_permission(self, request, obj=None):
-        return False
-        
-
-class MaterialResource(resources.ModelResource):
-
-    categoria = fields.Field(
-        column_name="categoria",
-        attribute="categoria",
-        widget=ForeignKeyWidget(CategoriaMaterial, "nome")
-    )
-
-    fornecedor = fields.Field(
-        column_name="fornecedor",
-        attribute="fornecedor",
-        widget=ForeignKeyWidget(Fornecedor, "nome")
-    )
-
-    unidade_preco = fields.Field(
-        column_name="unidade_preco",
-        attribute="unidade_preco",
-        widget=ForeignKeyWidget(UnidadeMedida, "simbolo")
-    )
-
-    class Meta:
-        model = Material
-        import_id_fields = ("codigo_material",)
-
-        fields = (
-            "codigo_material",
-            "nome",
-            "descricao",
-            "categoria",
-            "fornecedor",
-            "prioridade",
-            "preco",
-            "unidade_preco",
-            "ativo",
-        )
-
-        export_order = fields
-
-@admin.register(Material)
-class MaterialAdmin(ImportExportModelAdmin):
-    resource_class = MaterialResource
-
-    list_display = (
-        "codigo_material",
-        "nome",
-        "categoria",
-        "fornecedor",
-        "preco",
-        "unidade_preco",
-        "ativo",
-        "prioridade",
-    )
-
-    list_filter = (
-        "categoria",
-        "fornecedor",
-        "ativo",
-        "prioridade",
-    )
-
-    search_fields = (
-        "codigo_material",
-        "nome",
-        "descricao",
-    )
-
-    inlines = [MaterialParametroValorInline]
-
-    def change_view(self, request, object_id, form_url="", extra_context=None):
-        material = self.get_object(request, object_id)
-
-        if material and material.categoria:
-            parametros = material.categoria.parametros.filter(ativo=True)
-
-            for parametro in parametros:
-                MaterialParametroValor.objects.get_or_create(
-                    material=material,
-                    parametro=parametro,
-                )
-
-        return super().change_view(request, object_id, form_url, extra_context)
+from materiais.models import (
+    Condutor,
+    Fita,
+    Isolacao,
+    Material,
+    ResinaVerniz,
+    SensorTemperatura,
+)
+from .models import (
+    Cliente,
+    DadosConstrutivosBobina,
+    DadosEstator,
+    DadosGeometricosMaquina,
+    DadosPerifericos,
+    Fornecedor,
+    Maquina,
+    MateriaisBobinagemRoebel,
+    OrdemServico,
+    ResIsolamento,
+    UnidadeGeradora,
+    UnidadeMedida,
+    Usinas,
+)
 
 
 class FornecedorResource(resources.ModelResource):
@@ -145,6 +43,7 @@ class FornecedorResource(resources.ModelResource):
             "observacoes",
             "ativo",
         )
+
 
 @admin.register(Fornecedor)
 class FornecedorAdmin(ImportExportModelAdmin):
@@ -216,6 +115,7 @@ class ClienteAdmin(admin.ModelAdmin):
     list_display = ("nome", "localizacao", "contato_1", "data_registro")
     search_fields = ("nome", "localizacao")
 
+
 class UnidadeGeradoraInline(admin.TabularInline):
     model = UnidadeGeradora
     extra = 1
@@ -258,7 +158,7 @@ class UsinasAdmin(admin.ModelAdmin):
         }),
         ("Dados Técnicos Gerais", {
             "fields": (
-                ("n_maquinas",  "potencia_total"),
+                ("n_maquinas", "potencia_total"),
                 "capacidade_ponte_rolante_t",
             )
         }),
@@ -288,75 +188,13 @@ class UnidadeGeradoraAdmin(admin.ModelAdmin):
     search_fields = ("nome", "usina__nome", "fabricante")
     ordering = ("usina__nome", "nome")
 
+
 @admin.register(OrdemServico)
 class OrdemServicoAdmin(admin.ModelAdmin):
     list_display = ("numero", "cliente", "maquina", "tipo_servico", "localizacao", "data_registro")
     list_filter = ("cliente", "maquina", "tipo_servico")
-    search_fields = ("numero", "cliente__nome","maquina__nome")
+    search_fields = ("numero", "cliente__nome", "maquina__numero_serie")
 
-
-class CategoriaMaterialResource(resources.ModelResource):
-
-    class Meta:
-        model = CategoriaMaterial
-
-        import_id_fields = ("nome",)
-
-        fields = (
-            "nome",
-        )
-
-        export_order = (
-            "nome",
-        )
-
-class CategoriaMaterialParametroInline(admin.TabularInline):
-    model = CategoriaMaterialParametro
-    extra = 1
-
-
-class CategoriaMaterialParametroOpcaoInline(admin.TabularInline):
-    model = CategoriaMaterialParametroOpcao
-    extra = 1
-
-
-@admin.register(CategoriaMaterialParametro)
-class CategoriaMaterialParametroAdmin(admin.ModelAdmin):
-    list_display = (
-        "nome",
-        "categoria",
-        "tipo",
-        "grandeza",
-        "unidade",
-        "inteiro",
-        "usar_limites",
-        "obrigatorio",
-        "ativo",
-    )
-
-    list_filter = (
-        "categoria",
-        "tipo",
-        "ativo",
-        "obrigatorio",
-    )
-
-    search_fields = (
-        "nome",
-        "categoria__nome",
-    )
-
-    inlines = [CategoriaMaterialParametroOpcaoInline]
-
-    class Media:
-        js = "admin/js/categoria_material_parametro.js"
-
-
-@admin.register(CategoriaMaterial)
-class CategoriaMaterialAdmin(ImportExportModelAdmin):
-    list_display = ("id", "nome")
-    search_fields = ("nome",)
-    inlines = [CategoriaMaterialParametroInline]
 
 @admin.register(Maquina)
 class MaquinaAdmin(admin.ModelAdmin):
@@ -427,7 +265,6 @@ class MaquinaAdmin(admin.ModelAdmin):
 
 @admin.register(UnidadeMedida)
 class UnidadeMedidaAdmin(ImportExportModelAdmin):
-
     list_display = (
         "id",
         "nome",
@@ -451,7 +288,6 @@ class UnidadeMedidaAdmin(ImportExportModelAdmin):
 
 
 class DadosEstatorResource(resources.ModelResource):
-
     maquina = fields.Field(
         column_name="maquina",
         attribute="maquina",
@@ -460,9 +296,7 @@ class DadosEstatorResource(resources.ModelResource):
 
     class Meta:
         model = DadosEstator
-
         import_id_fields = ("maquina",)
-
         fields = (
             "maquina",
             "numero_bobinas",
@@ -490,6 +324,7 @@ class DadosEstatorResource(resources.ModelResource):
             "diametro_rotor",
             "entreferro_gerador",
         )
+
 
 @admin.register(DadosEstator)
 class DadosEstatorAdmin(ImportExportModelAdmin):
@@ -525,7 +360,6 @@ class DadosEstatorAdmin(ImportExportModelAdmin):
                 "numero_paralelos",
             )
         }),
-
         ("Sensores", {
             "fields": (
                 "numero_sensores",
@@ -533,7 +367,6 @@ class DadosEstatorAdmin(ImportExportModelAdmin):
                 "local_sensor",
             )
         }),
-
         ("Núcleo magnético", {
             "fields": (
                 "comprimento_nucleo_magnetico",
@@ -544,7 +377,6 @@ class DadosEstatorAdmin(ImportExportModelAdmin):
                 "entreferro_gerador",
             )
         }),
-
         ("Pesos, áreas e acabamento", {
             "fields": (
                 "peso_cobre_total",
@@ -591,6 +423,7 @@ class DadosPerifericosResource(resources.ModelResource):
             "descricao_terminal",
         )
 
+
 @admin.register(DadosPerifericos)
 class DadosPerifericosAdmin(ImportExportModelAdmin):
     resource_class = DadosPerifericosResource
@@ -616,22 +449,19 @@ class DadosPerifericosAdmin(ImportExportModelAdmin):
         ("Máquina", {
             "fields": ("maquina",)
         }),
-
         ("Aro de amarração", {
             "fields": (
                 ("aro_amarracao_ll", "aro_amarracao_lol"),
                 ("material_aro_ll", "material_aro_lol"),
             )
         }),
-
         ("Calços de amarração por bobina", {
             "fields": (
-                ("calco_amarracao_inferior_ll","obs_calco_amarracao_inferior_ll", "calco_amarracao_inferior_lol","obs_calco_amarracao_inferior_lol"),
-                ("calco_amarracao_superior_ll","obs_calco_amarracao_superior_ll", "calco_amarracao_superior_lol","obs_calco_amarracao_superior_lol"),
+                ("calco_amarracao_inferior_ll", "obs_calco_amarracao_inferior_ll", "calco_amarracao_inferior_lol", "obs_calco_amarracao_inferior_lol"),
+                ("calco_amarracao_superior_ll", "obs_calco_amarracao_superior_ll", "calco_amarracao_superior_lol", "obs_calco_amarracao_superior_lol"),
                 "material_calcos",
             )
         }),
-
         ("Cabo", {
             "fields": (
                 "campo_eletrico",
@@ -642,13 +472,12 @@ class DadosPerifericosAdmin(ImportExportModelAdmin):
                 "comprimento_cabo_externo",
             )
         }),
-
         ("Terminal", {
             "fields": (
                 "descricao_terminal",
             )
         }),
-    )    
+    )
 
 
 class DadosGeometricosMaquinaResource(resources.ModelResource):
@@ -687,6 +516,7 @@ class DadosGeometricosMaquinaResource(resources.ModelResource):
             "calco_d",
         )
 
+
 @admin.register(DadosGeometricosMaquina)
 class DadosGeometricosMaquinaAdmin(ImportExportModelAdmin):
     resource_class = DadosGeometricosMaquinaResource
@@ -708,7 +538,6 @@ class DadosGeometricosMaquinaAdmin(ImportExportModelAdmin):
         ("Máquina", {
             "fields": ("maquina",)
         }),
-
         ("Ranhura", {
             "fields": (
                 "tipo_ranhura",
@@ -717,7 +546,6 @@ class DadosGeometricosMaquinaAdmin(ImportExportModelAdmin):
                 "folga_ranhura",
             )
         }),
-
         ("Seção da Bobina", {
             "fields": (
                 ("bobina_e", "bobina_f"),
@@ -725,14 +553,12 @@ class DadosGeometricosMaquinaAdmin(ImportExportModelAdmin):
                 "sobreposicao_isolante",
             )
         }),
-
         ("Seção do Condutor", {
             "fields": (
                 ("condutor_e", "condutor_f"),
                 ("condutor_E_iso", "condutor_F_iso"),
             )
         }),
-
         ("Seção do Calço", {
             "fields": (
                 "tipo_calco",
@@ -787,9 +613,9 @@ class DadosConstrutivosBobinaResource(resources.ModelResource):
             "montada_f_sem_isolacao",
         )
 
+
 @admin.register(DadosConstrutivosBobina)
 class DadosConstrutivosBobinaAdmin(ImportExportModelAdmin):
-
     resource_class = DadosConstrutivosBobinaResource
 
     list_display = (
@@ -808,7 +634,6 @@ class DadosConstrutivosBobinaAdmin(ImportExportModelAdmin):
         ("Máquina", {
             "fields": ("maquina",)
         }),
-
         ("Croqui das Bobinas", {
             "fields": (
                 ("croqui_g", "croqui_h"),
@@ -816,7 +641,6 @@ class DadosConstrutivosBobinaAdmin(ImportExportModelAdmin):
                 ("croqui_k", "croqui_l"),
             )
         }),
-
         ("Amarração das Bobinas", {
             "fields": (
                 ("amarracao_a1", "amarracao_a2"),
@@ -825,7 +649,6 @@ class DadosConstrutivosBobinaAdmin(ImportExportModelAdmin):
                 ("amarracao_d1", "amarracao_d2"),
             )
         }),
-
         ("Configuração das Bobinas", {
             "fields": (
                 ("configuracao_a1", "configuracao_a2"),
@@ -834,7 +657,6 @@ class DadosConstrutivosBobinaAdmin(ImportExportModelAdmin):
                 ("configuracao_d1", "configuracao_d2"),
             )
         }),
-
         ("Bobina Montada", {
             "fields": (
                 ("montada_a", "montada_b"),
@@ -853,19 +675,35 @@ class MateriaisBobinagemRoebelResource(resources.ModelResource):
         widget=ForeignKeyWidget(Maquina, "numero_serie")
     )
 
-    for campo in [
-        "condutor", "isolacao_panqueca", "consolidacao_condutores",
-        "massa_enchimento", "isolacao_condutores", "isolacao_principal",
-        "fita_sacrificio", "verniz_condutivo", "fita_condutiva",
-        "verniz_semicondutivo", "fita_semicondutiva", "cadarco_fibra_vidro",
-        "fita_acabamento", "calcos_radiais", "calcos_tangenciais",
-        "conexoes", "barramentos_ligacao", "pavio_central",
-        "cunhagem", "sensor", "aros_amarracao",
-    ]:
+    MODELS_POR_CAMPO = {
+        "condutor": Condutor,
+        "isolacao_panqueca": Isolacao,
+        "consolidacao_condutores": ResinaVerniz,
+        "massa_enchimento": ResinaVerniz,
+        "isolacao_condutores": Isolacao,
+        "isolacao_principal": Isolacao,
+        "fita_sacrificio": Fita,
+        "verniz_condutivo": ResinaVerniz,
+        "fita_condutiva": Fita,
+        "verniz_semicondutivo": ResinaVerniz,
+        "fita_semicondutiva": Fita,
+        "cadarco_fibra_vidro": Fita,
+        "fita_acabamento": Fita,
+        "calcos_radiais": Material,
+        "calcos_tangenciais": Material,
+        "conexoes": Material,
+        "barramentos_ligacao": Material,
+        "pavio_central": Material,
+        "cunhagem": Material,
+        "sensor": SensorTemperatura,
+        "aros_amarracao": Material,
+    }
+
+    for campo, model_cls in MODELS_POR_CAMPO.items():
         locals()[campo] = fields.Field(
             column_name=campo,
             attribute=campo,
-            widget=ForeignKeyWidget(Material, "codigo_material")
+            widget=ForeignKeyWidget(model_cls, "codigo_material")
         )
 
     class Meta:
@@ -898,6 +736,7 @@ class MateriaisBobinagemRoebelResource(resources.ModelResource):
             "coeficiente_seguranca_bobinas",
         )
 
+
 @admin.register(MateriaisBobinagemRoebel)
 class MateriaisBobinagemRoebelAdmin(ImportExportModelAdmin):
     resource_class = MateriaisBobinagemRoebelResource
@@ -916,35 +755,10 @@ class MateriaisBobinagemRoebelAdmin(ImportExportModelAdmin):
     )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        filtros_por_campo = {
-            "condutor": "Condutor",
-            "isolacao_panqueca": "Isolação",
-            "isolacao_condutores": "Isolação",
-            "isolacao_principal": "Isolação",
-            "consolidacao_condutores": "Resina",
-            "massa_enchimento": "Massa",
-            "verniz_condutivo": "Verniz",
-            "fita_condutiva": "Fita",
-            "verniz_semicondutivo": "Verniz",
-            "fita_semicondutiva": "Fita",
-            "fita_sacrificio": "Fita",
-            "cadarco_fibra_vidro": "Cadarço",
-            "fita_acabamento": "Fita",
-            "pavio_central": "Pavio",
-            "aros_amarracao": "Aro",
-            "calcos_radiais": "Calço",
-            "calcos_tangenciais": "Calço",
-            "conexoes": "Conexão",
-            "barramentos_ligacao": "Barramento",
-            "cunhagem": "Cunha",
-            "sensor": "Sensor",
-        }
-
-        if db_field.name in filtros_por_campo:
-            kwargs["queryset"] = Material.objects.filter(
-                categoria__nome=filtros_por_campo[db_field.name],
-                ativo=True,
-            ).order_by("codigo_material")
+        if db_field.name in MateriaisBobinagemRoebelResource.MODELS_POR_CAMPO:
+            kwargs["queryset"] = db_field.related_model.objects.filter(
+                ativo=True
+            ).order_by("prioridade", "codigo_material")
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -1005,10 +819,9 @@ class MateriaisBobinagemRoebelAdmin(ImportExportModelAdmin):
         }),
     )
 
+
 @admin.register(ResIsolamento)
 class ResIsolamentoAdmin(admin.ModelAdmin):
-
-
     list_display = (
         "id",
         "maquina",
@@ -1029,7 +842,6 @@ class ResIsolamentoAdmin(admin.ModelAdmin):
                 "maquina",
             )
         }),
-
         ("Condições do ensaio", {
             "fields": (
                 "tensao",
@@ -1038,7 +850,6 @@ class ResIsolamentoAdmin(admin.ModelAdmin):
                 "tempo",
             )
         }),
-
         ("Medições fase x massa", {
             "fields": (
                 "Ø01xm",
@@ -1047,7 +858,6 @@ class ResIsolamentoAdmin(admin.ModelAdmin):
                 "Ø04xm",
             )
         }),
-
         ("Resistência ôhmica", {
             "fields": (
                 "res_ohmica_t",
@@ -1057,9 +867,3 @@ class ResIsolamentoAdmin(admin.ModelAdmin):
             )
         }),
     )
-
-@admin.register(Grandeza)
-class GrandezaAdmin(admin.ModelAdmin):
-    list_display = ("id", "nome", "unidade_padrao")
-    search_fields = ("nome",)
-    ordering = ("nome",)

@@ -363,6 +363,7 @@
         .theme-cyan   { --card-accent: #0891b2; --card-bg: #ecfeff; }
         .theme-rose   { --card-accent: #e11d48; --card-bg: #fff1f2; }
         .theme-slate  { --card-accent: #334155; --card-bg: #f1f5f9; }
+        .theme-teal   { --card-accent: #0d9488; --card-bg: #f0fdfa; }
 
         footer {
             text-align: center;
@@ -461,6 +462,28 @@
                 </div>
             </a>
 
+            <!-- Card: Usinas -->
+            <!-- Usinas -->
+            <a href="{% url 'usinas:lista_usinas' %}" class="module-card theme-teal" data-keywords="usinas hidreletricas termeletricas uhe pch cgh ute ceg aneel">
+                <div>
+                    <div class="card-top">
+                        <div class="icon-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 20h20"></path>
+                                <path d="M5 20V8l5 4V8l5 4V4h4v16"></path>
+                            </svg>
+                        </div>
+                        <span class="tag-pill">{{ stats.usinas }} cadastrada{{ stats.usinas|pluralize }}</span>
+                    </div>
+                    <h3>Usinas</h3>
+                    <p>Consulte dados cadastrais de usinas, códigos CEG (ANEEL), potência instalada, unidades geradoras e ponte rolante.</p>
+                </div>
+                <div class="card-footer">
+                    <span>Explorar usinas</span>
+                    <span class="arrow-icon">→</span>
+                </div>
+            </a>
+
             <!-- 2. Visualizar Máquinas -->
             <a href="{% url 'maquinas:lista' %}" class="module-card theme-green" data-keywords="maquinas geradores estator rotor usinas">
                 <div>
@@ -472,7 +495,7 @@
                         </div>
                         <span class="tag-pill">{{ stats.maquinas }} unidades</span>
                     </div>
-                    <h3>Visualizar Máquinas</h3>
+                    <h3>Máquinas</h3>
                     <p>Gerencie dados construtivos de geradores, estatores, ranhuras, periféricos e usinas vinculadas.</p>
                 </div>
                 <div class="card-footer">

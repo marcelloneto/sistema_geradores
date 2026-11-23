@@ -2,112 +2,427 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Materiais</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catálogo de Materiais</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        .rounded-custom { border-radius: 1rem !important; }
-        .sidebar { background: #f8f9fa; border-right: 1px solid #dee2e6; }
-        /* Deixa o cursor com formato de clique nas linhas da tabela */
-        tbody tr { cursor: pointer; }
+        body { background-color: #f3f5f8; font-size: 0.94rem; }
+        .card-clean { border: 1px solid #e2e8f0; border-radius: 0.85rem; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04); }
+        .nav-fam .nav-link {
+            color: #334155;
+            border-radius: 0.55rem;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+        .nav-fam .nav-link:hover { background-color: #f1f5f9; }
+        .nav-fam .nav-link.active { background-color: #0d6efd; color: #fff; }
+        .nav-fam .nav-link.active .badge { background-color: rgba(255,255,255,0.22) !important; color: #fff !important; }
+        tbody tr.linha-material { cursor: pointer; }
+        .code-pill { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82rem; }
+        .offcanvas-material { width: 620px !important; max-width: 95vw; }
     </style>
 </head>
-<body class="bg-light p-4">
+<body class="py-4">
 
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar de Filtros -->
-        <div class="col-md-2 p-3 bg-white rounded-custom shadow-sm sidebar">
-            <a href="{% url 'portal:home' %}" class="btn btn-outline-secondary w-100 mb-4">Voltar</a>
-            <h5>Categorias</h5>
-            <div class="nav flex-column nav-pills mt-3">
-                <a href="?" class="nav-link {% if not request.GET.categoria %}active{% endif %}">Todas</a>
-                {% for cat in categorias %}
-                    <a href="?categoria={{ cat.id }}" 
-                       class="nav-link {% if request.GET.categoria|add:'0' == cat.id %}active{% endif %}">
-                       {{ cat.nome }}
+<div class="container-fluid px-4">
+
+    {% if messages %}
+        <div class="mb-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row g-4">
+        <!-- Sidebar de Famílias -->
+        <div class="col-lg-3 col-xl-2" id="sidebar-familias-wrapper">
+            <div class="card card-clean bg-white p-3">
+                <a href="{% url 'portal:home' %}" class="btn btn-outline-secondary btn-sm w-100 mb-3">
+                    <i class="bi bi-arrow-left me-1"></i> Voltar ao Portal
+                </a>
+
+                <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                    <span class="text-uppercase text-muted fw-bold" style="font-size: 0.75rem; letter-spacing: 0.04em;">
+                        Famílias
+                    </span>
+                    <span class="badge bg-light text-dark border">{{ total_ativos }} ativos</span>
+                </div>
+
+                <div class="nav flex-column nav-fam">
+                    <a href="{% url 'materiais:lista_materiais' %}{% if status_atual %}?status={{ status_atual }}{% endif %}"
+                       class="nav-link {% if not tipo_atual %}active{% endif %}">
+                        <span>Todos os materiais</span>
+                        <span class="badge bg-light text-secondary border">{{ total_geral }}</span>
                     </a>
-                {% endfor %}
+
+                    {% for item in tipos_menu %}
+                        <a href="?tipo={{ item.codigo }}{% if status_atual %}&status={{ status_atual }}{% endif %}{% if fornecedor_atual %}&fornecedor={{ fornecedor_atual }}{% endif %}"
+                           class="nav-link {% if tipo_atual == item.codigo %}active{% endif %}">
+                            <span class="text-truncate me-2">{{ item.label }}</span>
+                            <span class="badge bg-light text-secondary border">{{ item.total }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
-        <!-- Tabela Principal -->
-        <div class="col-md-10">
-            <div class="card p-4 rounded-custom shadow-sm">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Materiais</h2>
+        <!-- Área Principal -->
+        <div class="col-lg-9 col-xl-10">
+            <div class="card card-clean bg-white p-4">
+
+                <!-- Cabeçalho -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                     <div>
-                        <!-- Botão de Excluir Selecionados -->
-                        <button type="submit" form="form-lote" id="btn-deletar-lote" class="btn btn-outline-danger me-2" disabled>Excluir Selecionados</button>
-                        <a href="{% url 'materiais:material_novo' %}" class="btn btn-primary rounded-custom">Novo Material</a>
+                        <h3 class="mb-0 fw-bold text-dark">Catálogo de Materiais</h3>
+                        <small class="text-muted">
+                            Clique em um material para visualizar ou editar na aba lateral
+                        </small>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" form="form-lote" name="acao" value="inativar"
+                                id="btn-inativar-lote" class="btn btn-outline-secondary btn-sm" disabled>
+                            <i class="bi bi-slash-circle me-1"></i> Inativar Selecionados
+                        </button>
+                        <button type="submit" form="form-lote" name="acao" value="excluir"
+                                id="btn-deletar-lote" class="btn btn-outline-danger btn-sm"
+                                onclick="return confirm('Confirma a exclusão dos itens selecionados?');" disabled>
+                            <i class="bi bi-trash me-1"></i> Excluir Selecionados
+                        </button>
+                        <button type="button"
+                                onclick="abrirPainelMaterial('{% url 'materiais:material_novo_painel' %}{% if tipo_atual %}?tipo={{ tipo_atual }}{% endif %}')"
+                                class="btn btn-primary btn-sm px-3">
+                            <i class="bi bi-plus-lg me-1"></i> Novo Material
+                        </button>
                     </div>
                 </div>
 
-                <!-- Formulário que envolve a tabela para envio dos checkboxes -->
-                <form id="form-lote" method="post" action="{% url 'materiais:material_bulk_delete' %}">
-                    {% csrf_token %}
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th style="width: 40px;">
-                                        <input type="checkbox" id="select-all" class="form-check-input">
-                                    </th>
-                                    <th>Código</th>
-                                    <th>Nome</th>
-                                    <th>Categoria</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for m in materiais %}
-                                <!-- Evento de clique duplo redireciona para a página de edição -->
-                                <tr ondblclick="window.location.href='{% url 'materiais:material_editar' m.pk %}'">
-                                    <td onclick="event.stopPropagation()">
-                                        <input type="checkbox" name="material_ids" value="{{ m.pk }}" class="form-check-input material-checkbox">
-                                    </td>
-                                    <td>{{ m.codigo_material }}</td>
-                                    <td class="fw-bold">{{ m.nome }}</td>
-                                    <td><span class="badge bg-info text-dark">{{ m.categoria.nome }}</span></td>
-                                    <td onclick="event.stopPropagation()">
-                                        <a href="{% url 'materiais:material_editar' m.pk %}" class="btn btn-sm btn-outline-warning">Editar</a>
-                                        <a href="{% url 'materiais:material_remover' m.pk %}" class="btn btn-sm btn-outline-danger">Excluir</a>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr><td colspan="5" class="text-center">Nenhum material encontrado.</td></tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                <!-- Barra de Busca e Filtros -->
+                <form method="get" class="row g-2 align-items-end bg-light p-3 rounded-3 border mb-4">
+                    {% if tipo_atual %}
+                        <input type="hidden" name="tipo" value="{{ tipo_atual }}">
+                    {% endif %}
+
+                    <div class="col-md-5">
+                        <label class="form-label small text-muted mb-1">Buscar por código, nome ou descrição</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" name="q" value="{{ busca_atual }}" class="form-control"
+                                   placeholder="Ex.: COND-SM-001, Nomex, Araldite...">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted mb-1">Fornecedor</label>
+                        <select name="fornecedor" class="form-select form-select-sm">
+                            <option value="">Todos os fornecedores</option>
+                            {% for f in fornecedores %}
+                                <option value="{{ f.id }}" {% if fornecedor_atual == f.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ f.nome }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label small text-muted mb-1">Status</label>
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="" {% if not status_atual %}selected{% endif %}>Todos</option>
+                            <option value="ativos" {% if status_atual == "ativos" %}selected{% endif %}>Somente Ativos</option>
+                            <option value="inativos" {% if status_atual == "inativos" %}selected{% endif %}>Somente Inativos</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 d-flex gap-1">
+                        <button type="submit" class="btn btn-dark btn-sm w-100">Filtrar</button>
+                        {% if tipo_atual or fornecedor_atual or status_atual or busca_atual %}
+                            <a href="{% url 'materiais:lista_materiais' %}" class="btn btn-outline-secondary btn-sm" title="Limpar filtros">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        {% endif %}
                     </div>
                 </form>
+
+                <!-- Tabela -->
+                <div id="tabela-materiais-wrapper">
+                    <form id="form-lote" method="post" action="{% url 'materiais:material_bulk_delete' %}">
+                        {% csrf_token %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light border-bottom">
+                                    <tr>
+                                        <th style="width: 36px;">
+                                            <input type="checkbox" id="select-all" class="form-check-input">
+                                        </th>
+                                        <th>Código</th>
+                                        <th>Material</th>
+                                        <th>Família</th>
+                                        <th>Especificação Técnica</th>
+                                        <th>Fornecedor</th>
+                                        <th>Preço</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for m in materiais %}
+                                    <tr class="linha-material {% if not m.ativo %}table-secondary text-muted{% endif %}"
+                                        onclick="abrirPainelMaterial('{% url 'materiais:material_painel' m.pk %}')">
+                                        <td onclick="event.stopPropagation()">
+                                            <input type="checkbox" name="material_ids" value="{{ m.pk }}"
+                                                   class="form-check-input material-checkbox">
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border code-pill">
+                                                {{ m.codigo_material|default:"—" }}
+                                            </span>
+                                            {% if m.codigo_fornecedor %}
+                                                <div class="small text-muted mt-1">Ref: {{ m.codigo_fornecedor }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold text-dark">{{ m.nome }}</div>
+                                            {% if m.descricao %}
+                                                <div class="small text-muted text-truncate" style="max-width: 280px;">
+                                                    {{ m.descricao }}
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle">
+                                                {{ m.get_tipo_material_display }}
+                                            </span>
+                                        </td>
+                                        <td class="small text-secondary">
+                                            {{ m.resumo_tecnico }}
+                                        </td>
+                                        <td class="small">
+                                            {{ m.fornecedor.nome|default:"—" }}
+                                        </td>
+                                        <td class="small">
+                                            {% if m.preco %}
+                                                R$ {{ m.preco|floatformat:2 }}
+                                                {% if m.unidade_preco %}/ {{ m.unidade_preco.simbolo }}{% endif %}
+                                            {% else %}
+                                                <span class="text-muted">—</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if m.ativo %}
+                                                <span class="badge bg-success-subtle text-success-emphasis">Ativo</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary-subtle text-secondary-emphasis">Inativo</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-end text-nowrap" onclick="event.stopPropagation()">
+                                            <button type="button"
+                                                    onclick="abrirPainelMaterial('{% url 'materiais:material_painel' m.pk %}')"
+                                                    class="btn btn-sm btn-outline-secondary" title="Visualizar">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button type="button"
+                                                    onclick="abrirPainelMaterial('{% url 'materiais:material_painel' m.pk %}?modo=editar')"
+                                                    class="btn btn-sm btn-outline-primary" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <a href="{% url 'materiais:material_remover' m.pk %}"
+                                               class="btn btn-sm btn-outline-danger" title="Remover">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="9" class="text-center py-5 text-muted">
+                                            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                            Nenhum material encontrado para os filtros aplicados.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Script para gerenciar os checkboxes e o botão de exclusão em massa -->
-<script>
-    const selectAll = document.getElementById('select-all');
-    const checkboxes = document.querySelectorAll('.material-checkbox');
-    const btnDeletarLote = document.getElementById('btn-deletar-lote');
+<!-- Aba Lateral (Offcanvas) -->
+<div class="offcanvas offcanvas-end offcanvas-material shadow" tabindex="-1" id="offcanvasMaterial" aria-labelledby="offcanvasMaterialLabel">
+    <div id="offcanvasMaterialConteudo" class="d-flex flex-column h-100">
+        <div class="p-5 text-center text-muted my-auto">
+            <div class="spinner-border text-primary mb-2" role="status"></div>
+            <div>Carregando...</div>
+        </div>
+    </div>
+</div>
 
-    function atualizarBotaoLote() {
-        const algumMarcado = Array.from(checkboxes.values()).some(cb => cb.checked);
-        btnDeletarLote.disabled = !algumMarcado;
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const offcanvasEl = document.getElementById('offcanvasMaterial');
+    const painelConteudo = document.getElementById('offcanvasMaterialConteudo');
+    const bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
+
+    function vincularCheckboxesLote() {
+        const selectAll = document.getElementById('select-all');
+        const checkboxes = document.querySelectorAll('.material-checkbox');
+        const btnDeletarLote = document.getElementById('btn-deletar-lote');
+        const btnInativarLote = document.getElementById('btn-inativar-lote');
+
+        function atualizarBotoes() {
+            const algumMarcado = Array.from(checkboxes).some(cb => cb.checked);
+            if (btnDeletarLote) btnDeletarLote.disabled = !algumMarcado;
+            if (btnInativarLote) btnInativarLote.disabled = !algumMarcado;
+        }
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                checkboxes.forEach(cb => cb.checked = selectAll.checked);
+                atualizarBotoes();
+            });
+        }
+        checkboxes.forEach(cb => cb.addEventListener('change', atualizarBotoes));
     }
 
-    selectAll.addEventListener('change', function() {
-        checkboxes.forEach(cb => {
-            cb.checked = selectAll.checked;
+    function atualizarCamposCondutor(container) {
+        const selectForma = container.querySelector('#id_forma');
+        if (!selectForma) return;
+
+        const forma = selectForma.value;
+        const grupos = {
+            retangular: ['largura_mm', 'altura_mm', 'largura_isolacao_mm', 'altura_isolacao_mm'],
+            roebel: ['largura_mm', 'altura_mm', 'largura_isolacao_mm', 'altura_isolacao_mm'],
+            quadrado: ['lado_mm', 'lado_isolacao_mm'],
+            redondo: ['diametro_mm', 'diametro_isolacao_mm'],
+        };
+
+        const todosCamposDimensao = [
+            'largura_mm', 'altura_mm', 'largura_isolacao_mm', 'altura_isolacao_mm',
+            'lado_mm', 'lado_isolacao_mm',
+            'diametro_mm', 'diametro_isolacao_mm',
+        ];
+        const visiveis = new Set(grupos[forma] || grupos.retangular);
+
+        todosCamposDimensao.forEach(nome => {
+            const wrapper = container.querySelector(`[data-field-name="${nome}"]`);
+            if (!wrapper) return;
+            if (visiveis.has(nome)) {
+                wrapper.classList.remove('d-none');
+            } else {
+                wrapper.classList.add('d-none');
+                const input = wrapper.querySelector('input');
+                if (input) input.value = '';
+            }
         });
-        atualizarBotaoLote();
+    }
+
+    async function abrirPainelMaterial(url) {
+        painelConteudo.innerHTML = `
+            <div class="p-5 text-center text-muted my-auto">
+                <div class="spinner-border text-primary mb-2" role="status"></div>
+                <div>Carregando dados do material...</div>
+            </div>
+        `;
+        bsOffcanvas.show();
+
+        try {
+            const resp = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            painelConteudo.innerHTML = await resp.text();
+            atualizarCamposCondutor(painelConteudo);
+        } catch (err) {
+            painelConteudo.innerHTML = `
+                <div class="p-4">
+                    <div class="alert alert-danger">Erro ao carregar o painel do material.</div>
+                </div>
+            `;
+        }
+    }
+
+    async function atualizarTabelaEmSegundoPlano() {
+        try {
+            const resp = await fetch(window.location.href);
+            const html = await resp.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+
+            const novaTabela = doc.getElementById('tabela-materiais-wrapper');
+            const novaSidebar = doc.getElementById('sidebar-familias-wrapper');
+
+            if (novaTabela) {
+                document.getElementById('tabela-materiais-wrapper').innerHTML = novaTabela.innerHTML;
+            }
+            if (novaSidebar) {
+                document.getElementById('sidebar-familias-wrapper').innerHTML = novaSidebar.innerHTML;
+            }
+            vincularCheckboxesLote();
+        } catch (err) {
+            console.error('Erro ao atualizar tabela:', err);
+        }
+    }
+
+    // Troca de família no dropdown de criação ou formato do condutor
+    painelConteudo.addEventListener('change', function(e) {
+        if (!e.target) return;
+
+        if (e.target.id === 'select-tipo-material') {
+            const baseUrl = e.target.getAttribute('data-base-url');
+            const tipo = e.target.value;
+            abrirPainelMaterial(`${baseUrl}?tipo=${encodeURIComponent(tipo)}`);
+            return;
+        }
+
+        if (e.target.id === 'id_forma') {
+            atualizarCamposCondutor(painelConteudo);
+        }
     });
 
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', atualizarBotaoLote);
+    // Navegação interna dentro do painel (ex.: botão Editar, Cancelar)
+    painelConteudo.addEventListener('click', function(e) {
+        const trigger = e.target.closest('[data-painel-url]');
+        if (!trigger) return;
+        e.preventDefault();
+        abrirPainelMaterial(trigger.getAttribute('data-painel-url'));
     });
+
+    // Envio do formulário dentro do painel sem recarregar a página
+    painelConteudo.addEventListener('submit', async function(e) {
+        const form = e.target.closest('form[data-painel-form]');
+        if (!form) return;
+        e.preventDefault();
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        if (btnSubmit) btnSubmit.disabled = true;
+
+        try {
+            const formData = new FormData(form);
+            const resp = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            painelConteudo.innerHTML = await resp.text();
+            atualizarCamposCondutor(painelConteudo);
+
+            if (resp.headers.get('X-Material-Salvo') === '1') {
+                await atualizarTabelaEmSegundoPlano();
+            }
+        } catch (err) {
+            alert('Erro ao salvar o material. Tente novamente.');
+        } finally {
+            if (btnSubmit) btnSubmit.disabled = false;
+        }
+    });
+
+    vincularCheckboxesLote();
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

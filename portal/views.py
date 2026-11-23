@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.utils import timezone
-from cadastros.models import Maquina, Usinas, Material, OrdemServico
+from cadastros.models import Maquina, OrdemServico, Usinas
+from materiais.models import Material
 
 try:
     from orcamento.models import Orcamento

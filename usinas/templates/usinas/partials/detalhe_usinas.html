@@ -1,0 +1,343 @@
+<!-- Cabeçalho da Aba Lateral -->
+<div class="offcanvas-header border-bottom bg-light py-3 px-4">
+    <div class="pe-3">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+            {% if usina and usina.codigo_ceg %}
+                <span class="badge bg-dark code-pill">{{ usina.codigo_ceg }}</span>
+            {% endif %}
+            {% if usina and usina.tipo %}
+                <span class="badge" style="background-color: #e0f2fe; color: #0369a1;">
+                    {{ usina.get_tipo_display }}
+                </span>
+            {% endif %}
+        </div>
+        <h5 class="offcanvas-title fw-bold text-dark mb-0" id="offcanvasUsinaLabel">
+            {% if modo == "criar" %}
+                Cadastrar Nova Usina
+            {% else %}
+                {{ usina.nome }}
+            {% endif %}
+        </h5>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+</div>
+
+<!-- Corpo da Aba Lateral -->
+<div class="offcanvas-body p-4">
+
+    {% if salvo_sucesso %}
+        <div class="alert alert-success alert-dismissible fade show py-2 px-3 small" role="alert">
+            <i class="bi bi-check-circle-fill me-1"></i> {{ salvo_sucesso }}
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+
+    {% if modo == "visualizar" %}
+        <!-- Barra de Ações -->
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-4 pb-3 border-bottom">
+            <button type="button"
+                    class="btn btn-primary btn-sm px-3"
+                    style="background-color: #0284c7; border-color: #0284c7;"
+                    data-painel-url="{% url 'usinas:usina_painel' usina.pk %}?modo=editar">
+                <i class="bi bi-pencil-square me-1"></i> Editar Usina
+            </button>
+            <small class="text-muted">Registro: {{ usina.data_registro|date:"d/m/Y" }}</small>
+        </div>
+
+        <!-- Dados Gerais da Usina -->
+        <div class="mb-4">
+            <div class="text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                Dados Gerais e Infraestrutura
+            </div>
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Operadora / Cliente</small>
+                        <strong class="text-dark small">{{ usina.operadora.nome|default:"—" }}</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="border rounded-3 p-2 bg-light h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Localização / UF</small>
+                        <strong class="text-dark small">
+                            {{ usina.localizacao|default:"—" }}{% if usina.estado %} / {{ usina.estado }}{% endif %}
+                        </strong>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="border rounded-3 p-2 bg-white h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Potência Total</small>
+                        <strong class="text-dark small">
+                            {% if usina.potencia_total %}{{ usina.potencia_total|floatformat:2 }} kVA{% else %}—{% endif %}
+                        </strong>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="border rounded-3 p-2 bg-white h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Nº de Unidades</small>
+                        <strong class="text-dark small">{{ usina.n_maquinas|default:"—" }}</strong>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="border rounded-3 p-2 bg-white h-100">
+                        <small class="text-muted d-block" style="font-size: 0.78rem;">Ponte Rolante</small>
+                        <strong class="text-dark small">
+                            {% if usina.capacidade_ponte_rolante_t %}{{ usina.capacidade_ponte_rolante_t|floatformat:1 }} t{% else %}—{% endif %}
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if usina.observacoes %}
+            <div class="mb-4">
+                <div class="text-uppercase text-muted fw-bold small mb-1" style="letter-spacing: 0.04em;">
+                    Observações
+                </div>
+                <p class="text-secondary bg-light border rounded-3 p-3 mb-0 small">
+                    {{ usina.observacoes }}
+                </p>
+            </div>
+        {% endif %}
+
+        <!-- Unidades Geradoras -->
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-uppercase text-muted fw-bold small" style="letter-spacing: 0.04em;">
+                    Unidades Geradoras ({{ unidades|length }})
+                </span>
+                <button class="btn btn-outline-primary btn-sm py-0 px-2"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseNovaUG">
+                    <i class="bi bi-plus-lg me-1"></i> Adicionar UG
+                </button>
+            </div>
+
+            <!-- Formulário Rápido para Nova UG -->
+            <div class="collapse {% if abrir_form_ug %}show{% endif %} mb-3" id="collapseNovaUG">
+                <form method="post"
+                      data-painel-form
+                      action="{% url 'usinas:ug_nova_painel' usina.pk %}"
+                      class="border rounded-3 p-3 bg-light">
+                    {% csrf_token %}
+                    <div class="fw-semibold small text-dark mb-2">Nova Unidade Geradora</div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small mb-1">Identificação *</label>
+                            {{ ug_form.nome }}
+                            {% if ug_form.nome.errors %}<div class="text-danger small">{{ ug_form.nome.errors|striptags }}</div>{% endif %}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small mb-1">Fabricante</label>
+                            {{ ug_form.fabricante }}
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small mb-1">Potência (kVA)</label>
+                            {{ ug_form.potencia_kva }}
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small mb-1">Tensão (kV)</label>
+                            {{ ug_form.tensao_kv }}
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small mb-1">Ano Operação</label>
+                            {{ ug_form.ano_operacao }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small mb-1">Tipo de Turbina</label>
+                            {{ ug_form.tipo_turbina }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small mb-1">Status</label>
+                            {{ ug_form.status }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small mb-1">Observações</label>
+                            {{ ug_form.observacoes }}
+                        </div>
+                    </div>
+                    <div class="mt-2 text-end">
+                        <button type="submit" class="btn btn-primary btn-sm px-3">Salvar UG</button>
+                    </div>
+                </form>
+            </div>
+
+            {% if unidades %}
+                <div class="d-flex flex-column gap-2">
+                    {% for ug in unidades %}
+                        <div class="border rounded-3 p-3 bg-white">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="fw-bold text-dark">
+                                    {{ ug.nome }}
+                                    {% if ug.fabricante %}
+                                        <span class="fw-normal text-muted small">• {{ ug.fabricante }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge {% if ug.status == 'operacao' %}bg-success-subtle text-success-emphasis{% elif ug.status == 'manutencao' %}bg-warning-subtle text-warning-emphasis{% elif ug.status == 'parada' %}bg-danger-subtle text-danger-emphasis{% else %}bg-secondary-subtle text-secondary-emphasis{% endif %}">
+                                        {{ ug.get_status_display }}
+                                    </span>
+                                    <form method="post"
+                                          data-painel-form
+                                          data-confirm="Remover a unidade '{{ ug.nome }}'?"
+                                          action="{% url 'usinas:ug_remover_painel' usina.pk ug.pk %}"
+                                          class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-link text-danger p-0" title="Remover UG">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="row g-2 small text-secondary">
+                                <div class="col-4">
+                                    <span class="text-muted d-block" style="font-size: 0.75rem;">Potência / Tensão</span>
+                                    <strong class="text-dark">
+                                        {% if ug.potencia_kva %}{{ ug.potencia_kva|floatformat:0 }} kVA{% else %}—{% endif %}
+                                        {% if ug.tensao_kv %} / {{ ug.tensao_kv|floatformat:2 }} kV{% endif %}
+                                    </strong>
+                                </div>
+                                <div class="col-4">
+                                    <span class="text-muted d-block" style="font-size: 0.75rem;">Turbina / Ano</span>
+                                    <strong class="text-dark">
+                                        {{ ug.get_tipo_turbina_display|default:"—" }}{% if ug.ano_operacao %} ({{ ug.ano_operacao }}){% endif %}
+                                    </strong>
+                                </div>
+                                <div class="col-4">
+                                    <span class="text-muted d-block" style="font-size: 0.75rem;">Gerador Vinculado</span>
+                                    {% if ug.maquina %}
+                                        <span class="badge bg-light text-dark border code-pill">{{ ug.maquina.numero_serie }}</span>
+                                    {% else %}
+                                        <span class="text-muted">Não vinculado</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if ug.observacoes %}
+                                <div class="mt-2 pt-2 border-top small text-muted">{{ ug.observacoes }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="border rounded-3 p-3 bg-light text-muted small text-center">
+                    Nenhuma unidade geradora detalhada cadastrada para esta usina.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Máquinas Vinculadas -->
+        {% if maquinas %}
+            <div>
+                <div class="text-uppercase text-muted fw-bold small mb-2" style="letter-spacing: 0.04em;">
+                    Máquinas Vinculadas ({{ maquinas|length }})
+                </div>
+                <div class="table-responsive border rounded-3">
+                    <table class="table table-sm align-middle mb-0 small">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nº Série</th>
+                                <th>UG</th>
+                                <th>Potência</th>
+                                <th>Tensão</th>
+                                <th>Rotação / Polos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for maq in maquinas %}
+                                <tr>
+                                    <td class="fw-semibold code-pill">{{ maq.numero_serie }}</td>
+                                    <td>{{ maq.unidade_geradora.nome|default:"—" }}</td>
+                                    <td>{% if maq.potencia_kva %}{{ maq.potencia_kva|floatformat:0 }} kVA{% else %}—{% endif %}</td>
+                                    <td>{% if maq.tensao_v %}{{ maq.tensao_v|floatformat:0 }} V{% else %}—{% endif %}</td>
+                                    <td>
+                                        {% if maq.rotacao_rpm %}{{ maq.rotacao_rpm|floatformat:0 }} rpm{% else %}—{% endif %}
+                                        {% if maq.numero_polos %} / {{ maq.numero_polos }}p{% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <!-- MODO CRIAÇÃO / EDIÇÃO DA USINA -->
+        <form method="post"
+              data-painel-form
+              action="{% if modo == 'criar' %}{% url 'usinas:usina_novo_painel' %}{% else %}{% url 'usinas:usina_painel' usina.pk %}{% endif %}"
+              novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger small">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="row g-2 mb-4">
+                <div class="col-8">
+                    <label class="form-label small fw-medium mb-1">Nome da Usina *</label>
+                    {{ form.nome }}
+                    {% if form.nome.errors %}<div class="text-danger small">{{ form.nome.errors|striptags }}</div>{% endif %}
+                </div>
+                <div class="col-4">
+                    <label class="form-label small fw-medium mb-1">Tipo</label>
+                    {{ form.tipo }}
+                </div>
+                <div class="col-6">
+                    <label class="form-label small fw-medium mb-1">Código CEG (ANEEL)</label>
+                    {{ form.codigo_ceg }}
+                </div>
+                <div class="col-6">
+                    <label class="form-label small fw-medium mb-1">Operadora / Cliente</label>
+                    {{ form.operadora }}
+                </div>
+                <div class="col-9">
+                    <label class="form-label small fw-medium mb-1">Localização / Município</label>
+                    {{ form.localizacao }}
+                </div>
+                <div class="col-3">
+                    <label class="form-label small fw-medium mb-1">UF</label>
+                    {{ form.estado }}
+                </div>
+                <div class="col-4">
+                    <label class="form-label small fw-medium mb-1">Nº Unidades</label>
+                    {{ form.n_maquinas }}
+                </div>
+                <div class="col-4">
+                    <label class="form-label small fw-medium mb-1">Potência Total (kVA)</label>
+                    {{ form.potencia_total }}
+                </div>
+                <div class="col-4">
+                    <label class="form-label small fw-medium mb-1">Ponte Rolante (t)</label>
+                    {{ form.capacidade_ponte_rolante_t }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label small fw-medium mb-1">Observações</label>
+                    {{ form.observacoes }}
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 pt-3 border-top">
+                <button type="submit" class="btn btn-primary btn-sm px-4" style="background-color: #0284c7; border-color: #0284c7;">
+                    <i class="bi bi-check-lg me-1"></i>
+                    {% if modo == "criar" %}Cadastrar Usina{% else %}Salvar Alterações{% endif %}
+                </button>
+
+                {% if modo == "editar" %}
+                    <button type="button"
+                            class="btn btn-outline-secondary btn-sm px-3"
+                            data-painel-url="{% url 'usinas:usina_painel' usina.pk %}?modo=visualizar">
+                        Cancelar
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="offcanvas">
+                        Cancelar
+                    </button>
+                {% endif %}
+            </div>
+        </form>
+    {% endif %}
+</div>

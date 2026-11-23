@@ -1,9 +1,18 @@
 from django import forms
-from cadastros.models import DadosEstator,DadosGeometricosMaquina, DadosPerifericos, Maquina, DadosConstrutivosBobina, ResIsolamento, OrdemServico, Cliente, MateriaisBobinagemRoebel, Material
+from cadastros.models import (
+    Cliente,
+    DadosConstrutivosBobina,
+    DadosEstator,
+    DadosGeometricosMaquina,
+    DadosPerifericos,
+    Maquina,
+    MateriaisBobinagemRoebel,
+    OrdemServico,
+    ResIsolamento,
+)
 
 
 class DadosEstatorForm(forms.ModelForm):
-
     BOBINADO = [
         "tipo_bobina",
         "tipo_bobinado",
@@ -44,7 +53,6 @@ class DadosEstatorForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
-
             field.widget.attrs.update({
                 "class": "form-control"
             })
@@ -67,17 +75,14 @@ class DadosEstatorForm(forms.ModelForm):
         ]
 
     def obter_bobinado(self):
-        
         return self.obter_grupo(self.BOBINADO)
 
     def obter_nucleo(self):
-
         return self.obter_grupo(self.NUCLEO)
 
-class DadosGeometricosForm(forms.ModelForm):
 
+class DadosGeometricosForm(forms.ModelForm):
     RANHURA = [
-        
         "ranhura_a",
         "ranhura_b",
         "ranhura_c",
@@ -103,7 +108,6 @@ class DadosGeometricosForm(forms.ModelForm):
     ]
 
     CALCO = [
-        
         "calco_a",
         "calco_b",
         "calco_c",
@@ -111,7 +115,6 @@ class DadosGeometricosForm(forms.ModelForm):
     ]
 
     LABELS = {
-
         # Ranhura
         "ranhura_a": "a",
         "ranhura_b": "b",
@@ -119,7 +122,7 @@ class DadosGeometricosForm(forms.ModelForm):
         "ranhura_d": "d",
         "ranhura_e": "e",
         "ranhura_f": "f",
-        "folga_ranhura":"Folga da Ranhura [mm]",
+        "folga_ranhura": "Folga da Ranhura [mm]",
 
         # Bobina
         "bobina_e": "e",
@@ -149,7 +152,6 @@ class DadosGeometricosForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
-            
             field.widget.attrs.update({
                 "class": "form-control"
             })
@@ -164,9 +166,8 @@ class DadosGeometricosForm(forms.ModelForm):
                     "step": "1",
                     "min": "0"
                 })
-        
-        for campo, label in self.LABELS.items():
 
+        for campo, label in self.LABELS.items():
             if campo in self.fields:
                 self.fields[campo].label = label
 
@@ -189,10 +190,9 @@ class DadosGeometricosForm(forms.ModelForm):
     def obter_calco(self):
         return self.obter_grupo(self.CALCO)
 
-class DadosPerifericosForm(forms.ModelForm):
 
+class DadosPerifericosForm(forms.ModelForm):
     ARO = [
-        
         "aro_amarracao_ll",
         "aro_amarracao_lol",
         "material_aro_ll",
@@ -214,7 +214,6 @@ class DadosPerifericosForm(forms.ModelForm):
     ]
 
     INFERIOR = [
-        
         "material_calcos",
         "campo_eletrico",
         "densidade_corrente",
@@ -222,11 +221,10 @@ class DadosPerifericosForm(forms.ModelForm):
         "classe_termica_cabo",
         "comprimento_cabo_interno",
         "descricao_terminal",
-        "comprimento_cabo_externo"
+        "comprimento_cabo_externo",
     ]
 
     LABELS = {
-
         # aro
         "aro_amarracao_ll": "LL",
         "aro_amarracao_lol": "LOL",
@@ -253,7 +251,7 @@ class DadosPerifericosForm(forms.ModelForm):
         "classe_termica_cabo": "Classe térmica do cabo",
         "comprimento_cabo_interno": "Comp. do cabo (barra à terminal)",
         "descricao_terminal": "Descrição do terminal",
-        "comprimento_cabo_externo": "Comp. do cabo (fora da carcaça)"
+        "comprimento_cabo_externo": "Comp. do cabo (fora da carcaça)",
     }
 
     class Meta:
@@ -278,9 +276,8 @@ class DadosPerifericosForm(forms.ModelForm):
                     "step": "1",
                     "min": "0"
                 })
-        
-        for campo, label in self.LABELS.items():
 
+        for campo, label in self.LABELS.items():
             if campo in self.fields:
                 self.fields[campo].label = label
 
@@ -303,10 +300,11 @@ class DadosPerifericosForm(forms.ModelForm):
     def obter_inferior(self):
         return self.obter_grupo(self.INFERIOR)
 
+
 class DadosMaquinaForm(forms.ModelForm):
     class Meta:
-            model = Maquina
-            exclude = [
+        model = Maquina
+        exclude = [
             "id",
             "cliente",
             "numero_serie",
@@ -316,7 +314,6 @@ class DadosMaquinaForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
-
             field.widget.attrs.update({
                 "class": "form-control"
             })
@@ -332,17 +329,16 @@ class DadosMaquinaForm(forms.ModelForm):
                     "min": "0"
                 })
 
-class DadosBobinaForm(forms.ModelForm):
 
+class DadosBobinaForm(forms.ModelForm):
     CROQUI = [
-        
         "croqui_j",
         "croqui_g",
         "croqui_k",
         "croqui_h",
         "croqui_l",
         "croqui_i",
-        "croqui_ponta"
+        "croqui_ponta",
     ]
 
     AMARRACAO = [
@@ -351,7 +347,7 @@ class DadosBobinaForm(forms.ModelForm):
         "amarracao_c1",
         "amarracao_a2",
         "amarracao_b2",
-        "amarracao_c2"
+        "amarracao_c2",
     ]
 
     CONFIGURACAO = [
@@ -366,7 +362,6 @@ class DadosBobinaForm(forms.ModelForm):
     ]
 
     MONTADA = [
-        
         "montada_a",
         "montada_b",
         "montada_c",
@@ -378,13 +373,12 @@ class DadosBobinaForm(forms.ModelForm):
     ]
 
     LABELS = {
-
         # croqui
         "croqui_g": "g",
         "croqui_j": "G",
         "croqui_h": "h",
         "croqui_k": "H",
-        "croqui_i": "i",        
+        "croqui_i": "i",
         "croqui_l": "I",
         "croqui_ponta": "Comprimento da ponta",
 
@@ -439,9 +433,8 @@ class DadosBobinaForm(forms.ModelForm):
                     "step": "1",
                     "min": "0"
                 })
-        
-        for campo, label in self.LABELS.items():
 
+        for campo, label in self.LABELS.items():
             if campo in self.fields:
                 self.fields[campo].label = label
 
@@ -464,8 +457,8 @@ class DadosBobinaForm(forms.ModelForm):
     def obter_montada(self):
         return self.obter_grupo(self.MONTADA)
 
-class DadosEnsaiosForm(forms.ModelForm):
 
+class DadosEnsaiosForm(forms.ModelForm):
     PARTE1 = [
         "tensao",
         "temperatura",
@@ -493,7 +486,6 @@ class DadosEnsaiosForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
-
             field.widget.attrs.update({
                 "class": "form-control"
             })
@@ -516,39 +508,13 @@ class DadosEnsaiosForm(forms.ModelForm):
         ]
 
     def obter_parte1(self):
-        
         return self.obter_grupo(self.PARTE1)
 
     def obter_parte2(self):
-
         return self.obter_grupo(self.PARTE2)
 
+
 class MateriaisBobinagemRoebelForm(forms.ModelForm):
-
-    FILTROS = {
-        "condutor": "Condutor",
-        "isolacao_panqueca": "Isolação",
-        "isolacao_condutores": "Isolação",
-        "isolacao_principal": "Isolação",
-        "consolidacao_condutores": "Resina",
-        "massa_enchimento": "Massa",
-        "verniz_condutivo": "Verniz",
-        "fita_condutiva": "Fita",
-        "verniz_semicondutivo": "Verniz",
-        "fita_semicondutiva": "Fita",
-        "fita_sacrificio": "Fita",
-        "cadarco_fibra_vidro": "Cadarço",
-        "fita_acabamento": "Fita",
-        "pavio_central": "Pavio",
-        "aros_amarracao": "Aro",
-        "calcos_radiais": "Calço",
-        "calcos_tangenciais": "Calço",
-        "conexoes": "Conexão",
-        "barramentos_ligacao": "Barramento",
-        "cunhagem": "Cunha",
-        "sensor": "Sensor",
-    }
-
     CONDUTOR_ISOLAMENTO = [
         "condutor",
         "isolacao_panqueca",
@@ -601,21 +567,15 @@ class MateriaisBobinagemRoebelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for nome, field in self.fields.items():
-            field.widget.attrs.update({"class": "form-control"})
-
             if isinstance(field, forms.ModelChoiceField):
                 field.widget.attrs.update({"class": "form-select"})
-
-            if isinstance(field, forms.DecimalField):
-                field.widget.attrs.update({"step": "0.01"})
-
-        for campo, categoria in self.FILTROS.items():
-            if campo in self.fields:
-                self.fields[campo].queryset = (
-                    Material.objects
-                    .filter(categoria__nome=categoria, ativo=True)
-                    .order_by("codigo_material")
+                field.queryset = field.queryset.filter(ativo=True).order_by(
+                    "prioridade", "codigo_material", "nome"
                 )
+            else:
+                field.widget.attrs.update({"class": "form-control"})
+                if isinstance(field, forms.DecimalField):
+                    field.widget.attrs.update({"step": "0.01"})
 
     def obter_grupo(self, grupo):
         return [
@@ -645,15 +605,16 @@ class MateriaisBobinagemRoebelForm(forms.ModelForm):
     def obter_parametros(self):
         return self.obter_grupo(self.PARAMETROS)
 
+
 class NovaMaquinaForm(forms.ModelForm):
     class Meta:
         model = Maquina
-        fields = ['numero_serie', 'cliente', 'potencia_kva', 'numero_polos', 'rotacao_rpm']
+        fields = ["numero_serie", "cliente", "potencia_kva", "numero_polos", "rotacao_rpm"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
-        
-        if 'cliente' in self.fields:
-            self.fields['cliente'].widget.attrs.update({'class': 'form-select'})
+            field.widget.attrs.update({"class": "form-control"})
+
+        if "cliente" in self.fields:
+            self.fields["cliente"].widget.attrs.update({"class": "form-select"})

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'maquinas',
     'organizador',
     'orcamento',
+    'usinas',
 ]
 
 MIDDLEWARE = [
@@ -97,7 +98,7 @@ WSGI_APPLICATION = 'sistema.wsgi.application'
 SECRET_KEY = os.getenv("SECRET_KEY")
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+ 
 if os.getenv('USE_POSTGRES', 'False') == 'True':
     DATABASES = {
         'default': {
